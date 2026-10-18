@@ -28,7 +28,7 @@ main:focus { outline: none; }
 .site-header.scrolled, .site-header.open { border-color: var(--line); box-shadow: 0 6px 20px -16px rgba(20, 24, 36, .25); }
 .bar { max-width: 1080px; margin-inline: auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .brand { display: inline-flex; align-items: center; gap: 10px; font: 700 17px var(--head); color: var(--text); text-decoration: none; }
-.brand:hover { color: var(--text); }
+.brand:hover { color: var(--accent); }
 nav { display: flex; align-items: center; gap: 2px; }
 nav a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; padding: 8px 12px; border-radius: 8px; transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease); }
 nav a:hover { color: var(--text); background: var(--surface-2); }
@@ -53,10 +53,10 @@ nav .nav-cta:hover { background: var(--accent-hover); color: var(--accent-ink); 
 /* Hero */
 .hero .btn { padding: 9px 15px; }
 .hero { padding: 80px 0 8px; background: linear-gradient(180deg, #f1f2ff 0%, var(--bg) 78%); }
-.hero-grid { display: block; text-align: center; max-width: 860px; }
-.hero-grid .lede { margin-inline: auto; }
+.hero-grid { display: block; text-align: center; max-width: 1000px; }
+.hero-grid .lede { margin-inline: auto; max-width: 52em; }
 .hero-grid .cta { justify-content: center; }
-.hero-grid h1 { max-width: 14em; margin-inline: auto; }
+.hero-grid h1 { max-width: 20em; margin-inline: auto; }
 .eyebrow { font: 500 12.5px var(--mono); color: var(--accent); letter-spacing: .08em; text-transform: uppercase; margin: 0 0 16px; }
 h1 { font: 800 clamp(34px, 5vw, 54px)/1.1 var(--head); letter-spacing: -.025em; margin: 0 0 20px; }
 .hl { color: var(--accent); }

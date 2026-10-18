@@ -79,9 +79,15 @@ function Header() {
   return (
     <header className={`site-header${scrolled ? " scrolled" : ""}${open ? " open" : ""}`}>
       <div className="bar">
-        <Link to="/" className="brand" onClick={close}>
+        <a
+          className="brand"
+          href={profile.whatsapp}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Chat with Eslam Usama on WhatsApp (opens in a new tab)"
+        >
           {profile.shortName}
-        </Link>
+        </a>
         <button className="menu-btn" aria-expanded={open} aria-controls="primary-nav" onClick={() => setOpen(!open)}>
           <span className="sr">Menu</span>
           <span aria-hidden="true" className="burger" />
