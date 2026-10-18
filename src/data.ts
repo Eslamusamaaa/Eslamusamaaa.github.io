@@ -12,7 +12,7 @@ export const profile = {
   phoneDisplay: "+20 109 517 8021",
   github: "https://github.com/Eslamusamaaa",
   linkedin: "https://www.linkedin.com/in/eslam-usamaaa",
-  cvUrl: null as string | null, // e.g. "cv/Eslam-Osama-CV.pdf" placed in /public
+  cvUrl: "cv/Eslam-Osama-CV.pdf" as string | null, // file lives in /public/cv
 };
 
 // Saudi mobile numbers are 9 digits starting with 5; wa.me needs country code + digits only.
