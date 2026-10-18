@@ -24,21 +24,21 @@ export const whatsappBots = [
     title: "Commerce bot · Line 1",
     number: "57 017 9909",
     href: wa("57 017 9909"),
-    blurb: "Guided product discovery over WhatsApp: pick a budget and style, get product cards from the store catalog.",
+    blurb: "Guided product picker: budget, style, then product cards.",
   },
   {
     id: "line-2",
     title: "Commerce bot · Line 2",
     number: "58 018 3680",
     href: wa("58 018 3680"),
-    blurb: "Button-driven shopping flow with free-text questions answered from the catalog, never from invented products.",
+    blurb: "Button-driven shopping flow plus free-text catalog questions.",
   },
   {
     id: "line-3",
     title: "Commerce bot · Line 3",
     number: "53 394 7699",
     href: wa("53 394 7699"),
-    blurb: "A catalog-grounded sales assistant: the database supplies prices, stock and links, the model handles the conversation.",
+    blurb: "Catalog-grounded sales assistant: prices and links come from data.",
   },
 ];
 
@@ -61,6 +61,7 @@ export type Project = {
   summary: string;
   tags: string[];
   image?: { src: string; alt: string };
+  video?: { url: string; id: string; title: string };
   overview: string;
   problem: string;
   flowTitle: string;
@@ -86,7 +87,8 @@ export const projects: Project[] = [
     summary:
       "A widget that interviews each shopper with questions generated from that store's own products, then returns ranked recommendations with a written reason for each.",
     tags: ["TypeScript", "PostgreSQL", "Salla API", "LLM", "Multi-tenant"],
-    image: { src: "img/rashihli-logo.png", alt: "Rashihli logo: a shopping bag with a check mark" },
+    image: { src: "img/rashihli-logo.png", alt: "Rashihli logo: a purple tile with a check mark" },
+    video: { url: "https://www.youtube.com/watch?v=EIuLRemSntw", id: "EIuLRemSntw", title: "رشّحلي — مساعد تسوّق ذكي لمتاجر سلة" },
     overview:
       "Rashihli lets a Salla merchant install an app, have their catalog imported automatically, and show a short adaptive quiz on their storefront. The questions, the options and the wording are generated from that store's products, in the store's own language, with nothing hardcoded per merchant. One backend serves many stores.",
     problem:

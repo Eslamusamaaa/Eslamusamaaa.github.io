@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Route, Routes, useLocation, useParams } from "react-router-dom";
 import {
   education, evidence, otherProjects, profile, projects, skills, training, whatsappBots, zikolaWork, type Project,
@@ -6,6 +6,7 @@ import {
 
 const asset = (p: string) => `${import.meta.env.BASE_URL}${p}`;
 const reduceMotion = () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const stagger = (i: number) => ({ ["--n" as string]: Math.min(i, 6) });
 
 function ScrollTop() {
   const { pathname } = useLocation();
@@ -19,9 +20,10 @@ function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: reduceMotion() ? "auto" : "smooth" });
 }
 
+/** One reveal system: elements with .reveal (or .stagger containers) get .in when they enter the viewport. */
 function useReveal(dep: unknown) {
   useEffect(() => {
-    const els = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]:not(.in)"));
+    const els = Array.from(document.querySelectorAll<HTMLElement>(".reveal:not(.in), .stagger:not(.in)"));
     if (reduceMotion() || !("IntersectionObserver" in window)) {
       els.forEach((e) => e.classList.add("in"));
       return;
@@ -34,33 +36,11 @@ function useReveal(dep: unknown) {
             io.unobserve(en.target);
           }
         }),
-      { threshold: 0.1, rootMargin: "0px 0px -5% 0px" }
+      { threshold: 0.08, rootMargin: "0px 0px -4% 0px" }
     );
     els.forEach((e) => io.observe(e));
     return () => io.disconnect();
   }, [dep]);
-}
-
-function Counter({ to }: { to: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const [v, setV] = useState(reduceMotion() ? to : 0);
-  useEffect(() => {
-    if (reduceMotion() || !ref.current) return;
-    const io = new IntersectionObserver(([en]) => {
-      if (!en.isIntersecting) return;
-      io.disconnect();
-      const t0 = performance.now();
-      const tick = (t: number) => {
-        const p = Math.min(1, (t - t0) / 1100);
-        setV(Math.round(to * (1 - Math.pow(1 - p, 3))));
-        if (p < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-    });
-    io.observe(ref.current);
-    return () => io.disconnect();
-  }, [to]);
-  return <span ref={ref}>{v.toLocaleString("en-US")}</span>;
 }
 
 function SectionLink({ id, children, className, onNav }: { id: string; children: React.ReactNode; className?: string; onNav?: () => void }) {
@@ -130,6 +110,14 @@ function WaIcon({ size = 18 }: { size?: number }) {
   );
 }
 
+function PlayIcon({ size = 18 }: { size?: number }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M21.6 7.2a2.5 2.5 0 0 0-1.76-1.77C18.3 5 12 5 12 5s-6.3 0-7.84.43A2.5 2.5 0 0 0 2.4 7.2C2 8.76 2 12 2 12s0 3.24.4 4.8a2.5 2.5 0 0 0 1.76 1.77C5.7 19 12 19 12 19s6.3 0 7.84-.43a2.5 2.5 0 0 0 1.76-1.77C22 15.24 22 12 22 12s0-3.24-.4-4.8ZM10 15V9l5.2 3L10 15Z" />
+    </svg>
+  );
+}
+
 const pipeline = [
   { t: "Voice or WhatsApp", s: "customer input" },
   { t: "Speech-to-text", s: "Deepgram" },
@@ -138,20 +126,19 @@ const pipeline = [
 ];
 
 function Hero() {
-  const rise = (d: number) => ({ style: { ["--d" as string]: `${d}s` } });
   return (
     <section className="hero">
       <div className="wrap hero-grid">
         <div className="hero-copy">
-          <p className="eyebrow rise" {...rise(0)}>AI Engineer · Egypt</p>
-          <h1 className="rise" {...rise(0.08)}>
+          <p className="eyebrow">AI Engineer · Egypt</p>
+          <h1>
             I build AI that <span className="hl">talks to customers</span>, reads catalogs and joins meetings.
           </h1>
-          <p className="lede rise" {...rise(0.16)}>
+          <p className="lede">
             I'm Eslam, an AI Engineer at Zikola. I ship LLM agents, RAG pipelines and speech systems: a Salla shopping quiz,
             a meeting assistant, voice calling for merchants and WhatsApp commerce bots.
           </p>
-          <div className="cta rise" {...rise(0.24)}>
+          <div className="cta">
             <SectionLink id="work" className="btn primary">See featured work</SectionLink>
             <SectionLink id="bots" className="btn"><WaIcon /> Try the bots</SectionLink>
             {profile.cvUrl && <a className="btn" href={profile.cvUrl} download>Download CV</a>}
@@ -159,7 +146,7 @@ function Hero() {
             <a className="btn ghost" href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
           </div>
         </div>
-        <figure className="portrait rise" {...rise(0.2)}>
+        <figure className="portrait">
           <img src={asset("img/eslam.jpg")} alt="Portrait of Eslam Osama" width={720} height={720} fetchPriority="high" />
           <figcaption>
             <strong>{profile.name}</strong>
@@ -168,7 +155,7 @@ function Hero() {
         </figure>
       </div>
       <div className="wrap">
-        <ol className="strip rise" {...rise(0.4)} aria-label="Typical pipeline in my voice and WhatsApp agent work">
+        <ol className="strip" aria-label="Typical pipeline in my voice and WhatsApp agent work">
           {pipeline.map((p, i) => (
             <li key={p.t}>
               <strong>{p.t}</strong>
@@ -182,29 +169,38 @@ function Hero() {
   );
 }
 
+function VideoButton({ p, size }: { p: Project; size?: "lg" }) {
+  if (!p.video) return null;
+  return (
+    <a className={`btn video${size ? " lg" : ""}`} href={p.video.url} target="_blank" rel="noopener noreferrer">
+      <PlayIcon size={size ? 20 : 18} /> Watch Project Explanation
+    </a>
+  );
+}
+
 function Lead({ p }: { p: Project }) {
   return (
-    <li data-reveal className="lead-wrap">
-      <Link to={`/projects/${p.slug}`} className="lead">
-        <div className="lead-art">
-          {p.image && <img src={asset(p.image.src)} alt={p.image.alt} width={120} height={120} loading="lazy" />}
-          <span>رشّحلي</span>
-        </div>
-        <div className="lead-body">
-          <span className="kind">{p.kind}</span>
-          <h3>{p.title}</h3>
-          <p>{p.summary}</p>
-          <span className="tags">{p.tags.map((t) => <span key={t}>{t}</span>)}</span>
-          <span className="more">Read the case study <span aria-hidden="true">→</span></span>
-        </div>
-      </Link>
+    <li className="lead">
+      <div className="lead-art">
+        {p.image && <img src={asset(p.image.src)} alt={p.image.alt} width={120} height={120} loading="lazy" />}
+      </div>
+      <div className="lead-body">
+        <span className="kind">{p.kind}</span>
+        <h3><Link to={`/projects/${p.slug}`}>{p.title}</Link></h3>
+        <p>{p.summary}</p>
+        <span className="tags">{p.tags.map((t) => <span key={t}>{t}</span>)}</span>
+        <span className="actions">
+          <Link className="btn primary" to={`/projects/${p.slug}`}>Read the case study</Link>
+          <VideoButton p={p} />
+        </span>
+      </div>
     </li>
   );
 }
 
 function Row({ p, i }: { p: Project; i: number }) {
   return (
-    <li data-reveal>
+    <li>
       <Link to={`/projects/${p.slug}`} className="row">
         <span className="idx">{String(i).padStart(2, "0")}</span>
         <div>
@@ -233,10 +229,10 @@ function Home() {
       <Hero />
 
       <section className="wrap evidence" aria-label="Verified figures from project documentation">
-        <ul>
-          {evidence.map((e) => (
-            <li key={e.label} data-reveal>
-              <strong><Counter to={e.value} /></strong>
+        <ul className="stagger">
+          {evidence.map((e, i) => (
+            <li key={e.label} style={stagger(i)}>
+              <strong>{e.value.toLocaleString("en-US")}</strong>
               <span>{e.label}</span>
               <small>{e.note}</small>
             </li>
@@ -245,60 +241,52 @@ function Home() {
       </section>
 
       <section id="work" className="wrap section">
-        <header className="sec-head" data-reveal>
+        <header className="sec-head reveal">
           <p className="eyebrow">01 · Professional work at Zikola</p>
           <h2>Systems I built and shipped</h2>
           <p className="sub-lede">Written from project documentation and repository history. Private source code and customer data are not shown.</p>
         </header>
-        <ul className="work">
+        <ul className="work stagger">
           <Lead p={pro[0]} />
           {pro.slice(1).map((p, i) => <Row key={p.slug} p={p} i={i + 2} />)}
         </ul>
       </section>
 
-      <section id="bots" className="band">
-        <div className="wrap bots-grid">
-          <header data-reveal>
-            <p className="eyebrow green">02 · Try it live</p>
-            <h2>WhatsApp bots you can message right now</h2>
-            <p className="sub-lede">Tap a button and a real WhatsApp chat opens with that bot. All three are Saudi (+966) mobile lines.</p>
-            <ol className="how">
-              <li><b>1</b> Tap <em>Try the Bot on WhatsApp</em></li>
-              <li><b>2</b> WhatsApp opens a chat with the number</li>
-              <li><b>3</b> Say hello and browse the catalog</li>
-            </ol>
-            <p className="fine">How they work: <Link to="/projects/whatsapp-commerce-bots">WhatsApp commerce bots case study</Link>.</p>
-          </header>
-          <ul className="bots">
-            {whatsappBots.map((b) => (
-              <li key={b.id} data-reveal className="bot">
-                <span className="wa-badge"><WaIcon size={22} /></span>
-                <div className="bot-info">
-                  <h3>{b.title}</h3>
-                  <p className="num" dir="ltr">+966 {b.number}</p>
-                  <p>{b.blurb}</p>
-                </div>
-                <a className="btn wa" href={b.href} target="_blank" rel="noopener noreferrer" aria-label={`Try the bot on WhatsApp: +966 ${b.number}`}>
-                  <WaIcon /> Try the Bot on WhatsApp
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
+      <section id="bots" className="wrap section compact">
+        <header className="sec-head reveal">
+          <p className="eyebrow">02 · Quick access</p>
+          <h2 className="h-sm">WhatsApp bots</h2>
+          <p className="sub-lede">Each link opens a WhatsApp chat with the bot. <Link to="/projects/whatsapp-commerce-bots">How they work</Link>.</p>
+        </header>
+        <ul className="bots stagger">
+          {whatsappBots.map((b, i) => (
+            <li key={b.id} style={stagger(i)}>
+              <span className="wa-ic"><WaIcon size={16} /></span>
+              <span className="bot-text">
+                <strong>{b.title}</strong>
+                <span className="num" dir="ltr">+966 {b.number}</span>
+                <span className="desc">{b.blurb}</span>
+              </span>
+              <a className="wa-link" href={b.href} target="_blank" rel="noopener noreferrer" aria-label={`Try on WhatsApp: +966 ${b.number}`}>
+                Try on WhatsApp <span aria-hidden="true">↗</span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="wrap section">
-        <header className="sec-head" data-reveal>
+        <header className="sec-head reveal">
           <p className="eyebrow">03 · Research and personal projects</p>
           <h2>Models, speech and imaging</h2>
         </header>
-        <ul className="work">
+        <ul className="work stagger">
           {personal.map((p, i) => <Row key={p.slug} p={p} i={i + 1} />)}
         </ul>
-        <h3 className="sub" data-reveal>More repositories</h3>
-        <ul className="list">
-          {otherProjects.map((p) => (
-            <li key={p.title} data-reveal>
+        <h3 className="sub reveal">More repositories</h3>
+        <ul className="list stagger">
+          {otherProjects.map((p, i) => (
+            <li key={p.title} style={stagger(i)}>
               <div>
                 <strong>{p.title}</strong>
                 <p>{p.blurb}</p>
@@ -311,24 +299,24 @@ function Home() {
       </section>
 
       <section id="experience" className="wrap section">
-        <header className="sec-head" data-reveal>
+        <header className="sec-head reveal">
           <p className="eyebrow">04 · Experience and education</p>
           <h2>Where I've worked and studied</h2>
         </header>
-        <ol className="tl">
-          <li data-reveal>
+        <ol className="tl stagger">
+          <li style={stagger(0)}>
             <p className="when">April 2026 – present · Employment</p>
             <h3>AI Engineer, Zikola</h3>
             <ul className="bullets">
               {zikolaWork.map((w) => <li key={w.title}><strong>{w.title}.</strong> {w.body}</li>)}
             </ul>
           </li>
-          <li data-reveal>
+          <li style={stagger(1)}>
             <p className="when">{education.years} · {education.status}</p>
             <h3>{education.degree}</h3>
             <p className="muted">{education.school}</p>
           </li>
-          <li data-reveal>
+          <li style={stagger(2)}>
             <p className="when">Training and certificates</p>
             <ul className="bullets">
               {training.map((t) => <li key={t.title}><strong>{t.title}</strong> · {t.when}</li>)}
@@ -338,33 +326,33 @@ function Home() {
       </section>
 
       <section id="skills" className="wrap section">
-        <header className="sec-head" data-reveal>
+        <header className="sec-head reveal">
           <p className="eyebrow">05 · Technical expertise</p>
           <h2>What I work with</h2>
         </header>
-        <dl className="skills">
-          {skills.map((s) => (
-            <div key={s.group} data-reveal>
+        <dl className="skills stagger">
+          {skills.map((s, i) => (
+            <div key={s.group} style={stagger(i)}>
               <dt>{s.group}</dt>
-              <dd>{s.items.map((i) => <span key={i}>{i}</span>)}</dd>
+              <dd>{s.items.map((it) => <span key={it}>{it}</span>)}</dd>
             </div>
           ))}
         </dl>
       </section>
 
-      <section id="contact" className="band contact">
+      <section id="contact" className="contact">
         <div className="wrap contact-grid">
-          <header data-reveal>
+          <header className="reveal">
             <p className="eyebrow">06 · Contact</p>
             <h2>Let's build something</h2>
             <p className="sub-lede">Open to AI engineering roles and collaborations.</p>
             <p className="fine">The WhatsApp numbers above are demo bot lines, separate from my personal number.</p>
           </header>
-          <ul className="contact-list" data-reveal>
-            <li><span>Phone</span><a href={`tel:${profile.phone}`} dir="ltr">{profile.phoneDisplay}</a></li>
-            <li><span>Email</span><a href={`mailto:${profile.email}`}>{profile.email}</a></li>
-            <li><span>LinkedIn</span><a href={profile.linkedin} target="_blank" rel="noopener noreferrer">linkedin.com/in/eslam-usamaaa</a></li>
-            <li><span>GitHub</span><a href={profile.github} target="_blank" rel="noopener noreferrer">github.com/Eslamusamaaa</a></li>
+          <ul className="contact-list stagger">
+            <li style={stagger(0)}><span>Phone</span><a href={`tel:${profile.phone}`} dir="ltr">{profile.phoneDisplay}</a></li>
+            <li style={stagger(1)}><span>Email</span><a href={`mailto:${profile.email}`}>{profile.email}</a></li>
+            <li style={stagger(2)}><span>LinkedIn</span><a href={profile.linkedin} target="_blank" rel="noopener noreferrer">linkedin.com/in/eslam-usamaaa</a></li>
+            <li style={stagger(3)}><span>GitHub</span><a href={profile.github} target="_blank" rel="noopener noreferrer">github.com/Eslamusamaaa</a></li>
           </ul>
         </div>
       </section>
@@ -374,15 +362,36 @@ function Home() {
 
 function Flow({ steps }: { steps: Project["flow"] }) {
   return (
-    <ol className="flow">
+    <ol className="flow stagger">
       {steps.map((s, i) => (
-        <li key={s.title} data-reveal style={{ transitionDelay: `${i * 60}ms` }}>
+        <li key={s.title} style={stagger(i)}>
           <span className="n">{i + 1}</span>
           <strong>{s.title}</strong>
           <span>{s.note}</span>
         </li>
       ))}
     </ol>
+  );
+}
+
+function VideoCard({ p }: { p: Project }) {
+  if (!p.video) return null;
+  return (
+    <a className="video-card" href={p.video.url} target="_blank" rel="noopener noreferrer" aria-label={`Watch on YouTube: ${p.video.title}`}>
+      <img
+        src={`https://i.ytimg.com/vi/${p.video.id}/hqdefault.jpg`}
+        alt=""
+        width={480}
+        height={360}
+        loading="lazy"
+        referrerPolicy="no-referrer"
+      />
+      <span className="play" aria-hidden="true"><PlayIcon size={28} /></span>
+      <span className="video-meta">
+        <strong dir="rtl">{p.video.title}</strong>
+        <small>Project explanation video · opens YouTube</small>
+      </span>
+    </a>
   );
 }
 
@@ -413,9 +422,13 @@ function ProjectPage() {
       </div>
       <p className="lede">{p.summary}</p>
       <p className="status">Status: {p.status}</p>
+      {p.video && (
+        <div className="cta"><VideoButton p={p} size="lg" /></div>
+      )}
 
       <h2>Overview</h2>
       <p>{p.overview}</p>
+      <VideoCard p={p} />
       <h2>Problem and motivation</h2>
       <p>{p.problem}</p>
       <p className="callout"><strong>My contribution.</strong> {p.contribution}</p>
@@ -426,7 +439,7 @@ function ProjectPage() {
 
       <h2>Implementation</h2>
       {p.implementation.map((i) => (
-        <div key={i.heading} data-reveal>
+        <div key={i.heading}>
           <h3>{i.heading}</h3>
           <p>{i.body}</p>
         </div>
@@ -465,7 +478,7 @@ function ProjectPage() {
         <>
           <h2>Links</h2>
           <div className="cta">
-            {isBots && <Link className="btn wa" to="/" state={{ scrollTo: "bots" }}><WaIcon /> Try the bots</Link>}
+            {isBots && <Link className="btn" to="/" state={{ scrollTo: "bots" }}><WaIcon /> Try the bots</Link>}
             {p.links.map((l) =>
               l.href.startsWith("#/") ? (
                 <Link key={l.href} className="btn" to={l.href.slice(1)}>{l.label}</Link>
