@@ -4,6 +4,7 @@ import {
   education, evidence, otherProjects, profile, projects, skills, training, whatsappBots, zikolaWork, type Project,
 } from "./data";
 
+const asset = (p: string) => `${import.meta.env.BASE_URL}${p}`;
 const reduceMotion = () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 function ScrollTop() {
@@ -18,7 +19,6 @@ function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: reduceMotion() ? "auto" : "smooth" });
 }
 
-/** Adds .in to elements with [data-reveal] as they enter the viewport. */
 function useReveal(dep: unknown) {
   useEffect(() => {
     const els = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]:not(.in)"));
@@ -34,7 +34,7 @@ function useReveal(dep: unknown) {
             io.unobserve(en.target);
           }
         }),
-      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -5% 0px" }
     );
     els.forEach((e) => io.observe(e));
     return () => io.disconnect();
@@ -100,7 +100,7 @@ function Header() {
     <header className={`site-header${scrolled ? " scrolled" : ""}${open ? " open" : ""}`}>
       <div className="bar">
         <Link to="/" className="brand" onClick={close}>
-          <span className="mark" aria-hidden="true" />
+          <img src={asset("img/eslam.jpg")} alt="" width={32} height={32} />
           {profile.shortName}
         </Link>
         <button className="menu-btn" aria-expanded={open} aria-controls="primary-nav" onClick={() => setOpen(!open)}>
@@ -119,9 +119,9 @@ function Header() {
   );
 }
 
-function WaIcon() {
+function WaIcon({ size = 18 }: { size?: number }) {
   return (
-    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" focusable="false">
       <path
         fill="currentColor"
         d="M12.04 2a9.9 9.9 0 0 0-8.5 14.9L2 22l5.25-1.38A9.9 9.9 0 1 0 12.04 2Zm0 1.8a8.1 8.1 0 1 1-4.3 15l-.31-.18-3.12.82.83-3.04-.2-.32A8.1 8.1 0 0 1 12.04 3.8Zm-3 3.9c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.5s1.07 2.9 1.22 3.1c.15.2 2.1 3.2 5.08 4.5 2.5 1.08 3 .87 3.54.82.55-.05 1.76-.72 2-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35-.3-.15-1.76-.87-2.03-.97-.28-.1-.48-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.2-.24-.58-.49-.5-.67-.5Z"
@@ -130,44 +130,90 @@ function WaIcon() {
   );
 }
 
-function PipelineVisual() {
-  const nodes = [
-    { x: 20, label: "Voice / WhatsApp", sub: "input" },
-    { x: 150, label: "STT", sub: "Deepgram" },
-    { x: 280, label: "Agent", sub: "LangGraph + RAG" },
-    { x: 410, label: "TTS / reply", sub: "output" },
-  ];
+const pipeline = [
+  { t: "Voice or WhatsApp", s: "customer input" },
+  { t: "Speech-to-text", s: "Deepgram" },
+  { t: "Agent", s: "LangGraph · RAG · LLM" },
+  { t: "Reply", s: "text or TTS" },
+];
+
+function Hero() {
+  const rise = (d: number) => ({ style: { ["--d" as string]: `${d}s` } });
   return (
-    <figure className="pipeline" aria-label="Typical pipeline in my voice and WhatsApp systems: input, speech-to-text, agent with retrieval, speech or text reply">
-      <svg viewBox="0 0 520 150" role="img" aria-hidden="true">
-        {nodes.slice(0, -1).map((n, i) => (
-          <line key={i} className="flow-line" x1={n.x + 90} y1="75" x2={nodes[i + 1].x} y2="75" />
-        ))}
-        {nodes.map((n, i) => (
-          <g key={n.label} className="node" style={{ animationDelay: `${0.5 + i * 0.15}s` }}>
-            <rect x={n.x} y="40" width="90" height="70" rx="12" />
-            <text x={n.x + 45} y="73" textAnchor="middle" className="t1">{n.label}</text>
-            <text x={n.x + 45} y="93" textAnchor="middle" className="t2">{n.sub}</text>
-          </g>
-        ))}
-      </svg>
-      <figcaption>The shape of my voice and WhatsApp agent work, simplified.</figcaption>
-    </figure>
+    <section className="hero">
+      <div className="wrap hero-grid">
+        <div className="hero-copy">
+          <p className="eyebrow rise" {...rise(0)}>AI Engineer · Egypt</p>
+          <h1 className="rise" {...rise(0.08)}>
+            I build AI that <span className="hl">talks to customers</span>, reads catalogs and joins meetings.
+          </h1>
+          <p className="lede rise" {...rise(0.16)}>
+            I'm Eslam, an AI Engineer at Zikola. I ship LLM agents, RAG pipelines and speech systems: a Salla shopping quiz,
+            a meeting assistant, voice calling for merchants and WhatsApp commerce bots.
+          </p>
+          <div className="cta rise" {...rise(0.24)}>
+            <SectionLink id="work" className="btn primary">See featured work</SectionLink>
+            <SectionLink id="bots" className="btn"><WaIcon /> Try the bots</SectionLink>
+            {profile.cvUrl && <a className="btn" href={profile.cvUrl} download>Download CV</a>}
+            <a className="btn ghost" href={profile.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a className="btn ghost" href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          </div>
+        </div>
+        <figure className="portrait rise" {...rise(0.2)}>
+          <img src={asset("img/eslam.jpg")} alt="Portrait of Eslam Osama" width={720} height={720} fetchPriority="high" />
+          <figcaption>
+            <strong>{profile.name}</strong>
+            <span>AI Engineer · Zikola</span>
+          </figcaption>
+        </figure>
+      </div>
+      <div className="wrap">
+        <ol className="strip rise" {...rise(0.4)} aria-label="Typical pipeline in my voice and WhatsApp agent work">
+          {pipeline.map((p, i) => (
+            <li key={p.t}>
+              <strong>{p.t}</strong>
+              <span>{p.s}</span>
+              {i < pipeline.length - 1 && <i className="arrow" aria-hidden="true" />}
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
   );
 }
 
-function CaseCard({ p, lead }: { p: Project; lead?: boolean }) {
+function Lead({ p }: { p: Project }) {
   return (
-    <li data-reveal className={lead ? "lead" : ""}>
-      <Link to={`/projects/${p.slug}`} className="case">
-        {p.image && <img src={`${import.meta.env.BASE_URL}${p.image.src}`} alt={p.image.alt} width={1200} height={440} loading="lazy" />}
-        <div className="case-body">
+    <li data-reveal className="lead-wrap">
+      <Link to={`/projects/${p.slug}`} className="lead">
+        <div className="lead-art">
+          {p.image && <img src={asset(p.image.src)} alt={p.image.alt} width={120} height={120} loading="lazy" />}
+          <span>رشّحلي</span>
+        </div>
+        <div className="lead-body">
           <span className="kind">{p.kind}</span>
           <h3>{p.title}</h3>
           <p>{p.summary}</p>
           <span className="tags">{p.tags.map((t) => <span key={t}>{t}</span>)}</span>
           <span className="more">Read the case study <span aria-hidden="true">→</span></span>
         </div>
+      </Link>
+    </li>
+  );
+}
+
+function Row({ p, i }: { p: Project; i: number }) {
+  return (
+    <li data-reveal>
+      <Link to={`/projects/${p.slug}`} className="row">
+        <span className="idx">{String(i).padStart(2, "0")}</span>
+        <div>
+          <span className="kind">{p.kind}</span>
+          <h3>{p.title}</h3>
+          <p>{p.summary}</p>
+          <span className="tags">{p.tags.map((t) => <span key={t}>{t}</span>)}</span>
+        </div>
+        <span className="go" aria-hidden="true">→</span>
       </Link>
     </li>
   );
@@ -184,30 +230,7 @@ function Home() {
   const personal = projects.filter((p) => p.group === "personal");
   return (
     <main id="main" tabIndex={-1}>
-      <section className="hero">
-        <div className="bg" aria-hidden="true"><i /><i /><i /></div>
-        <div className="wrap hero-grid">
-          <div>
-            <p className="eyebrow rise" style={{ ["--d" as string]: "0s" }}>AI Engineer · Mansoura, Egypt</p>
-            <h1 className="rise" style={{ ["--d" as string]: ".08s" }}>
-              I build AI systems that <span className="hl">talk to customers</span>, read catalogs and join meetings.
-            </h1>
-            <p className="lede rise" style={{ ["--d" as string]: ".16s" }}>
-              I'm Eslam Osama, an AI Engineer at Zikola. I ship LLM agents, RAG pipelines and speech systems: a Salla shopping
-              quiz, an AI meeting assistant, voice calling for merchants and WhatsApp commerce bots, plus fine-tuned LLMs and
-              medical-imaging work on the side.
-            </p>
-            <div className="cta rise" style={{ ["--d" as string]: ".24s" }}>
-              <SectionLink id="work" className="btn primary">See featured work</SectionLink>
-              <SectionLink id="bots" className="btn"><WaIcon /> Try the bots</SectionLink>
-              {profile.cvUrl && <a className="btn" href={profile.cvUrl} download>Download CV</a>}
-              <a className="btn ghost" href={profile.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-              <a className="btn ghost" href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            </div>
-          </div>
-          <div className="rise" style={{ ["--d" as string]: ".3s" }}><PipelineVisual /></div>
-        </div>
-      </section>
+      <Hero />
 
       <section className="wrap evidence" aria-label="Verified figures from project documentation">
         <ul>
@@ -223,44 +246,54 @@ function Home() {
 
       <section id="work" className="wrap section">
         <header className="sec-head" data-reveal>
-          <p className="eyebrow">Professional work at Zikola</p>
+          <p className="eyebrow">01 · Professional work at Zikola</p>
           <h2>Systems I built and shipped</h2>
-          <p className="sub-lede">Case studies written from the project documentation and repository history. Private source code and customer data are not shown.</p>
+          <p className="sub-lede">Written from project documentation and repository history. Private source code and customer data are not shown.</p>
         </header>
-        <ul className="cases">
-          {pro.map((p, i) => <CaseCard key={p.slug} p={p} lead={i === 0} />)}
+        <ul className="work">
+          <Lead p={pro[0]} />
+          {pro.slice(1).map((p, i) => <Row key={p.slug} p={p} i={i + 2} />)}
         </ul>
       </section>
 
-      <section id="bots" className="wrap section">
-        <header className="sec-head" data-reveal>
-          <p className="eyebrow">Try it live</p>
-          <h2>WhatsApp bots</h2>
-          <p className="sub-lede">Open a real WhatsApp chat with each bot. Numbers are Saudi (+966) mobile lines.</p>
-        </header>
-        <ul className="bots">
-          {whatsappBots.map((b) => (
-            <li key={b.id} data-reveal className="bot">
-              <span className="wa-badge"><WaIcon /></span>
-              <h3>{b.title}</h3>
-              <p className="num" dir="ltr">+966 {b.number}</p>
-              <p>{b.blurb}</p>
-              <a className="btn wa" href={b.href} target="_blank" rel="noopener noreferrer" aria-label={`Try the bot on WhatsApp: +966 ${b.number}`}>
-                <WaIcon /> Try the Bot on WhatsApp
-              </a>
-            </li>
-          ))}
-        </ul>
-        <p className="fine">Read how they work in the <Link to="/projects/whatsapp-commerce-bots">WhatsApp commerce bots case study</Link>.</p>
+      <section id="bots" className="band">
+        <div className="wrap bots-grid">
+          <header data-reveal>
+            <p className="eyebrow green">02 · Try it live</p>
+            <h2>WhatsApp bots you can message right now</h2>
+            <p className="sub-lede">Tap a button and a real WhatsApp chat opens with that bot. All three are Saudi (+966) mobile lines.</p>
+            <ol className="how">
+              <li><b>1</b> Tap <em>Try the Bot on WhatsApp</em></li>
+              <li><b>2</b> WhatsApp opens a chat with the number</li>
+              <li><b>3</b> Say hello and browse the catalog</li>
+            </ol>
+            <p className="fine">How they work: <Link to="/projects/whatsapp-commerce-bots">WhatsApp commerce bots case study</Link>.</p>
+          </header>
+          <ul className="bots">
+            {whatsappBots.map((b) => (
+              <li key={b.id} data-reveal className="bot">
+                <span className="wa-badge"><WaIcon size={22} /></span>
+                <div className="bot-info">
+                  <h3>{b.title}</h3>
+                  <p className="num" dir="ltr">+966 {b.number}</p>
+                  <p>{b.blurb}</p>
+                </div>
+                <a className="btn wa" href={b.href} target="_blank" rel="noopener noreferrer" aria-label={`Try the bot on WhatsApp: +966 ${b.number}`}>
+                  <WaIcon /> Try the Bot on WhatsApp
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
       <section className="wrap section">
         <header className="sec-head" data-reveal>
-          <p className="eyebrow">Research and personal projects</p>
+          <p className="eyebrow">03 · Research and personal projects</p>
           <h2>Models, speech and imaging</h2>
         </header>
-        <ul className="cases small">
-          {personal.map((p) => <CaseCard key={p.slug} p={p} />)}
+        <ul className="work">
+          {personal.map((p, i) => <Row key={p.slug} p={p} i={i + 1} />)}
         </ul>
         <h3 className="sub" data-reveal>More repositories</h3>
         <ul className="list">
@@ -279,58 +312,61 @@ function Home() {
 
       <section id="experience" className="wrap section">
         <header className="sec-head" data-reveal>
-          <p className="eyebrow">Experience and education</p>
+          <p className="eyebrow">04 · Experience and education</p>
           <h2>Where I've worked and studied</h2>
         </header>
-        <div className="timeline">
-          <article data-reveal>
+        <ol className="tl">
+          <li data-reveal>
             <p className="when">April 2026 – present · Employment</p>
             <h3>AI Engineer, Zikola</h3>
-            <p className="muted">Mansoura, Egypt</p>
             <ul className="bullets">
               {zikolaWork.map((w) => <li key={w.title}><strong>{w.title}.</strong> {w.body}</li>)}
             </ul>
-          </article>
-          <article data-reveal>
+          </li>
+          <li data-reveal>
             <p className="when">{education.years} · {education.status}</p>
             <h3>{education.degree}</h3>
             <p className="muted">{education.school}</p>
-            <p className="when pad">Training and certificates</p>
+          </li>
+          <li data-reveal>
+            <p className="when">Training and certificates</p>
             <ul className="bullets">
               {training.map((t) => <li key={t.title}><strong>{t.title}</strong> · {t.when}</li>)}
             </ul>
-          </article>
-        </div>
+          </li>
+        </ol>
       </section>
 
       <section id="skills" className="wrap section">
         <header className="sec-head" data-reveal>
-          <p className="eyebrow">Technical expertise</p>
+          <p className="eyebrow">05 · Technical expertise</p>
           <h2>What I work with</h2>
         </header>
-        <div className="skills">
+        <dl className="skills">
           {skills.map((s) => (
             <div key={s.group} data-reveal>
-              <h3>{s.group}</h3>
-              <ul>{s.items.map((i) => <li key={i}>{i}</li>)}</ul>
+              <dt>{s.group}</dt>
+              <dd>{s.items.map((i) => <span key={i}>{i}</span>)}</dd>
             </div>
           ))}
-        </div>
+        </dl>
       </section>
 
-      <section id="contact" className="wrap section contact">
-        <header className="sec-head" data-reveal>
-          <p className="eyebrow">Contact</p>
-          <h2>Let's build something</h2>
-          <p className="sub-lede">Open to AI engineering roles and collaborations.</p>
-        </header>
-        <ul className="contact-list" data-reveal>
-          <li><span>Phone</span><a href={`tel:${profile.phone}`} dir="ltr">{profile.phoneDisplay}</a></li>
-          <li><span>Email</span><a href={`mailto:${profile.email}`}>{profile.email}</a></li>
-          <li><span>LinkedIn</span><a href={profile.linkedin} target="_blank" rel="noopener noreferrer">linkedin.com/in/eslam-usamaaa</a></li>
-          <li><span>GitHub</span><a href={profile.github} target="_blank" rel="noopener noreferrer">github.com/Eslamusamaaa</a></li>
-        </ul>
-        <p className="fine">The WhatsApp numbers above are demo bot lines, separate from my personal number.</p>
+      <section id="contact" className="band contact">
+        <div className="wrap contact-grid">
+          <header data-reveal>
+            <p className="eyebrow">06 · Contact</p>
+            <h2>Let's build something</h2>
+            <p className="sub-lede">Open to AI engineering roles and collaborations.</p>
+            <p className="fine">The WhatsApp numbers above are demo bot lines, separate from my personal number.</p>
+          </header>
+          <ul className="contact-list" data-reveal>
+            <li><span>Phone</span><a href={`tel:${profile.phone}`} dir="ltr">{profile.phoneDisplay}</a></li>
+            <li><span>Email</span><a href={`mailto:${profile.email}`}>{profile.email}</a></li>
+            <li><span>LinkedIn</span><a href={profile.linkedin} target="_blank" rel="noopener noreferrer">linkedin.com/in/eslam-usamaaa</a></li>
+            <li><span>GitHub</span><a href={profile.github} target="_blank" rel="noopener noreferrer">github.com/Eslamusamaaa</a></li>
+          </ul>
+        </div>
       </section>
     </main>
   );
@@ -368,11 +404,15 @@ function ProjectPage() {
   return (
     <main id="main" tabIndex={-1} className="wrap page">
       <Link to="/" className="back">← All projects</Link>
-      <p className="eyebrow">{p.kind}</p>
-      <h1>{p.title}</h1>
+      <div className="page-head">
+        {p.image && <img className="logo-tile" src={asset(p.image.src)} alt={p.image.alt} width={88} height={88} />}
+        <div>
+          <p className="eyebrow">{p.kind}</p>
+          <h1>{p.title}</h1>
+        </div>
+      </div>
       <p className="lede">{p.summary}</p>
       <p className="status">Status: {p.status}</p>
-      {p.image && <img className="hero-img" src={`${import.meta.env.BASE_URL}${p.image.src}`} alt={p.image.alt} width={1200} height={440} />}
 
       <h2>Overview</h2>
       <p>{p.overview}</p>

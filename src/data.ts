@@ -6,7 +6,7 @@ export const profile = {
   name: "Eslam Osama Mahmoud",
   shortName: "Eslam Osama",
   title: "AI Engineer",
-  location: "Mansoura, Egypt",
+  location: "Egypt",
   email: "eslamosamamahmoud3@gmail.com",
   phone: "+201095178021", // from the CV
   phoneDisplay: "+20 109 517 8021",
@@ -86,7 +86,7 @@ export const projects: Project[] = [
     summary:
       "A widget that interviews each shopper with questions generated from that store's own products, then returns ranked recommendations with a written reason for each.",
     tags: ["TypeScript", "PostgreSQL", "Salla API", "LLM", "Multi-tenant"],
-    image: { src: "img/rashihli-banner.png", alt: "Rashihli marketing banner: a quiz that recommends the right product to every customer in your store" },
+    image: { src: "img/rashihli-logo.png", alt: "Rashihli logo: a shopping bag with a check mark" },
     overview:
       "Rashihli lets a Salla merchant install an app, have their catalog imported automatically, and show a short adaptive quiz on their storefront. The questions, the options and the wording are generated from that store's products, in the store's own language, with nothing hardcoded per merchant. One backend serves many stores.",
     problem:
