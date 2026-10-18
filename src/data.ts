@@ -69,6 +69,8 @@ export type Project = {
   next: string[];
   links: Link[];
   contribution: string;
+  role?: string;
+  outcome?: string;
 };
 
 export const projects: Project[] = [
@@ -145,6 +147,8 @@ export const projects: Project[] = [
     links: [],
     contribution:
       "Repository history shows my commits throughout; I worked on the backend, catalog adapter, quiz engine and merchant tooling described above.",
+    role: "Backend, catalog adapter, quiz engine and merchant tooling.",
+    outcome: "Working multi-tenant product, verified on demo stores with pricing, adaptation and branching test suites.",
   },
   {
     slug: "zikola-meeting-assistant",
@@ -212,6 +216,8 @@ export const projects: Project[] = [
     links: [],
     contribution:
       "I am the main committer and built the extension, alignment, analysis pipeline, security model and reports described above.",
+    role: "Main developer: extension, alignment, analysis pipeline, security and reports.",
+    outcome: "Working end to end: extension, backend, dashboard, reports and admin console.",
   },
   {
     slug: "ai-voice-calling",
@@ -273,6 +279,8 @@ export const projects: Project[] = [
     links: [],
     contribution:
       "Tele Confirm's history shows my commits only; the Voice Assistant has no commit history in the copy I reviewed, so its authorship is described by my CV and role at Zikola.",
+    role: "Tele Confirm engine and integrations; voice assistant described via CV.",
+    outcome: "Tele Confirm tested live on a Salla test store; real customer calls are switched off.",
   },
   {
     slug: "whatsapp-commerce-bots",
@@ -329,6 +337,8 @@ export const projects: Project[] = [
     links: [],
     contribution:
       "I authored the catalog bot. My role on the Zikola platform is documented only by my CV, which lists integrating WhatsApp APIs into the conversational agent.",
+    role: "Authored the catalog bot; WhatsApp API integration on the Zikola platform.",
+    outcome: "Catalog bot captured 63 of 63 store products with complete fields in its last recorded run.",
   },
   {
     slug: "elara-tts-egyptian-arabic",
@@ -588,12 +598,12 @@ export const zikolaWork = [
 ];
 
 export const skills: { group: string; items: string[] }[] = [
-  { group: "LLMs and agents", items: ["LangGraph", "LangChain", "RAG", "FAISS", "Qdrant", "Chroma", "QLoRA / LoRA", "PEFT / TRL", "vLLM", "Unsloth"] },
-  { group: "Speech and NLP", items: ["Deepgram", "ElevenLabs", "Vapi", "Spark-TTS", "Wav2Vec2", "faster-whisper", "Hugging Face Transformers", "NLTK"] },
-  { group: "ML and vision", items: ["PyTorch", "TensorFlow", "Keras", "Scikit-learn", "XGBoost", "OpenCV"] },
-  { group: "Backend and data", items: ["FastAPI", "Flask", "Node.js", "PostgreSQL", "SQLAlchemy", "Redis", "Docker", "Vercel"] },
-  { group: "Integrations", items: ["WhatsApp Cloud API", "Salla API", "n8n", "WebAuthn", "Chrome MV3", "Webhooks", "React"] },
-  { group: "Languages", items: ["Python", "TypeScript", "JavaScript", "C", "C++", "PHP", "Arabic (native)", "English (fluent)"] },
+  { group: "Machine Learning", items: ["Scikit-learn", "XGBoost", "TensorFlow / Keras", "Pandas", "NumPy"] },
+  { group: "Deep Learning", items: ["PyTorch", "DenseNet-121 from scratch", "Wav2Vec2", "Mixed-precision training"] },
+  { group: "Computer Vision", items: ["OpenCV", "3D CT segmentation (NumPy / SciPy)", "Nodule detection (LUNA16)"] },
+  { group: "NLP and Speech", items: ["Hugging Face Transformers", "NLTK", "faster-whisper", "Deepgram", "Spark-TTS", "ElevenLabs"] },
+  { group: "Generative AI and Agents", items: ["LLM fine-tuning (LoRA, QLoRA, Unsloth, PEFT / TRL)", "RAG (FAISS, Qdrant, Chroma)", "LangGraph, LangChain", "vLLM"] },
+  { group: "Tools and Infrastructure", items: ["Python, TypeScript, JavaScript", "FastAPI, Flask, Node.js", "PostgreSQL, SQLAlchemy, Redis", "Docker, Vercel, Modal", "WhatsApp Cloud API, Salla API, n8n", "Git"] },
 ];
 
 export const education = {

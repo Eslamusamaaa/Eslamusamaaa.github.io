@@ -143,22 +143,36 @@ function Hero() {
       <div className="wrap hero-grid">
         <div className="hero-copy">
           <p className="eyebrow">AI Engineer · Egypt</p>
-          <h1>
-            I design and build <span className="hl">intelligent systems</span> that solve real problems.
-          </h1>
+          <h1>Building intelligent systems that solve <span className="hl">real-world problems.</span></h1>
           <p className="lede">
-            I'm <NameLink />, an AI Engineer focused on building intelligent systems that turn complex problems into practical,
-            AI-powered solutions. My work spans machine learning, deep learning, computer vision, natural language
-            processing and generative AI, from LLM applications and retrieval-augmented generation to AI agents.
+            I'm <NameLink />, an AI Engineer focused on building intelligent systems that turn complex problems into
+            practical AI-powered solutions. My interests span Machine Learning, Deep Learning, Computer Vision, Natural
+            Language Processing and Generative AI.
           </p>
           <div className="cta">
-            <SectionLink id="work" className="btn primary">See featured work</SectionLink>
-            <SectionLink id="bots" className="btn"><WaIcon /> Try the bots</SectionLink>
-            {profile.cvUrl && <a className="btn" href={profile.cvUrl} download>Download CV</a>}
+            <SectionLink id="work" className="btn primary">Explore projects</SectionLink>
+            <SectionLink id="contact" className="btn">Contact me</SectionLink>
+            {profile.cvUrl && <a className="btn ghost" href={profile.cvUrl} download>Download CV</a>}
             <a className="btn ghost" href={profile.github} target="_blank" rel="noopener noreferrer">GitHub</a>
             <a className="btn ghost" href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
           </div>
         </div>
+        <figure className="portrait">
+          <a
+            className="portrait-link"
+            href={profile.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Chat with Eslam Usama on WhatsApp (opens in a new tab)"
+          >
+            <img src={asset("img/eslam.jpg")} alt="Portrait of Eslam Usama" width={720} height={720} fetchPriority="high" />
+            <span className="portrait-wa" aria-hidden="true"><WaIcon size={20} /></span>
+          </a>
+          <figcaption>
+            <strong><NameLink /></strong>
+            <span>AI Engineer · Say hi on WhatsApp</span>
+          </figcaption>
+        </figure>
       </div>
     </section>
   );
@@ -173,38 +187,37 @@ function VideoButton({ p, size }: { p: Project; size?: "lg" }) {
   );
 }
 
-function Lead({ p }: { p: Project }) {
+function ProCard({ p, i }: { p: Project; i: number }) {
   return (
-    <li className="lead">
-      <div className="lead-art">
-        {p.image && <img src={asset(p.image.src)} alt={p.image.alt} width={120} height={120} loading="lazy" />}
-      </div>
-      <div className="lead-body">
+    <li className="pro" style={stagger(i)}>
+      <div className="pro-head">
+        {p.image ? <img src={asset(p.image.src)} alt={p.image.alt} width={56} height={56} loading="lazy" /> : <span className="pro-ph" aria-hidden="true" />}
         <span className="kind">{p.kind}</span>
-        <h3><Link to={`/projects/${p.slug}`}>{p.title}</Link></h3>
-        <p>{p.summary}</p>
-        <span className="tags">{p.tags.map((t) => <span key={t}>{t}</span>)}</span>
-        <span className="actions">
-          <Link className="btn primary" to={`/projects/${p.slug}`}>Read the case study</Link>
-          <VideoButton p={p} />
-        </span>
       </div>
+      <h3><Link to={`/projects/${p.slug}`}>{p.title}</Link></h3>
+      <p>{p.summary}</p>
+      <dl className="facts">
+        {p.role && <div><dt>My role</dt><dd>{p.role}</dd></div>}
+        {p.outcome && <div><dt>Outcome</dt><dd>{p.outcome}</dd></div>}
+      </dl>
+      <span className="tags">{p.tags.map((t) => <span key={t}>{t}</span>)}</span>
+      <span className="actions">
+        <Link className="btn primary" to={`/projects/${p.slug}`}>Read the case study</Link>
+        <VideoButton p={p} />
+      </span>
     </li>
   );
 }
 
-function Row({ p, i }: { p: Project; i: number }) {
+function MiniCard({ p, i }: { p: Project; i: number }) {
   return (
-    <li>
-      <Link to={`/projects/${p.slug}`} className="row">
-        <span className="idx">{String(i).padStart(2, "0")}</span>
-        <div>
-          <span className="kind">{p.kind}</span>
-          <h3>{p.title}</h3>
-          <p>{p.summary}</p>
-          <span className="tags">{p.tags.map((t) => <span key={t}>{t}</span>)}</span>
-        </div>
-        <span className="go" aria-hidden="true">→</span>
+    <li style={stagger(i)}>
+      <Link to={`/projects/${p.slug}`} className="mini">
+        <span className="kind">{p.kind}</span>
+        <h3>{p.title}</h3>
+        <p>{p.summary}</p>
+        <span className="tags">{p.tags.slice(0, 4).map((t) => <span key={t}>{t}</span>)}</span>
+        <span className="more">Case study <span aria-hidden="true">→</span></span>
       </Link>
     </li>
   );
@@ -227,35 +240,36 @@ function Home() {
         <header className="sec-head reveal">
           <p className="eyebrow">01 · Professional work at Zikola</p>
           <h2>Systems I built and shipped</h2>
-          <p className="sub-lede">Written from project documentation and repository history. Private source code and customer data are not shown.</p>
+          <p className="sub-lede">Case studies written from project documentation and repository history. Private source code and customer data are not shown.</p>
         </header>
-        <ul className="work stagger">
-          <Lead p={pro[0]} />
-          {pro.slice(1).map((p, i) => <Row key={p.slug} p={p} i={i + 2} />)}
+        <ul className="grid-2 stagger">
+          {pro.map((p, i) => <ProCard key={p.slug} p={p} i={i} />)}
         </ul>
       </section>
 
       <section id="bots" className="wrap section compact">
-        <header className="sec-head reveal">
-          <p className="eyebrow">02 · Quick access</p>
-          <h2 className="h-sm">WhatsApp bots</h2>
-          <p className="sub-lede">Each link opens a WhatsApp chat with the bot. <Link to="/projects/whatsapp-commerce-bots">How they work</Link>.</p>
-        </header>
-        <ul className="bots stagger">
-          {whatsappBots.map((b, i) => (
-            <li key={b.id} style={stagger(i)}>
-              <span className="wa-ic"><WaIcon size={16} /></span>
-              <span className="bot-text">
-                <strong>{b.title}</strong>
-                <span className="num" dir="ltr">+966 {b.number}</span>
-                <span className="desc">{b.blurb}</span>
-              </span>
-              <a className="wa-link" href={b.href} target="_blank" rel="noopener noreferrer" aria-label={`Try on WhatsApp: +966 ${b.number}`}>
-                Try on WhatsApp <span aria-hidden="true">↗</span>
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div className="split">
+          <header className="sec-head reveal">
+            <p className="eyebrow">02 · Quick access</p>
+            <h2 className="h-sm">WhatsApp bots</h2>
+            <p className="sub-lede">Each link opens a WhatsApp chat with the bot. <Link to="/projects/whatsapp-commerce-bots">How they work</Link>.</p>
+          </header>
+          <ul className="bots stagger">
+            {whatsappBots.map((b, i) => (
+              <li key={b.id} style={stagger(i)}>
+                <span className="wa-ic"><WaIcon size={16} /></span>
+                <span className="bot-text">
+                  <strong>{b.title}</strong>
+                  <span className="num" dir="ltr">+966 {b.number}</span>
+                  <span className="desc">{b.blurb}</span>
+                </span>
+                <a className="wa-link" href={b.href} target="_blank" rel="noopener noreferrer" aria-label={`Try on WhatsApp: +966 ${b.number}`}>
+                  Try on WhatsApp <span aria-hidden="true">↗</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
       <section className="wrap section">
@@ -263,11 +277,11 @@ function Home() {
           <p className="eyebrow">03 · Research and personal projects</p>
           <h2>Models, speech and imaging</h2>
         </header>
-        <ul className="work stagger">
-          {personal.map((p, i) => <Row key={p.slug} p={p} i={i + 1} />)}
+        <ul className="grid-3 stagger">
+          {personal.map((p, i) => <MiniCard key={p.slug} p={p} i={i} />)}
         </ul>
         <h3 className="sub reveal">More repositories</h3>
-        <ul className="list stagger">
+        <ul className="repos stagger">
           {otherProjects.map((p, i) => (
             <li key={p.title} style={stagger(i)}>
               <div>
@@ -284,28 +298,26 @@ function Home() {
       <section id="experience" className="wrap section">
         <header className="sec-head reveal">
           <p className="eyebrow">04 · Experience and education</p>
-          <h2>Where I've worked and studied</h2>
+          <h2>Where I have worked and studied</h2>
         </header>
-        <ol className="tl stagger">
-          <li style={stagger(0)}>
+        <div className="exp stagger">
+          <article className="panel" style={stagger(0)}>
             <p className="when">April 2026 – present · Employment</p>
             <h3>AI Engineer, Zikola</h3>
-            <ul className="bullets">
+            <ul className="bullets cols">
               {zikolaWork.map((w) => <li key={w.title}><strong>{w.title}.</strong> {w.body}</li>)}
             </ul>
-          </li>
-          <li style={stagger(1)}>
+          </article>
+          <article className="panel" style={stagger(1)}>
             <p className="when">{education.years} · {education.status}</p>
             <h3>{education.degree}</h3>
             <p className="muted">{education.school}</p>
-          </li>
-          <li style={stagger(2)}>
-            <p className="when">Training and certificates</p>
+            <p className="when pad">Training and certificates</p>
             <ul className="bullets">
               {training.map((t) => <li key={t.title}><strong>{t.title}</strong> · {t.when}</li>)}
             </ul>
-          </li>
-        </ol>
+          </article>
+        </div>
       </section>
 
       <section id="skills" className="wrap section">
@@ -317,7 +329,7 @@ function Home() {
           {skills.map((s, i) => (
             <div key={s.group} style={stagger(i)}>
               <dt>{s.group}</dt>
-              <dd>{s.items.map((it) => <span key={it}>{it}</span>)}</dd>
+              <dd><ul>{s.items.map((it) => <li key={it}>{it}</li>)}</ul></dd>
             </div>
           ))}
         </dl>
@@ -396,82 +408,85 @@ function ProjectPage() {
   return (
     <main id="main" tabIndex={-1} className="wrap page">
       <Link to="/" className="back">← All projects</Link>
-      <div className="page-head">
+      <header className="page-head">
         {p.image && <img className="logo-tile" src={asset(p.image.src)} alt={p.image.alt} width={88} height={88} />}
         <div>
           <p className="eyebrow">{p.kind}</p>
           <h1>{p.title}</h1>
+          <p className="lede">{p.summary}</p>
+          {p.video && <div className="cta"><VideoButton p={p} size="lg" /></div>}
         </div>
-      </div>
-      <p className="lede">{p.summary}</p>
-      <p className="status">Status: {p.status}</p>
-      {p.video && (
-        <div className="cta"><VideoButton p={p} size="lg" /></div>
-      )}
+      </header>
 
-      <h2>Overview</h2>
-      <p>{p.overview}</p>
-      <VideoCard p={p} />
-      <h2>Problem and motivation</h2>
-      <p>{p.problem}</p>
-      <p className="callout"><strong>My contribution.</strong> {p.contribution}</p>
+      <div className="page-grid">
+        <div className="page-main">
+          <h2>Overview</h2>
+          <p>{p.overview}</p>
+          <h2>Problem and motivation</h2>
+          <p>{p.problem}</p>
 
-      <h2>{p.flowTitle}</h2>
-      <Flow steps={p.flow} />
-      {p.flowCaveat && <p className="note">{p.flowCaveat}</p>}
+          <h2>{p.flowTitle}</h2>
+          <Flow steps={p.flow} />
+          {p.flowCaveat && <p className="note">{p.flowCaveat}</p>}
 
-      <h2>Implementation</h2>
-      {p.implementation.map((i) => (
-        <div key={i.heading}>
-          <h3>{i.heading}</h3>
-          <p>{i.body}</p>
-        </div>
-      ))}
+          <h2>Implementation</h2>
+          {p.implementation.map((i) => (
+            <div key={i.heading}>
+              <h3>{i.heading}</h3>
+              <p>{i.body}</p>
+            </div>
+          ))}
 
-      <h2>Technologies and their roles</h2>
-      <table>
-        <tbody>
-          {p.stack.map((s) => <tr key={s.name}><th scope="row">{s.name}</th><td>{s.role}</td></tr>)}
-        </tbody>
-      </table>
+          {p.challenges.length > 0 && (
+            <>
+              <h2>Challenges and trade-offs</h2>
+              <ul className="bullets">
+                {p.challenges.map((c) => <li key={c.challenge}><strong>{c.challenge}.</strong> {c.solution}</li>)}
+              </ul>
+            </>
+          )}
 
-      {p.challenges.length > 0 && (
-        <>
-          <h2>Challenges and trade-offs</h2>
+          <h2>Results and limitations</h2>
           <ul className="bullets">
-            {p.challenges.map((c) => <li key={c.challenge}><strong>{c.challenge}.</strong> {c.solution}</li>)}
+            {p.results.map((r) => <li key={r}>{r}</li>)}
+            {p.limitations.map((r) => <li key={r} className="limit">{r}</li>)}
           </ul>
-        </>
-      )}
 
-      <h2>Results and limitations</h2>
-      <ul className="bullets">
-        {p.results.map((r) => <li key={r}>{r}</li>)}
-        {p.limitations.map((r) => <li key={r} className="limit">{r}</li>)}
-      </ul>
+          {p.next.length > 0 && (
+            <>
+              <h2>Future improvements</h2>
+              <ul className="bullets">{p.next.map((r) => <li key={r}>{r}</li>)}</ul>
+            </>
+          )}
+        </div>
 
-      {p.next.length > 0 && (
-        <>
-          <h2>Future improvements</h2>
-          <ul className="bullets">{p.next.map((r) => <li key={r}>{r}</li>)}</ul>
-        </>
-      )}
-
-      {(p.links.length > 0 || isBots) && (
-        <>
-          <h2>Links</h2>
-          <div className="cta">
-            {isBots && <Link className="btn" to="/" state={{ scrollTo: "bots" }}><WaIcon /> Try the bots</Link>}
-            {p.links.map((l) =>
-              l.href.startsWith("#/") ? (
-                <Link key={l.href} className="btn" to={l.href.slice(1)}>{l.label}</Link>
-              ) : (
-                <a key={l.href} className="btn" href={l.href} target="_blank" rel="noopener noreferrer">{l.label} ↗</a>
-              )
-            )}
-          </div>
-        </>
-      )}
+        <aside className="page-aside">
+          <p className="status">Status: {p.status}</p>
+          <p className="callout"><strong>My contribution.</strong> {p.contribution}</p>
+          <VideoCard p={p} />
+          <h2>Technologies</h2>
+          <table>
+            <tbody>
+              {p.stack.map((s) => <tr key={s.name}><th scope="row">{s.name}</th><td>{s.role}</td></tr>)}
+            </tbody>
+          </table>
+          {(p.links.length > 0 || isBots) && (
+            <>
+              <h2>Links</h2>
+              <div className="cta stack">
+                {isBots && <Link className="btn" to="/" state={{ scrollTo: "bots" }}><WaIcon /> Try the bots</Link>}
+                {p.links.map((l) =>
+                  l.href.startsWith("#/") ? (
+                    <Link key={l.href} className="btn" to={l.href.slice(1)}>{l.label}</Link>
+                  ) : (
+                    <a key={l.href} className="btn" href={l.href} target="_blank" rel="noopener noreferrer">{l.label} ↗</a>
+                  )
+                )}
+              </div>
+            </>
+          )}
+        </aside>
+      </div>
     </main>
   );
 }
