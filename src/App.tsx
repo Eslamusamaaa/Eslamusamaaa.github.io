@@ -157,6 +157,22 @@ function Hero() {
             <a className="btn ghost" href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
           </div>
         </div>
+        <figure className="portrait">
+          <a
+            className="portrait-link"
+            href={profile.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Chat with Eslam Usama on WhatsApp (opens in a new tab)"
+          >
+            <img src={asset("img/eslam.jpg")} alt="Portrait of Eslam Usama" width={800} height={800} fetchPriority="high" />
+            <span className="portrait-wa" aria-hidden="true"><WaIcon size={20} /></span>
+          </a>
+          <figcaption>
+            <strong><NameLink /></strong>
+            <span>AI Engineer · Say hi on WhatsApp</span>
+          </figcaption>
+        </figure>
       </div>
     </section>
   );
