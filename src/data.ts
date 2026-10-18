@@ -10,6 +10,7 @@ export const profile = {
   email: "eslamosamamahmoud3@gmail.com",
   phone: "+201095178021", // from the CV
   phoneDisplay: "+20 109 517 8021",
+  whatsapp: "https://wa.me/201095178021", // personal number, separate from the bot lines
   github: "https://github.com/Eslamusamaaa",
   linkedin: "https://www.linkedin.com/in/eslam-usamaaa",
   cvUrl: "cv/Eslam-Osama-CV.pdf" as string | null, // file lives in /public/cv
@@ -40,13 +41,6 @@ export const whatsappBots = [
     href: wa("53 394 7699"),
     blurb: "Catalog-grounded sales assistant: prices and links come from data.",
   },
-];
-
-export const evidence = [
-  { value: 30, label: "call features built in Tele Confirm", note: "from its README status" },
-  { value: 666, label: "automated checks passing", note: "Tele Confirm, 17 scripts" },
-  { value: 1242, label: "data-integrity checks", note: "ALDAR WhatsApp bot, last recorded run" },
-  { value: 234, label: "commits on Rashihli", note: "from the repository history" },
 ];
 
 export type Link = { label: string; href: string };
@@ -150,7 +144,7 @@ export const projects: Project[] = [
     next: ["Purchase-conversion attribution via order webhooks.", "Generic adapter (JSON-LD / product feed)."],
     links: [],
     contribution:
-      "Repository history shows my commits throughout (234 in total); I worked on the backend, catalog adapter, quiz engine and merchant tooling described above.",
+      "Repository history shows my commits throughout; I worked on the backend, catalog adapter, quiz engine and merchant tooling described above.",
   },
   {
     slug: "zikola-meeting-assistant",
@@ -217,7 +211,7 @@ export const projects: Project[] = [
     next: [],
     links: [],
     contribution:
-      "I am the main committer (265 of roughly 280 commits) and built the extension, alignment, analysis pipeline, security model and reports described above.",
+      "I am the main committer and built the extension, alignment, analysis pipeline, security model and reports described above.",
   },
   {
     slug: "ai-voice-calling",
@@ -246,7 +240,7 @@ export const projects: Project[] = [
         body: "The call engine (domain, playbooks, tools, orchestration) has no server, database driver or voice platform in it, and talks to the outside through ports. The voice platform, storefront and database are replaceable; what a call is stays fixed.",
       },
       {
-        heading: "Thirty playbooks",
+        heading: "Call playbooks",
         body: "One file per feature across confirmation, payments, fulfilment, post-delivery and merchant operations, from COD confirmation and address checks to unpaid-order follow-up and satisfaction surveys. Marketing features stay off until a merchant confirms consent per feature.",
       },
       {
@@ -270,7 +264,7 @@ export const projects: Project[] = [
       { challenge: "Calls must never exceed what the merchant allowed", solution: "A pre-dial gate re-checked on every attempt, plus per-feature consent and quotas." },
       { challenge: "Long waits and restarts", solution: "Runs checkpointed after every step; scheduled calls survive restarts." },
     ],
-    results: ["Tele Confirm README records 30 features built and 17 scripts with 666 checks passing, tested live on a Salla test store."],
+    results: ["Tele Confirm's README records its call features as built and tested live on a Salla test store."],
     limitations: [
       "Tele Confirm is a test environment: dialing real customers is off, and a Saudi outbound number, production database and panel login are still missing per its README.",
       "No latency, call-volume or success-rate figures are claimed. The Voice Assistant is an MVP.",
@@ -278,7 +272,7 @@ export const projects: Project[] = [
     next: ["Persistent checkpointer on Postgres, panel login, production number."],
     links: [],
     contribution:
-      "Tele Confirm's history shows my commits only (17); the Voice Assistant has no commit history in the copy I reviewed, so its authorship is described by my CV and role at Zikola.",
+      "Tele Confirm's history shows my commits only; the Voice Assistant has no commit history in the copy I reviewed, so its authorship is described by my CV and role at Zikola.",
   },
   {
     slug: "whatsapp-commerce-bots",
@@ -308,7 +302,7 @@ export const projects: Project[] = [
       },
       {
         heading: "Scrape, index, serve",
-        body: "A Playwright scraper reads the store's live catalog on a schedule into SQLite; product text is embedded into a persistent Chroma index; the bot never touches the live site. Verification scripts record 1,242 checks passing across mapping layers on the last run.",
+        body: "A Playwright scraper reads the store's live catalog on a schedule into SQLite; product text is embedded into a persistent Chroma index; the bot never touches the live site. Verification scripts check the scraped data across several mapping layers.",
       },
       {
         heading: "Zikola's multi-tenant platform",
@@ -334,7 +328,7 @@ export const projects: Project[] = [
     next: [],
     links: [],
     contribution:
-      "I authored the catalog bot (28 commits). My role on the Zikola platform is documented only by my CV, which lists integrating WhatsApp APIs into the conversational agent.",
+      "I authored the catalog bot. My role on the Zikola platform is documented only by my CV, which lists integrating WhatsApp APIs into the conversational agent.",
   },
   {
     slug: "elara-tts-egyptian-arabic",

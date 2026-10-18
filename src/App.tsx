@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Route, Routes, useLocation, useParams } from "react-router-dom";
 import {
-  education, evidence, otherProjects, profile, projects, skills, training, whatsappBots, zikolaWork, type Project,
+  education, otherProjects, profile, projects, skills, training, whatsappBots, zikolaWork, type Project,
 } from "./data";
 
 const asset = (p: string) => `${import.meta.env.BASE_URL}${p}`;
@@ -80,7 +80,6 @@ function Header() {
     <header className={`site-header${scrolled ? " scrolled" : ""}${open ? " open" : ""}`}>
       <div className="bar">
         <Link to="/" className="brand" onClick={close}>
-          <img src={asset("img/eslam.jpg")} alt="" width={32} height={32} />
           {profile.shortName}
         </Link>
         <button className="menu-btn" aria-expanded={open} aria-controls="primary-nav" onClick={() => setOpen(!open)}>
@@ -118,13 +117,6 @@ function PlayIcon({ size = 18 }: { size?: number }) {
   );
 }
 
-const pipeline = [
-  { t: "Voice or WhatsApp", s: "customer input" },
-  { t: "Speech-to-text", s: "Deepgram" },
-  { t: "Agent", s: "LangGraph · RAG · LLM" },
-  { t: "Reply", s: "text or TTS" },
-];
-
 function Hero() {
   return (
     <section className="hero">
@@ -132,11 +124,12 @@ function Hero() {
         <div className="hero-copy">
           <p className="eyebrow">AI Engineer · Egypt</p>
           <h1>
-            I build AI that <span className="hl">talks to customers</span>, reads catalogs and joins meetings.
+            I design and build <span className="hl">intelligent systems</span> that solve real problems.
           </h1>
           <p className="lede">
-            I'm Eslam, an AI Engineer at Zikola. I ship LLM agents, RAG pipelines and speech systems: a Salla shopping quiz,
-            a meeting assistant, voice calling for merchants and WhatsApp commerce bots.
+            I'm Eslam, an AI Engineer focused on building intelligent systems that turn complex problems into practical,
+            AI-powered solutions. My work spans machine learning, deep learning, computer vision, natural language
+            processing and generative AI, from LLM applications and retrieval-augmented generation to AI agents.
           </p>
           <div className="cta">
             <SectionLink id="work" className="btn primary">See featured work</SectionLink>
@@ -147,23 +140,21 @@ function Hero() {
           </div>
         </div>
         <figure className="portrait">
-          <img src={asset("img/eslam.jpg")} alt="Portrait of Eslam Osama" width={720} height={720} fetchPriority="high" />
+          <a
+            className="portrait-link"
+            href={profile.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Chat with Eslam on WhatsApp (opens in a new tab)"
+          >
+            <img src={asset("img/eslam.jpg")} alt="Portrait of Eslam Osama" width={720} height={720} fetchPriority="high" />
+            <span className="portrait-wa" aria-hidden="true"><WaIcon size={20} /></span>
+          </a>
           <figcaption>
             <strong>{profile.name}</strong>
-            <span>AI Engineer · Zikola</span>
+            <span>AI Engineer · Say hi on WhatsApp</span>
           </figcaption>
         </figure>
-      </div>
-      <div className="wrap">
-        <ol className="strip" aria-label="Typical pipeline in my voice and WhatsApp agent work">
-          {pipeline.map((p, i) => (
-            <li key={p.t}>
-              <strong>{p.t}</strong>
-              <span>{p.s}</span>
-              {i < pipeline.length - 1 && <i className="arrow" aria-hidden="true" />}
-            </li>
-          ))}
-        </ol>
       </div>
     </section>
   );
@@ -227,18 +218,6 @@ function Home() {
   return (
     <main id="main" tabIndex={-1}>
       <Hero />
-
-      <section className="wrap evidence" aria-label="Verified figures from project documentation">
-        <ul className="stagger">
-          {evidence.map((e, i) => (
-            <li key={e.label} style={stagger(i)}>
-              <strong>{e.value.toLocaleString("en-US")}</strong>
-              <span>{e.label}</span>
-              <small>{e.note}</small>
-            </li>
-          ))}
-        </ul>
-      </section>
 
       <section id="work" className="wrap section">
         <header className="sec-head reveal">
