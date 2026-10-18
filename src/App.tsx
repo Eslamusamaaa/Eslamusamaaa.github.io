@@ -109,6 +109,20 @@ function WaIcon({ size = 18 }: { size?: number }) {
   );
 }
 
+function NameLink({ children }: { children?: React.ReactNode }) {
+  return (
+    <a
+      className="name-link"
+      href={profile.whatsapp}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat with Eslam Usama on WhatsApp (opens in a new tab)"
+    >
+      {children ?? profile.name}
+    </a>
+  );
+}
+
 function PlayIcon({ size = 18 }: { size?: number }) {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" focusable="false">
@@ -127,7 +141,7 @@ function Hero() {
             I design and build <span className="hl">intelligent systems</span> that solve real problems.
           </h1>
           <p className="lede">
-            I'm Eslam, an AI Engineer focused on building intelligent systems that turn complex problems into practical,
+            I'm <NameLink />, an AI Engineer focused on building intelligent systems that turn complex problems into practical,
             AI-powered solutions. My work spans machine learning, deep learning, computer vision, natural language
             processing and generative AI, from LLM applications and retrieval-augmented generation to AI agents.
           </p>
@@ -145,13 +159,13 @@ function Hero() {
             href={profile.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Chat with Eslam on WhatsApp (opens in a new tab)"
+            aria-label="Chat with Eslam Usama on WhatsApp (opens in a new tab)"
           >
-            <img src={asset("img/eslam.jpg")} alt="Portrait of Eslam Osama" width={720} height={720} fetchPriority="high" />
+            <img src={asset("img/eslam.jpg")} alt="Portrait of Eslam Usama" width={720} height={720} fetchPriority="high" />
             <span className="portrait-wa" aria-hidden="true"><WaIcon size={20} /></span>
           </a>
           <figcaption>
-            <strong>{profile.name}</strong>
+            <strong><NameLink /></strong>
             <span>AI Engineer · Say hi on WhatsApp</span>
           </figcaption>
         </figure>
@@ -379,7 +393,7 @@ function ProjectPage() {
   const p = projects.find((x) => x.slug === slug);
   useReveal(slug);
   useEffect(() => {
-    document.title = p ? `${p.title} · Eslam Osama` : "Eslam Osama · AI Engineer";
+    document.title = p ? `${p.title} · Eslam Usama` : "Eslam Usama · AI Engineer";
   }, [p]);
   if (!p)
     return (
@@ -484,7 +498,7 @@ export default function App() {
         <Route path="*" element={<main id="main" tabIndex={-1} className="wrap page"><h1>Page not found</h1><Link to="/">Back to home</Link></main>} />
       </Routes>
       <footer className="site-footer wrap">
-        <span>© {new Date().getFullYear()} {profile.name} · AI Engineer</span>
+        <span>© {new Date().getFullYear()} <NameLink /> · AI Engineer</span>
         <a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub</a>
       </footer>
     </>

@@ -3,8 +3,8 @@
 // customer data are published here. Edit this file to update the site.
 
 export const profile = {
-  name: "Eslam Osama Mahmoud",
-  shortName: "Eslam Osama",
+  name: "Eslam Usama",
+  shortName: "Eslam Usama",
   title: "AI Engineer",
   location: "Egypt",
   email: "eslamosamamahmoud3@gmail.com",
