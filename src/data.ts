@@ -283,6 +283,76 @@ export const projects: Project[] = [
     outcome: "Tele Confirm tested live on a Salla test store; real customer calls are switched off.",
   },
   {
+    slug: "ai-fragrance-concierge",
+    title: "AI Fragrance Concierge: Arabic voice and chat assistant",
+    kind: "Zikola · conversational AI · RAG · voice",
+    group: "professional",
+    status: "Working prototype · private repository",
+    summary:
+      "A real-time Arabic assistant for a fragrance retailer: it answers product questions by voice, recommends from the catalog, and places automated calls to confirm cash-on-delivery orders.",
+    tags: ["Deepgram", "ElevenLabs", "RAG", "Vapi", "TypeScript"],
+    overview:
+      "Two voice surfaces share one retrieval and catalog engine. A browser voice assistant handles pre-purchase advice and recommendations over a WebSocket, and an outbound call path built on Vapi confirms or cancels cash-on-delivery orders after checkout.",
+    problem:
+      "A fragrance shopper needs advice, not a search box, and a refused cash-on-delivery order costs the merchant shipping both ways. The assistant has to sound natural in spoken Saudi Arabic, respond fast enough to interrupt, and only recommend products that exist.",
+    flowTitle: "A spoken turn in the browser assistant",
+    flow: [
+      { title: "Microphone", note: "AudioWorklet frames streamed to the server over WebSocket" },
+      { title: "Speech-to-text", note: "Deepgram nova-3, Arabic, streaming" },
+      { title: "Retrieval", note: "RAG over the fragrance knowledge base plus catalog context" },
+      { title: "Language model", note: "OpenRouter (Gemini 2.5 Flash), streaming with tool calling" },
+      { title: "Text-to-speech", note: "ElevenLabs streaming, sentence by sentence" },
+      { title: "Playback", note: "Barge-in cancels generation and speech immediately" },
+    ],
+    implementation: [
+      {
+        heading: "Latency by design",
+        body: "Recognition, generation and synthesis all stream. A sentence splitter hands each complete Arabic sentence to speech synthesis as soon as it is ready, so time to first audio depends on the first sentence rather than the whole reply. The speech recognizer connects lazily on the first audio chunk.",
+      },
+      {
+        heading: "Barge-in and turn-taking",
+        body: "A state machine moves between listening, thinking and speaking. Interrupting the assistant aborts the model request, destroys the synthesis socket and resets the splitter together, because cancelling only part of that leaves audio playing over the user. A turn ends on whichever comes first: client voice-activity detection, a server silence timer or the recognizer's utterance-end event.",
+      },
+      {
+        heading: "Spoken-Arabic persona",
+        body: "Prompts constrain the assistant to a direct contemporary Saudi register and forbid emoji, markdown and filler greetings, since every word is spoken. Beginner and enthusiast conversation journeys, budget matching and a human handoff when it cannot help sit on top of the retrieval engine.",
+      },
+      {
+        heading: "Order confirmation calls",
+        body: "Cash-on-delivery checkout creates an order awaiting confirmation. A delayed job places a Vapi call with per-order details, and the call agent exposes confirm and cancel as tools and can transfer to a person. An end-of-call webhook reconciles the order and writes a call log.",
+      },
+      {
+        heading: "Accounts and storage",
+        body: "Signup and login with hashed passwords and JWT sessions, phone numbers validated to E.164, and SQLite for orders and call logs.",
+      },
+    ],
+    stack: [
+      { name: "Node.js, TypeScript, Express, ws", role: "Server and WebSocket voice transport" },
+      { name: "Deepgram nova-3", role: "Streaming Arabic speech recognition" },
+      { name: "ElevenLabs", role: "Streaming speech synthesis" },
+      { name: "OpenRouter (Gemini 2.5 Flash)", role: "Streaming responses and tool calling" },
+      { name: "RAG engine (LangChain core + custom)", role: "Catalog and knowledge-base retrieval" },
+      { name: "Vapi", role: "Outbound order-confirmation calls" },
+      { name: "SQLite", role: "Orders, users and call logs" },
+    ],
+    challenges: [
+      { challenge: "Perceived latency in a spoken conversation", solution: "End-to-end streaming and sentence-level hand-off to speech synthesis." },
+      { challenge: "Users interrupting mid-sentence", solution: "Barge-in that cancels model, synthesis and splitter together." },
+      { challenge: "Text that sounds wrong when read aloud", solution: "Prompt rules for spoken output and a dialect-specific persona." },
+    ],
+    results: ["The browser assistant and the order-confirmation call path are both implemented in the repository."],
+    limitations: [
+      "A prototype: the repository's own roadmap lists configuration hardening, a persistent call queue and a storefront widget as remaining phases.",
+      "No latency, call-volume or conversion figures are claimed.",
+    ],
+    next: ["Persist the call queue, harden webhooks and configuration, and ship a storefront voice widget."],
+    links: [],
+    contribution:
+      "Repository history shows my commits only; I built the voice pipeline, retrieval, ordering and call-confirmation flow described above.",
+    role: "Voice pipeline, retrieval engine, ordering and call-confirmation flow.",
+    outcome: "Browser voice assistant and outbound confirmation calls implemented; still a prototype.",
+  },
+  {
     slug: "whatsapp-commerce-bots",
     title: "WhatsApp commerce bots",
     kind: "Zikola · conversational commerce",
@@ -591,6 +661,7 @@ export const otherProjects: { title: string; blurb: string; tags: string[]; href
 
 export const zikolaWork = [
   { title: "Multi-modal conversational agent", body: "Stateful agentic workflows with LangGraph and LangChain integrating LLMs, a tailored RAG pipeline and STT/TTS engines, reachable through WhatsApp APIs and web platforms." },
+  { title: "Arabic voice and chat concierge", body: "A real-time voice assistant with RAG recommendations, barge-in, and Vapi-based order-confirmation calls for a retailer." },
   { title: "Real-time meeting intelligence", body: "Dual-channel audio capture in a Chrome MV3 extension and a custom word-alignment algorithm that maps diarization tags to attendee names." },
   { title: "Async LLM pipeline", body: "Parallel asyncio processing of multi-hour transcripts with a state-machine auto-repair parser guaranteeing valid JSON." },
   { title: "Security and RBAC", body: "WebAuthn passkeys, SHA-256 OTPs, multi-tenant RBAC, automated offboarding, JWT invalidation and immutable audit logging." },
@@ -598,12 +669,52 @@ export const zikolaWork = [
 ];
 
 export const skills: { group: string; items: string[] }[] = [
-  { group: "Machine Learning", items: ["Scikit-learn", "XGBoost", "TensorFlow / Keras", "Pandas", "NumPy"] },
-  { group: "Deep Learning", items: ["PyTorch", "DenseNet-121 from scratch", "Wav2Vec2", "Mixed-precision training"] },
-  { group: "Computer Vision", items: ["OpenCV", "3D CT segmentation (NumPy / SciPy)", "Nodule detection (LUNA16)"] },
-  { group: "NLP and Speech", items: ["Hugging Face Transformers", "NLTK", "faster-whisper", "Deepgram", "Spark-TTS", "ElevenLabs"] },
-  { group: "Generative AI and Agents", items: ["LLM fine-tuning (LoRA, QLoRA, Unsloth, PEFT / TRL)", "RAG (FAISS, Qdrant, Chroma)", "LangGraph, LangChain", "vLLM"] },
-  { group: "Tools and Infrastructure", items: ["Python, TypeScript, JavaScript", "FastAPI, Flask, Node.js", "PostgreSQL, SQLAlchemy, Redis", "Docker, Vercel, Modal", "WhatsApp Cloud API, Salla API, n8n", "Git"] },
+  {
+    group: "Machine Learning",
+    items: [
+      "Scikit-learn", "XGBoost", "TensorFlow / Keras", "Pandas, NumPy",
+      "Supervised classification and regression", "Feature engineering", "Model evaluation and validation",
+      "Exploratory data analysis", "Data preprocessing and augmentation", "Ensemble methods",
+    ],
+  },
+  {
+    group: "Deep Learning",
+    items: [
+      "PyTorch", "Convolutional networks (DenseNet-121 from scratch)", "Transformer fine-tuning", "Transfer learning",
+      "Class-imbalance handling", "Mixed-precision (bf16) training", "GPU memory optimisation", "Training loops and checkpointing",
+    ],
+  },
+  {
+    group: "Computer Vision",
+    items: [
+      "OpenCV", "3D medical image processing", "Image segmentation", "Candidate detection and false-positive reduction",
+      "Patch extraction and sliding-window inference", "Image preprocessing and normalisation",
+    ],
+  },
+  {
+    group: "NLP and Speech",
+    items: [
+      "Hugging Face Transformers", "NLTK", "Text classification (TF-IDF, n-grams)", "Arabic text normalisation",
+      "Embeddings and semantic search", "Speech-to-text and diarization (faster-whisper, Deepgram)",
+      "Text-to-speech and voice synthesis (Spark-TTS, ElevenLabs)", "Voice activity detection",
+    ],
+  },
+  {
+    group: "Generative AI and Agents",
+    items: [
+      "LLM fine-tuning (LoRA, QLoRA, Unsloth, PEFT / TRL)", "Prompt engineering", "Retrieval-augmented generation (FAISS, Qdrant, Chroma)",
+      "Chunking and retrieval tuning", "Tool and function calling", "Stateful agents (LangGraph, LangChain)",
+      "Structured and schema-validated output", "Streaming LLM responses", "LLM serving (vLLM)",
+    ],
+  },
+  {
+    group: "Tools and Infrastructure",
+    items: [
+      "Python, TypeScript, JavaScript", "FastAPI, Flask, Node.js, Express", "REST APIs, WebSockets and webhooks",
+      "Async and concurrent programming", "PostgreSQL, SQLite, SQLAlchemy, Redis", "OAuth, JWT, passkeys and role-based access",
+      "Docker, Vercel, Modal", "CI/CD with GitHub Actions", "Salla, WhatsApp Cloud API and n8n integrations", "Git",
+    ],
+  },
 ];
 
 export const education = {
