@@ -52,26 +52,17 @@ nav .nav-cta:hover { background: var(--accent-hover); color: var(--accent-ink); 
 
 /* Hero */
 .hero .btn { padding: 9px 15px; }
-.hero { padding: 56px 0 8px; background: linear-gradient(180deg, #f1f2ff 0%, var(--bg) 78%); }
-.hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: clamp(72px, 11vw, 160px); align-items: center; }
+.hero { padding: 80px 0 8px; background: linear-gradient(180deg, #f1f2ff 0%, var(--bg) 78%); }
+.hero-grid { display: block; text-align: center; max-width: 860px; }
+.hero-grid .lede { margin-inline: auto; }
+.hero-grid .cta { justify-content: center; }
+.hero-grid h1 { max-width: 14em; margin-inline: auto; }
 .eyebrow { font: 500 12.5px var(--mono); color: var(--accent); letter-spacing: .08em; text-transform: uppercase; margin: 0 0 16px; }
 h1 { font: 800 clamp(34px, 5vw, 54px)/1.1 var(--head); letter-spacing: -.025em; margin: 0 0 20px; }
 .hl { color: var(--accent); }
 .lede { font-size: 18px; color: var(--muted); max-width: 38em; margin: 0 0 28px; }
-.portrait { margin: 0 0 0 auto; justify-self: end; width: min(100%, 400px); }
 .name-link { color: inherit; font-weight: 600; text-decoration: underline; text-decoration-color: var(--line-2); text-decoration-thickness: 1.5px; text-underline-offset: 4px; border-radius: 3px; transition: color var(--t-fast) var(--ease), text-decoration-color var(--t-fast) var(--ease); }
 .name-link:hover, .name-link:focus-visible { color: var(--accent); text-decoration-color: var(--accent); }
-.portrait-link { position: relative; display: block; border-radius: 24px; }
-.portrait-link img { transition: transform var(--t-base) var(--ease), box-shadow var(--t-base) var(--ease); }
-.portrait-link:hover img { transform: scale(1.02); }
-.portrait-wa { position: absolute; right: 12px; bottom: 12px; width: 40px; height: 40px; border-radius: 50%; background: var(--wa); color: #fff; display: grid; place-items: center; box-shadow: 0 6px 16px -6px rgba(0, 0, 0, .35); opacity: 0; transform: translateY(6px); transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease); }
-.portrait-link:hover .portrait-wa, .portrait-link:focus-visible .portrait-wa { opacity: 1; transform: none; }
-@media (hover: none) { .portrait-wa { opacity: 1; transform: none; } }
-.portrait img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 24px; border: 1px solid var(--line-2); box-shadow: var(--shadow); background: var(--surface-2); }
-.portrait figcaption { display: flex; flex-direction: column; margin-top: 14px; }
-.portrait strong { font: 700 16px var(--head); }
-.portrait span { font: 12.5px var(--mono); color: var(--muted); }
-
 
 /* Sections */
 .section { padding-block: 88px 0; }
@@ -181,9 +172,7 @@ th { width: 42%; font-weight: 600; } td { color: var(--muted); }
 /* Motion: hidden-until-revealed only when JS is running */
 @keyframes enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
-.js .hero-copy, .js .portrait { animation: enter var(--t-base) var(--ease) both; }
-.js .portrait { animation-delay: 120ms; }
-.js .js main { animation: fade 240ms var(--ease) both; }
+.js .hero-copy, .js .js .js .js main { animation: fade 240ms var(--ease) both; }
 .js .reveal { opacity: 0; transform: translateY(12px); transition: opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease); }
 .js .reveal.in { opacity: 1; transform: none; }
 .js .stagger > * { opacity: 0; transform: translateY(10px); transition: opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease); transition-delay: calc(var(--n, 0) * var(--step)); }
@@ -191,9 +180,8 @@ th { width: 42%; font-weight: 600; } td { color: var(--muted); }
 .js .row, .js .bots li { transition: background var(--t-fast) var(--ease), opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease); }
 
 @media (max-width: 960px) {
-  .hero-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
-  .portrait { justify-self: start; width: min(100%, 320px); }
-  .lead { grid-template-columns: 1fr; gap: 18px; } .lead-art { width: 112px; padding: 8px; }
+  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .lead { grid-template-columns: 1fr; gap: 18px; } .lead-art { width: 112px; padding: 8px; }
     .skills > div { grid-template-columns: 1fr; gap: 10px; }
 }
 @media (max-width: 760px) {
