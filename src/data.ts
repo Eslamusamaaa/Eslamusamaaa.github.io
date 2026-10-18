@@ -662,6 +662,8 @@ export const otherProjects: { title: string; blurb: string; tags: string[]; href
 export const zikolaWork = [
   { title: "Multi-modal conversational agent", body: "Stateful agentic workflows with LangGraph and LangChain integrating LLMs, a tailored RAG pipeline and STT/TTS engines, reachable through WhatsApp APIs and web platforms." },
   { title: "Arabic voice and chat concierge", body: "A real-time voice assistant with RAG recommendations, barge-in, and Vapi-based order-confirmation calls for a retailer." },
+  { title: "WhatsApp commerce chatbots", body: "Catalog-grounded WhatsApp sales assistants on the Meta Cloud API: a button-driven guided flow for exact answers and an LLM agent (LangGraph, tool calling) for open questions, backed by a scraped catalog and a vector index." },
+  { title: "Multi-tenant messaging platform", body: "WhatsApp integration work on Zikola's multi-tenant commerce messaging platform, where a client is onboarded from a storefront URL and the LLM reaches the catalog only through a fixed tool registry." },
   { title: "Real-time meeting intelligence", body: "Dual-channel audio capture in a Chrome MV3 extension and a custom word-alignment algorithm that maps diarization tags to attendee names." },
   { title: "Async LLM pipeline", body: "Parallel asyncio processing of multi-hour transcripts with a state-machine auto-repair parser guaranteeing valid JSON." },
   { title: "Security and RBAC", body: "WebAuthn passkeys, SHA-256 OTPs, multi-tenant RBAC, automated offboarding, JWT invalidation and immutable audit logging." },
@@ -687,8 +689,9 @@ export const skills: { group: string; items: string[] }[] = [
   {
     group: "Computer Vision",
     items: [
-      "OpenCV", "3D medical image processing", "Image segmentation", "Candidate detection and false-positive reduction",
-      "Patch extraction and sliding-window inference", "Image preprocessing and normalisation",
+      "OpenCV", "Image classification", "Object detection", "Keypoint and pose estimation", "Action recognition in video",
+      "Image segmentation", "3D medical image processing", "Candidate detection and false-positive reduction",
+      "Patch extraction and sliding-window inference", "Image preprocessing and normalisation", "Dataset annotation and augmentation",
     ],
   },
   {
