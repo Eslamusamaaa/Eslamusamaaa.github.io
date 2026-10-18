@@ -165,7 +165,7 @@ function Hero() {
             rel="noopener noreferrer"
             aria-label="Chat with Eslam Usama on WhatsApp (opens in a new tab)"
           >
-            <img src={asset("img/eslam.jpg")} alt="Portrait of Eslam Usama" width={800} height={800} fetchPriority="high" />
+            <img src={asset("img/eslam-profile.jpg")} alt="Portrait of Eslam Usama" width={800} height={800} fetchPriority="high" />
             <span className="portrait-wa" aria-hidden="true"><WaIcon size={20} /></span>
           </a>
           <figcaption>
