@@ -13,7 +13,8 @@ export const profile = {
   whatsapp: "https://wa.me/201095178021", // personal number, separate from the bot lines
   github: "https://github.com/Eslamusamaaa",
   linkedin: "https://www.linkedin.com/in/eslam-usamaaa",
-  cvUrl: "cv/Eslam-Osama-CV.pdf" as string | null, // file lives in /public/cv
+  cvUrl: "cv/Eslam-Usama-CV.pdf" as string | null, // file lives in /public/cv
+  cvLabel: "Download CV",
 };
 
 // Saudi mobile numbers are 9 digits starting with 5; wa.me needs country code + digits only.
@@ -74,6 +75,12 @@ export type Project = {
   contribution: string;
   role?: string;
   outcome?: string;
+  /** Filter categories used by the work section. */
+  cats: string[];
+  /** Small visual motif drawn on cards. */
+  motif: "wave" | "scan" | "tokens" | "chat" | "grid" | "graph";
+  /** One true sentence shown on the collapsed card. */
+  oneLine: string;
 };
 
 export const projects: Project[] = [
@@ -101,6 +108,9 @@ export const projects: Project[] = [
       { title: "Adaptive quiz", note: "Server scores candidate questions by how well they split the remaining pool" },
       { title: "Results", note: "Explicit answers filter, preferences rank; each pick gets a reason" },
     ],
+    cats: ["Agents", "Commerce"],
+    motif: "grid",
+    oneLine: "A working multi-tenant Salla app, verified on demo stores with pricing, adaptation and branching test suites.",
     implementation: [
       {
         heading: "Questions come from the store, not from a template",
@@ -175,6 +185,9 @@ export const projects: Project[] = [
       { title: "LLM analysis", note: "Gemini 2.5 Flash via OpenRouter: summary, action items, sentiment" },
       { title: "Reports", note: "PDF for users, Word for admins; stored in PostgreSQL" },
     ],
+    cats: ["Voice", "Agents"],
+    motif: "wave",
+    oneLine: "Working end to end: browser capture, Arabic and English transcription, reviewed reports in PDF and Word.",
     implementation: [
       {
         heading: "Dual-channel audio capture",
@@ -243,6 +256,9 @@ export const projects: Project[] = [
       { title: "Call", note: "Vapi voice adapter, Saudi Arabic, tools the model may call mid-call" },
       { title: "Write-back", note: "Outcome to the Salla order note and status, plus merchant tasks" },
     ],
+    cats: ["Voice", "Agents", "Commerce"],
+    motif: "wave",
+    oneLine: "Tested live on a Salla test store; calls to real customers are switched off.",
     implementation: [
       {
         heading: "Engine separated from runtime",
@@ -307,6 +323,9 @@ export const projects: Project[] = [
       { title: "Text-to-speech", note: "ElevenLabs streaming, sentence by sentence" },
       { title: "Playback", note: "Barge-in cancels generation and speech immediately" },
     ],
+    cats: ["Voice", "Agents", "Commerce"],
+    motif: "wave",
+    oneLine: "A working prototype: spoken product advice plus order-confirmation calls.",
     implementation: [
       {
         heading: "Latency by design",
@@ -376,6 +395,9 @@ export const projects: Project[] = [
       { title: "Tools", note: "Prices, stock, links and images read from SQLite, not typed by the model" },
       { title: "Reply", note: "Interactive buttons, product cards and photos" },
     ],
+    cats: ["Agents", "Commerce"],
+    motif: "chat",
+    oneLine: "The catalog bot captured 63 of 63 store products with complete fields in its last recorded run.",
     implementation: [
       {
         heading: "Workflow first, free text second",
@@ -443,6 +465,9 @@ export const projects: Project[] = [
       alt: "Colab notebook TEST_ELARA running generate_elara_speech on an Arabic input text, logging 32 global tokens and 186 semantic tokens, with an audio player",
       caption: "Frame from a screen recording of my test notebook: Arabic text goes in, the model generates global and semantic tokens, and the notebook detokenizes them into audio.",
     },
+    cats: ["Voice"],
+    motif: "wave",
+    oneLine: "About 18,900 Egyptian Arabic samples; generated audio is on the page.",
     implementation: [
       {
         heading: "Dataset",
@@ -512,6 +537,9 @@ export const projects: Project[] = [
       width: 1233,
       height: 848,
     },
+    cats: ["Vision"],
+    motif: "scan",
+    oneLine: "The full detection pipeline is implemented; no final FROC score is claimed.",
     implementation: [
       {
         heading: "Lung segmentation without deep learning",
@@ -569,6 +597,9 @@ export const projects: Project[] = [
       { title: "Qwen2.5-1.5B + LoRA", note: "CUDA inference via PyTorch" },
       { title: "Response", note: "Text, elapsed seconds, device" },
     ],
+    cats: ["LLM"],
+    motif: "tokens",
+    oneLine: "Fine-tuned model served through FastAPI with a chat UI; no benchmark scores are claimed.",
     implementation: [
       {
         heading: "Data",
@@ -618,6 +649,9 @@ export const projects: Project[] = [
       { title: "RAG assistant", note: "Cited, course-grounded answers" },
       { title: "Student KPIs", note: "Performance level classifier" },
     ],
+    cats: ["LLM", "Voice"],
+    motif: "graph",
+    oneLine: "Four modules around one learning product; module details come from my CV.",
     implementation: [
       {
         heading: "LLM cognitive evaluation engine",
@@ -678,15 +712,15 @@ export const otherProjects: { title: string; blurb: string; tags: string[]; href
   },
 ];
 
-export const zikolaWork = [
-  { title: "Multi-modal conversational agent", body: "Stateful agentic workflows with LangGraph and LangChain integrating LLMs, a tailored RAG pipeline and STT/TTS engines, reachable through WhatsApp APIs and web platforms." },
-  { title: "Arabic voice and chat concierge", body: "A real-time voice assistant with RAG recommendations, barge-in, and Vapi-based order-confirmation calls for a retailer." },
-  { title: "WhatsApp commerce chatbots", body: "Catalog-grounded WhatsApp sales assistants on the Meta Cloud API: a button-driven guided flow for exact answers and an LLM agent (LangGraph, tool calling) for open questions, backed by a scraped catalog and a vector index." },
-  { title: "Multi-tenant messaging platform", body: "WhatsApp integration work on Zikola's multi-tenant commerce messaging platform, where a client is onboarded from a storefront URL and the LLM reaches the catalog only through a fixed tool registry." },
-  { title: "Real-time meeting intelligence", body: "Dual-channel audio capture in a Chrome MV3 extension and a custom word-alignment algorithm that maps diarization tags to attendee names." },
-  { title: "Async LLM pipeline", body: "Parallel asyncio processing of multi-hour transcripts with a state-machine auto-repair parser guaranteeing valid JSON." },
-  { title: "Security and RBAC", body: "WebAuthn passkeys, SHA-256 OTPs, multi-tenant RBAC, automated offboarding, JWT invalidation and immutable audit logging." },
-  { title: "Media-buying analytics ETL", body: "Meta, TikTok and Snapchat CSVs processed into ROAS, CPA, CTR and CPC and fed into n8n AI-agent workflows." },
+export const zikolaWork: { title: string; body: string; short: string; slug?: string }[] = [
+  { title: "Arabic voice and chat concierge", short: "Real-time Arabic voice assistant with RAG recommendations and order-confirmation calls.", slug: "ai-fragrance-concierge", body: "A real-time voice assistant with RAG recommendations, barge-in, and Vapi-based order-confirmation calls for a retailer." },
+  { title: "WhatsApp commerce chatbots", short: "Catalog-grounded WhatsApp sales assistants: guided buttons plus an LLM agent.", slug: "whatsapp-commerce-bots", body: "Catalog-grounded WhatsApp sales assistants on the Meta Cloud API: a button-driven guided flow for exact answers and an LLM agent (LangGraph, tool calling) for open questions, backed by a scraped catalog and a vector index." },
+  { title: "Multi-tenant messaging platform", short: "WhatsApp integration on Zikola's multi-tenant commerce messaging platform.", slug: "whatsapp-commerce-bots", body: "WhatsApp integration work on Zikola's multi-tenant commerce messaging platform, where a client is onboarded from a storefront URL and the LLM reaches the catalog only through a fixed tool registry." },
+  { title: "Multi-modal conversational agent", short: "Stateful LangGraph agents with RAG and speech, over WhatsApp and the web.", slug: "ai-voice-calling", body: "Stateful agentic workflows with LangGraph and LangChain integrating LLMs, a tailored RAG pipeline and STT/TTS engines, reachable through WhatsApp APIs and web platforms." },
+  { title: "Real-time meeting intelligence", short: "Chrome extension audio capture with word alignment to attendee names.", slug: "zikola-meeting-assistant", body: "Dual-channel audio capture in a Chrome MV3 extension and a custom word-alignment algorithm that maps diarization tags to attendee names." },
+  { title: "Async LLM pipeline", short: "Parallel transcript processing that always returns valid JSON.", slug: "zikola-meeting-assistant", body: "Parallel asyncio processing of multi-hour transcripts with a state-machine auto-repair parser guaranteeing valid JSON." },
+  { title: "Security and RBAC", short: "Passkeys, OTPs, multi-tenant roles, offboarding and audit logs.", slug: "zikola-meeting-assistant", body: "WebAuthn passkeys, SHA-256 OTPs, multi-tenant RBAC, automated offboarding, JWT invalidation and immutable audit logging." },
+  { title: "Media-buying analytics ETL", short: "Ad-platform CSVs turned into ROAS, CPA, CTR and CPC for n8n agent workflows.", body: "Meta, TikTok and Snapchat CSVs processed into ROAS, CPA, CTR and CPC and fed into n8n AI-agent workflows." },
 ];
 
 export const skills: { group: string; items: string[] }[] = [
@@ -750,4 +784,35 @@ export const training = [
   { title: "Machine Learning Diploma, CSkilled Academy", when: "Sep 2026" },
   { title: "Data Science & Web Development, MCIT", when: "Jul–Aug 2025 · 120 hrs" },
   { title: "Data Analysis & Freelancing, ITIDA & NTI", when: "Aug–Sep 2024 · 120 hrs" },
+];
+
+export const hero = {
+  kicker: "AI Engineer · Egypt",
+  title: "I design and build AI systems that solve real-world problems.",
+  lede:
+    "From LLM agents and retrieval-augmented generation to speech models, computer vision and classic machine learning, I take AI from prototype to working product. Currently an AI Engineer at Zikola.",
+};
+
+export const about = [
+  "I'm Eslam Usama, an AI Engineer focused on building intelligent systems that turn complex problems into practical AI-powered solutions. My interests span Machine Learning, Deep Learning, Computer Vision, Natural Language Processing and Generative AI.",
+  "I studied Computer Science at the Faculty of Computers and Information, Mansoura University (2022 to 2026), and I have worked as an AI Engineer at Zikola since April 2026.",
+  "Much of my recent work is in Arabic: Saudi Arabic voice agents and assistants for online stores, and an Egyptian Arabic text-to-speech model.",
+];
+
+/** Skills mapped to projects by matching keywords against each project's tags, stack and kind. */
+export const skillMap: { skill: string; keys: string[] }[] = [
+  { skill: "LLM agents", keys: ["langgraph", "agent", "tool calling", "llm"] },
+  { skill: "RAG", keys: ["rag", "retrieval", "faiss", "qdrant", "chroma"] },
+  { skill: "Speech-to-text", keys: ["deepgram", "whisper", "speech recognition"] },
+  { skill: "Text-to-speech", keys: ["tts", "elevenlabs", "spark-tts", "speech synthesis", "voices"] },
+  { skill: "Fine-tuning", keys: ["lora", "qlora", "unsloth", "fine-tun"] },
+  { skill: "Computer vision", keys: ["densenet", "3d ct", "vision"] },
+  { skill: "PyTorch", keys: ["pytorch"] },
+  { skill: "FastAPI", keys: ["fastapi"] },
+  { skill: "TypeScript and Node.js", keys: ["typescript", "node.js"] },
+  { skill: "PostgreSQL", keys: ["postgres"] },
+  { skill: "WhatsApp API", keys: ["whatsapp"] },
+  { skill: "Salla API", keys: ["salla"] },
+  { skill: "Telephony (Vapi)", keys: ["vapi"] },
+  { skill: "scikit-learn", keys: ["scikit", "random forest"] },
 ];

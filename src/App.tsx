@@ -1,521 +1,97 @@
-import { useEffect, useState } from "react";
-import { Link, Route, Routes, useLocation, useParams } from "react-router-dom";
-import {
-  education, otherProjects, profile, projects, skills, training, whatsappBots, zikolaWork, type Project,
-} from "./data";
+import { useLayoutEffect, useRef } from "react";
+import { Route, Routes, useLocation } from "react-router-dom";
+import { hero } from "./data";
+import { gsap, MOTION, scrollToId, usePageMeta, useMotion } from "./lib";
+import Header from "./components/Header";
+import Hero from "./components/Hero";
+import Work from "./components/Work";
+import Demos from "./components/Demos";
+import ProjectPage from "./components/ProjectPage";
+import { About, Contact, Experience, Footer, Research, Skills } from "./components/Sections";
+import { Waveform } from "./components/Motifs";
 
-const asset = (p: string) => `${import.meta.env.BASE_URL}${p}`;
-const reduceMotion = () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const stagger = (i: number) => ({ ["--n" as string]: Math.min(i, 6) });
+const HOME_SCROLL = "home-scroll";
 
-function ScrollTop() {
-  const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-  return null;
-}
-
-function scrollToId(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: reduceMotion() ? "auto" : "smooth" });
-}
-
-/** One reveal system: elements with .reveal (or .stagger containers) get .in when they enter the viewport. */
-function useReveal(dep: unknown) {
-  useEffect(() => {
-    const els = Array.from(document.querySelectorAll<HTMLElement>(".reveal:not(.in), .stagger:not(.in)"));
-    if (reduceMotion() || !("IntersectionObserver" in window)) {
-      els.forEach((e) => e.classList.add("in"));
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((en) => {
-          if (en.isIntersecting) {
-            en.target.classList.add("in");
-            io.unobserve(en.target);
-          }
-        }),
-      { threshold: 0.08, rootMargin: "0px 0px -4% 0px" }
-    );
-    els.forEach((e) => io.observe(e));
-    return () => io.disconnect();
-  }, [dep]);
-}
-
-function SectionLink({ id, children, className, onNav }: { id: string; children: React.ReactNode; className?: string; onNav?: () => void }) {
-  const home = useLocation().pathname === "/";
-  if (home)
-    return (
-      <a
-        href="#/"
-        className={className}
-        onClick={(e) => {
-          e.preventDefault();
-          onNav?.();
-          scrollToId(id);
-        }}
-      >
-        {children}
-      </a>
-    );
-  return (
-    <Link to="/" state={{ scrollTo: id }} className={className} onClick={onNav}>
-      {children}
-    </Link>
-  );
-}
-
-function Header() {
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const on = () => setScrolled(window.scrollY > 8);
-    on();
-    window.addEventListener("scroll", on, { passive: true });
-    return () => window.removeEventListener("scroll", on);
-  }, []);
-  const close = () => setOpen(false);
-  return (
-    <header className={`site-header${scrolled ? " scrolled" : ""}${open ? " open" : ""}`}>
-      <div className="bar">
-        <a
-          className="brand"
-          href={profile.whatsapp}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Chat with Eslam Usama on WhatsApp (opens in a new tab)"
-        >
-          {profile.shortName}
-        </a>
-        <button className="menu-btn" aria-expanded={open} aria-controls="primary-nav" onClick={() => setOpen(!open)}>
-          <span className="sr">Menu</span>
-          <span aria-hidden="true" className="burger" />
-        </button>
-        <nav id="primary-nav" aria-label="Primary">
-          <SectionLink id="work" onNav={close}>Work</SectionLink>
-          <SectionLink id="bots" onNav={close}>WhatsApp bots</SectionLink>
-          <SectionLink id="experience" onNav={close}>Experience</SectionLink>
-          <SectionLink id="skills" onNav={close}>Skills</SectionLink>
-          <SectionLink id="contact" className="nav-cta" onNav={close}>Contact</SectionLink>
-        </nav>
-      </div>
-    </header>
-  );
-}
-
-function WaIcon({ size = 18 }: { size?: number }) {
-  return (
-    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" focusable="false">
-      <path
-        fill="currentColor"
-        d="M12.04 2a9.9 9.9 0 0 0-8.5 14.9L2 22l5.25-1.38A9.9 9.9 0 1 0 12.04 2Zm0 1.8a8.1 8.1 0 1 1-4.3 15l-.31-.18-3.12.82.83-3.04-.2-.32A8.1 8.1 0 0 1 12.04 3.8Zm-3 3.9c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.5s1.07 2.9 1.22 3.1c.15.2 2.1 3.2 5.08 4.5 2.5 1.08 3 .87 3.54.82.55-.05 1.76-.72 2-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35-.3-.15-1.76-.87-2.03-.97-.28-.1-.48-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.2-.24-.58-.49-.5-.67-.5Z"
-      />
-    </svg>
-  );
-}
-
-function NameLink({ children }: { children?: React.ReactNode }) {
-  return (
-    <a
-      className="name-link"
-      href={profile.whatsapp}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Chat with Eslam Usama on WhatsApp (opens in a new tab)"
-    >
-      {children ?? profile.name}
-    </a>
-  );
-}
-
-function PlayIcon({ size = 18 }: { size?: number }) {
-  return (
-    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" focusable="false">
-      <path fill="currentColor" d="M21.6 7.2a2.5 2.5 0 0 0-1.76-1.77C18.3 5 12 5 12 5s-6.3 0-7.84.43A2.5 2.5 0 0 0 2.4 7.2C2 8.76 2 12 2 12s0 3.24.4 4.8a2.5 2.5 0 0 0 1.76 1.77C5.7 19 12 19 12 19s6.3 0 7.84-.43a2.5 2.5 0 0 0 1.76-1.77C22 15.24 22 12 22 12s0-3.24-.4-4.8ZM10 15V9l5.2 3L10 15Z" />
-    </svg>
-  );
-}
-
-function Hero() {
-  return (
-    <section className="hero">
-      <div className="wrap hero-grid">
-        <div className="hero-copy">
-          <p className="eyebrow">AI Engineer · Egypt</p>
-          <h1>Building intelligent systems that solve <span className="hl">real-world problems.</span></h1>
-          <p className="lede">
-            I'm <NameLink />, an AI Engineer focused on building intelligent systems that turn complex problems into
-            practical AI-powered solutions. My interests span Machine Learning, Deep Learning, Computer Vision, Natural
-            Language Processing and Generative AI.
-          </p>
-          <div className="cta">
-            <SectionLink id="work" className="btn primary">Explore projects</SectionLink>
-            <SectionLink id="contact" className="btn">Contact me</SectionLink>
-            {profile.cvUrl && <a className="btn ghost" href={profile.cvUrl} download>Download CV</a>}
-            <a className="btn ghost" href={profile.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a className="btn ghost" href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          </div>
-        </div>
-        <figure className="portrait">
-          <a
-            className="portrait-link"
-            href={profile.whatsapp}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Chat with Eslam Usama on WhatsApp (opens in a new tab)"
-          >
-            <img src={asset("img/eslam-profile.jpg")} alt="Portrait of Eslam Usama" width={800} height={800} fetchPriority="high" />
-            <span className="portrait-wa" aria-hidden="true"><WaIcon size={20} /></span>
-          </a>
-          <figcaption>
-            <strong><NameLink /></strong>
-            <span>AI Engineer · Say hi on WhatsApp</span>
-          </figcaption>
-        </figure>
-      </div>
-    </section>
-  );
-}
-
-function VideoButton({ p, size }: { p: Project; size?: "lg" }) {
-  if (!p.video) return null;
-  return (
-    <a className={`btn video${size ? " lg" : ""}`} href={p.video.url} target="_blank" rel="noopener noreferrer">
-      <PlayIcon size={size ? 20 : 18} /> Watch Project Explanation
-    </a>
-  );
-}
-
-function ProCard({ p, i }: { p: Project; i: number }) {
-  return (
-    <li className="pro" style={stagger(i)}>
-      <div className="pro-head">
-        {p.image ? <img src={asset(p.image.src)} alt={p.image.alt} width={56} height={56} loading="lazy" /> : <span className="pro-ph" aria-hidden="true" />}
-        <span className="kind">{p.kind}</span>
-      </div>
-      <h3><Link to={`/projects/${p.slug}`}>{p.title}</Link></h3>
-      <p>{p.summary}</p>
-      <dl className="facts">
-        {p.role && <div><dt>My role</dt><dd>{p.role}</dd></div>}
-        {p.outcome && <div><dt>Outcome</dt><dd>{p.outcome}</dd></div>}
-      </dl>
-      <span className="tags">{p.tags.map((t) => <span key={t}>{t}</span>)}</span>
-      <span className="actions">
-        <Link className="btn primary" to={`/projects/${p.slug}`}>Read the case study</Link>
-        <VideoButton p={p} />
-      </span>
-    </li>
-  );
-}
-
-function MiniCard({ p, i }: { p: Project; i: number }) {
-  return (
-    <li style={stagger(i)}>
-      <Link to={`/projects/${p.slug}`} className="mini">
-        <span className="kind">{p.kind}</span>
-        <h3>{p.title}</h3>
-        <p>{p.summary}</p>
-        <span className="tags">{p.tags.slice(0, 4).map((t) => <span key={t}>{t}</span>)}</span>
-        <span className="more">Case study <span aria-hidden="true">→</span></span>
-      </Link>
-    </li>
-  );
+function Divider() {
+  return <Waveform className="divider" height={36} cycles={14} />;
 }
 
 function Home() {
   const loc = useLocation();
-  useReveal(loc.key);
-  useEffect(() => {
-    const id = (loc.state as { scrollTo?: string } | null)?.scrollTo;
-    if (id) setTimeout(() => scrollToId(id), 0);
-  }, [loc.state]);
-  const pro = projects.filter((p) => p.group === "professional");
-  const personal = projects.filter((p) => p.group === "personal");
+  const ref = useRef<HTMLElement>(null);
+  usePageMeta("Eslam Usama · AI Engineer", `${hero.title} ${hero.lede}`, "/");
+
+  // Return to the right place: a section requested by the nav, or where you left off.
+  useLayoutEffect(() => {
+    const state = loc.state as { scrollTo?: string; restore?: boolean } | null;
+    if (state?.scrollTo) {
+      requestAnimationFrame(() => scrollToId(state.scrollTo!));
+    } else if (state?.restore) {
+      const y = Number(sessionStorage.getItem(HOME_SCROLL) || 0);
+      window.scrollTo(0, y);
+    } else if (loc.hash) {
+      requestAnimationFrame(() => scrollToId(loc.hash.slice(1)));
+    }
+    const save = () => sessionStorage.setItem(HOME_SCROLL, String(window.scrollY));
+    window.addEventListener("scroll", save, { passive: true });
+    return () => {
+      save();
+      window.removeEventListener("scroll", save);
+    };
+  }, [loc.key]);
+
+  useMotion(
+    ref,
+    (mm) => {
+      mm.add(MOTION, () => {
+        // Section headings: masked line reveal, once.
+        gsap.utils.toArray<HTMLElement>(".mask-line > span").forEach((el) => {
+          gsap.from(el, { yPercent: 105, duration: 0.38, ease: "power3.out", scrollTrigger: { trigger: el.parentElement, start: "top 88%", once: true } });
+        });
+        // Divider waveform scrubs with scroll.
+        gsap.utils.toArray<SVGPathElement>(".divider path").forEach((path) => {
+          const len = path.getTotalLength();
+          gsap.fromTo(path, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, ease: "none", scrollTrigger: { trigger: path, start: "top 95%", end: "top 45%", scrub: 0.3 } });
+        });
+      });
+    },
+    [loc.key]
+  );
+
   return (
-    <main id="main" tabIndex={-1}>
+    <main id="main" tabIndex={-1} ref={ref}>
       <Hero />
-
-      <section id="work" className="wrap section">
-        <header className="sec-head reveal">
-          <p className="eyebrow">01 · Professional work at Zikola</p>
-          <h2>Systems I built and shipped</h2>
-          <p className="sub-lede">Case studies written from project documentation and repository history. Private source code and customer data are not shown.</p>
-        </header>
-        <ul className="grid-2 stagger">
-          {pro.map((p, i) => <ProCard key={p.slug} p={p} i={i} />)}
-        </ul>
-      </section>
-
-      <section id="bots" className="wrap section compact">
-        <div className="split">
-          <header className="sec-head reveal">
-            <p className="eyebrow">02 · Quick access</p>
-            <h2 className="h-sm">WhatsApp bots</h2>
-            <p className="sub-lede">Each link opens a WhatsApp chat with the bot. <Link to="/projects/whatsapp-commerce-bots">How they work</Link>.</p>
-          </header>
-          <ul className="bots stagger">
-            {whatsappBots.map((b, i) => (
-              <li key={b.id} style={stagger(i)}>
-                <span className="wa-ic"><WaIcon size={16} /></span>
-                <span className="bot-text">
-                  <strong>{b.title}</strong>
-                  <span className="num" dir="ltr">+966 {b.number}</span>
-                  <span className="desc">{b.blurb}</span>
-                </span>
-                <a className="wa-link" href={b.href} target="_blank" rel="noopener noreferrer" aria-label={`Try on WhatsApp: +966 ${b.number}`}>
-                  Try on WhatsApp <span aria-hidden="true">↗</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <section className="wrap section">
-        <header className="sec-head reveal">
-          <p className="eyebrow">03 · Research and personal projects</p>
-          <h2>Models, speech and imaging</h2>
-        </header>
-        <ul className="grid-3 stagger">
-          {personal.map((p, i) => <MiniCard key={p.slug} p={p} i={i} />)}
-        </ul>
-        <h3 className="sub reveal">More repositories</h3>
-        <ul className="repos stagger">
-          {otherProjects.map((p, i) => (
-            <li key={p.title} style={stagger(i)}>
-              <div>
-                <strong>{p.title}</strong>
-                <p>{p.blurb}</p>
-                <span className="tags">{p.tags.map((t) => <span key={t}>{t}</span>)}</span>
-              </div>
-              <a href={p.href} target="_blank" rel="noopener noreferrer">View source code ↗</a>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section id="experience" className="wrap section">
-        <header className="sec-head reveal">
-          <p className="eyebrow">04 · Experience and education</p>
-          <h2>Where I have worked and studied</h2>
-        </header>
-        <div className="exp stagger">
-          <article className="panel" style={stagger(0)}>
-            <p className="when">April 2026 – present · Employment</p>
-            <h3>AI Engineer, Zikola</h3>
-            <ul className="bullets cols">
-              {zikolaWork.map((w) => <li key={w.title}><strong>{w.title}.</strong> {w.body}</li>)}
-            </ul>
-          </article>
-          <article className="panel" style={stagger(1)}>
-            <p className="when">{education.years} · {education.status}</p>
-            <h3>{education.degree}</h3>
-            <p className="muted">{education.school}</p>
-            <p className="when pad">Training and certificates</p>
-            <ul className="bullets">
-              {training.map((t) => <li key={t.title}><strong>{t.title}</strong> · {t.when}</li>)}
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section id="skills" className="wrap section">
-        <header className="sec-head reveal">
-          <p className="eyebrow">05 · Skills</p>
-          <h2>Skills</h2>
-        </header>
-        <dl className="skills stagger">
-          {skills.map((s, i) => (
-            <div key={s.group} style={stagger(i)}>
-              <dt>{s.group}</dt>
-              <dd><ul>{s.items.map((it) => <li key={it}>{it}</li>)}</ul></dd>
-            </div>
-          ))}
-        </dl>
-      </section>
-
-      <section id="contact" className="contact">
-        <div className="wrap contact-grid">
-          <header className="reveal">
-            <p className="eyebrow">06 · Contact</p>
-            <h2>Let's build something</h2>
-            <p className="sub-lede">Open to AI engineering roles and collaborations.</p>
-            <p className="fine">The WhatsApp numbers above are demo bot lines, separate from my personal number.</p>
-          </header>
-          <ul className="contact-list stagger">
-            <li style={stagger(0)}><span>Phone</span><a href={`tel:${profile.phone}`} dir="ltr">{profile.phoneDisplay}</a></li>
-            <li style={stagger(1)}><span>Email</span><a href={`mailto:${profile.email}`}>{profile.email}</a></li>
-            <li style={stagger(2)}><span>LinkedIn</span><a href={profile.linkedin} target="_blank" rel="noopener noreferrer">linkedin.com/in/eslam-usamaaa</a></li>
-            <li style={stagger(3)}><span>GitHub</span><a href={profile.github} target="_blank" rel="noopener noreferrer">github.com/Eslamusamaaa</a></li>
-          </ul>
-        </div>
-      </section>
+      <Work />
+      <Divider />
+      <Research />
+      <Divider />
+      <Demos />
+      <Experience />
+      <About />
+      <Skills />
+      <Contact />
     </main>
   );
 }
 
-function Flow({ steps }: { steps: Project["flow"] }) {
-  return (
-    <ol className="flow stagger">
-      {steps.map((s, i) => (
-        <li key={s.title} style={stagger(i)}>
-          <span className="n">{i + 1}</span>
-          <strong>{s.title}</strong>
-          <span>{s.note}</span>
-        </li>
-      ))}
-    </ol>
-  );
+function ScrollTop() {
+  const { pathname, state } = useLocation();
+  useLayoutEffect(() => {
+    const s = state as { scrollTo?: string; restore?: boolean } | null;
+    if (pathname !== "/" || (!s?.scrollTo && !s?.restore)) window.scrollTo(0, 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+  return null;
 }
 
-function VideoCard({ p }: { p: Project }) {
-  if (!p.video) return null;
-  return (
-    <a className="video-card" href={p.video.url} target="_blank" rel="noopener noreferrer" aria-label={`Watch on YouTube: ${p.video.title}`}>
-      <img
-        src={`https://i.ytimg.com/vi/${p.video.id}/hqdefault.jpg`}
-        alt=""
-        width={480}
-        height={360}
-        loading="lazy"
-        referrerPolicy="no-referrer"
-      />
-      <span className="play" aria-hidden="true"><PlayIcon size={28} /></span>
-      <span className="video-meta">
-        <strong dir="rtl">{p.video.title}</strong>
-        <small>Project explanation video · opens YouTube</small>
-      </span>
-    </a>
-  );
-}
-
-function ProjectPage() {
-  const { slug } = useParams();
-  const p = projects.find((x) => x.slug === slug);
-  useReveal(slug);
-  useEffect(() => {
-    document.title = p ? `${p.title} · Eslam Usama` : "Eslam Usama · AI Engineer";
-  }, [p]);
-  if (!p)
-    return (
-      <main id="main" tabIndex={-1} className="wrap page">
-        <h1>Project not found</h1>
-        <Link to="/">Back to home</Link>
-      </main>
-    );
-  const isBots = p.slug === "whatsapp-commerce-bots";
+function NotFound() {
+  usePageMeta("Page not found · Eslam Usama", "This page could not be found.", "/");
   return (
     <main id="main" tabIndex={-1} className="wrap page">
-      <Link to="/" className="back">← All projects</Link>
-      <header className="page-head">
-        {p.image && <img className="logo-tile" src={asset(p.image.src)} alt={p.image.alt} width={88} height={88} />}
-        <div>
-          <p className="eyebrow">{p.kind}</p>
-          <h1>{p.title}</h1>
-          <p className="lede">{p.summary}</p>
-          {p.video && <div className="cta"><VideoButton p={p} size="lg" /></div>}
-        </div>
-      </header>
-
-      <div className="page-grid">
-        <div className="page-main">
-          <h2>Overview</h2>
-          <p>{p.overview}</p>
-          {p.samples && (
-            <>
-              <h2>Audio samples</h2>
-              <p className="sub-lede">Speech generated by the model, with the Arabic input text, extracted from a recording of my test notebook.</p>
-              <ul className="samples">
-                {p.samples.map((x) => (
-                  <li key={x.src}>
-                    <p className="sample-text" dir="rtl" lang="ar">{x.text}</p>
-                    <audio controls preload="none" src={asset(x.src)}>Your browser does not support audio playback.</audio>
-                    <span className="sample-note">{x.note}</span>
-                  </li>
-                ))}
-              </ul>
-              {p.proof && (
-                <figure className="proof">
-                  <img src={asset(p.proof.src)} alt={p.proof.alt} width={1080} height={420} loading="lazy" />
-                  <figcaption>{p.proof.caption}</figcaption>
-                </figure>
-              )}
-            </>
-          )}
-          <h2>Problem and motivation</h2>
-          <p>{p.problem}</p>
-
-          <h2>{p.flowTitle}</h2>
-          <Flow steps={p.flow} />
-          {p.flowCaveat && <p className="note">{p.flowCaveat}</p>}
-          {p.diagram && (
-            <figure className="diagram">
-              <a href={asset(p.diagram.src)} target="_blank" rel="noopener noreferrer" aria-label="Open the full-size pipeline diagram in a new tab">
-                <img src={asset(p.diagram.src)} alt={p.diagram.alt} width={p.diagram.width} height={p.diagram.height} loading="lazy" />
-              </a>
-              <figcaption>{p.diagram.caption}</figcaption>
-            </figure>
-          )}
-
-          <h2>Implementation</h2>
-          {p.implementation.map((i) => (
-            <div key={i.heading}>
-              <h3>{i.heading}</h3>
-              <p>{i.body}</p>
-            </div>
-          ))}
-
-          {p.challenges.length > 0 && (
-            <>
-              <h2>Challenges and trade-offs</h2>
-              <ul className="bullets">
-                {p.challenges.map((c) => <li key={c.challenge}><strong>{c.challenge}.</strong> {c.solution}</li>)}
-              </ul>
-            </>
-          )}
-
-          <h2>Results and limitations</h2>
-          <ul className="bullets">
-            {p.results.map((r) => <li key={r}>{r}</li>)}
-            {p.limitations.map((r) => <li key={r} className="limit">{r}</li>)}
-          </ul>
-
-          {p.next.length > 0 && (
-            <>
-              <h2>Future improvements</h2>
-              <ul className="bullets">{p.next.map((r) => <li key={r}>{r}</li>)}</ul>
-            </>
-          )}
-        </div>
-
-        <aside className="page-aside">
-          <p className="status">Status: {p.status}</p>
-          <p className="callout"><strong>My contribution.</strong> {p.contribution}</p>
-          <VideoCard p={p} />
-          <h2>Technologies</h2>
-          <table>
-            <tbody>
-              {p.stack.map((s) => <tr key={s.name}><th scope="row">{s.name}</th><td>{s.role}</td></tr>)}
-            </tbody>
-          </table>
-          {(p.links.length > 0 || isBots) && (
-            <>
-              <h2>Links</h2>
-              <div className="cta stack">
-                {isBots && <Link className="btn" to="/" state={{ scrollTo: "bots" }}><WaIcon /> Try the bots</Link>}
-                {p.links.map((l) =>
-                  l.href.startsWith("#/") ? (
-                    <Link key={l.href} className="btn" to={l.href.slice(1)}>{l.label}</Link>
-                  ) : (
-                    <a key={l.href} className="btn" href={l.href} target="_blank" rel="noopener noreferrer">{l.label} ↗</a>
-                  )
-                )}
-              </div>
-            </>
-          )}
-        </aside>
-      </div>
+      <h1>Page not found</h1>
+      <p>
+        <a href="/">Back to the home page</a>
+      </p>
     </main>
   );
 }
@@ -523,18 +99,24 @@ function ProjectPage() {
 export default function App() {
   return (
     <>
-      <a href="#main" className="skip" onClick={(e) => { e.preventDefault(); document.getElementById("main")?.focus(); }}>Skip to content</a>
+      <a
+        href="#main"
+        className="skip"
+        onClick={(e) => {
+          e.preventDefault();
+          document.getElementById("main")?.focus();
+        }}
+      >
+        Skip to content
+      </a>
       <ScrollTop />
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/projects/:slug" element={<ProjectPage />} />
-        <Route path="*" element={<main id="main" tabIndex={-1} className="wrap page"><h1>Page not found</h1><Link to="/">Back to home</Link></main>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
-      <footer className="site-footer wrap">
-        <span>© {new Date().getFullYear()} <NameLink /> · AI Engineer</span>
-        <a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-      </footer>
+      <Footer />
     </>
   );
 }
