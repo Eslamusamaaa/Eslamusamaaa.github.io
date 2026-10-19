@@ -5,13 +5,13 @@
 :root {
   /* Neutrals: near-black graphite ramp, kept unsaturated */
   --bg: #0e0f10;
-  --surface: #151718;
-  --surface-2: #1c1f21;
-  --line: #26292b;
-  --line-strong: #383c3f;
+  --surface: #1e2124;
+  --surface-2: #272b2e;
+  --line: #33373b;
+  --line-strong: #474c51;
   --text: #f1f2ee;
   --text-2: #c8cbc6;
-  --muted: #9a9f9b;
+  --muted: #a6aba7;
 
   /* Brand: neon lime. Actions, links, focus, the waveform. Dark ink on top of it. */
   --brand: #c6f432;
@@ -19,6 +19,11 @@
   --brand-soft: rgba(198, 244, 50, 0.1);
   --brand-glow: rgba(198, 244, 50, 0.22);
   --on-brand: #0e0f10;
+
+  /* Secondary accent: soft lavender. Labels, numbers, markers; never primary actions. */
+  --accent: #b4a6ff;
+  --accent-soft: rgba(180, 166, 255, 0.12);
+  --accent-line: rgba(180, 166, 255, 0.45);
 
   /* WhatsApp green: only on WhatsApp controls. */
   --wa: #25d366;
@@ -70,7 +75,7 @@ h1 em { font-style: normal; color: var(--brand); }
 h1 { font-size: clamp(2.3rem, 4.6vw, 4rem); line-height: 1.06; font-weight: 700; margin: 0 0 20px; }
 h2 { font-size: clamp(1.6rem, 2.6vw, 2.3rem); line-height: 1.15; font-weight: 600; margin: 0 0 10px; }
 h3 { font-size: 1.15rem; line-height: 1.3; font-weight: 600; margin: 24px 0 6px; }
-.kicker { font-size: 0.875rem; font-weight: 600; color: var(--brand); margin: 0 0 14px; }
+.kicker { font-size: 0.875rem; font-weight: 600; color: var(--accent); margin: 0 0 14px; }
 .lede { font-size: 1.15rem; line-height: 1.6; color: var(--text-2); max-width: 40em; margin: 0 0 26px; }
 .sub-lede { font-size: 1.02rem; color: var(--muted); margin: 0; max-width: 52em; }
 .muted { color: var(--muted); }
@@ -164,7 +169,7 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 .work-index a::before { content: ""; position: absolute; left: -1px; top: 8px; bottom: 8px; width: 2px; background: var(--brand); transform: scaleY(0); transition: transform var(--t-hover) var(--ease); }
 .work-index li.is-current a { color: var(--text); font-weight: 600; }
 .work-index li.is-current a::before { transform: scaleY(1); }
-.work-index .num { font-variant-numeric: tabular-nums; color: var(--brand); font-weight: 600; font-size: 0.8125rem; }
+.work-index .num { font-variant-numeric: tabular-nums; color: var(--accent); font-weight: 600; font-size: 0.8125rem; }
 
 .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
 .chip { min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--text-2); font-weight: 500; cursor: pointer; transition: background 150ms var(--ease), color 150ms var(--ease), border-color 150ms var(--ease); }
@@ -184,7 +189,7 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 .card:hover::before, .card:focus-within::before { transform: scaleX(1); }
 .card:active { transform: scale(0.98); }
 .card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; }
-.card-kind { font-size: 0.8125rem; color: var(--muted); text-align: right; }
+.card-kind { font-size: 0.8125rem; color: var(--accent); text-align: right; }
 .card-logo { width: 56px; height: 56px; border-radius: var(--r-md); border: 1px solid var(--line); background: #fff; }
 .card h3 { margin: 4px 0 0; font-size: 1.25rem; }
 .card h3 a { color: var(--text); text-decoration: none; }
@@ -194,7 +199,7 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 .card-line { margin: 0; color: var(--text-2); }
 .card-detail { margin: 0; font-size: 0.9rem; color: var(--muted); }
 .card-tags { display: flex; flex-wrap: wrap; gap: 0; font-size: 0.875rem; color: var(--muted); }
-.card-tags li + li::before { content: "·"; margin: 0 8px; color: var(--line-strong); }
+.card-tags li + li::before { content: "·"; margin: 0 8px; color: var(--accent-line); }
 .card-foot { margin-top: auto; padding-top: 8px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
 .card-cta { display: inline-flex; align-items: center; gap: 6px; color: var(--brand); font-weight: 600; font-size: 0.95rem; }
 .card-cta svg { transition: transform var(--t-hover) var(--ease); }
@@ -230,7 +235,7 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 /* Motifs */
 .motif { width: 96px; height: 58px; flex: none; }
 .motif .mbar, .motif .mfill-strong, .motif .mdot { fill: var(--brand); }
-.motif .mfill { fill: var(--brand-soft); stroke: var(--brand); stroke-width: 1; }
+.motif .mfill { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1; }
 .motif .mline { fill: none; stroke: var(--line-strong); stroke-width: 1.5; }
 .motif .mscan { stroke: var(--brand); stroke-width: 1.5; opacity: 0.8; }
 .motif .mbar { transform-box: fill-box; transform-origin: center; }
@@ -278,9 +283,9 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 /* ---------- Experience timeline ---------- */
 .timeline { position: relative; display: grid; gap: 40px; padding-left: 28px; border-left: 2px solid var(--line); max-width: 64rem; margin-left: 8px; }
 .timeline > li { position: relative; }
-.timeline > li::before { content: ""; position: absolute; left: -37px; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--bg); border: 3px solid var(--brand); }
+.timeline > li::before { content: ""; position: absolute; left: -37px; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--bg); border: 3px solid var(--accent); }
 .timeline h3 { margin: 0 0 6px; font-size: 1.3rem; }
-.when { margin: 0 0 6px; font-size: 0.875rem; font-weight: 600; color: var(--brand); }
+.when { margin: 0 0 6px; font-size: 0.875rem; font-weight: 600; color: var(--accent); }
 .tl-items { display: grid; gap: 8px; margin-top: 12px; }
 .tl-items li { color: var(--text-2); line-height: 1.5; }
 .tl-items.compact { gap: 4px; }
@@ -300,7 +305,8 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 .skill { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: var(--r-md); border: 1px solid var(--line-strong); background: var(--surface); cursor: pointer; font-weight: 500; transition: background var(--t-hover) var(--ease), border-color var(--t-hover) var(--ease), color var(--t-hover) var(--ease); }
 .skill:hover, .skill:focus-visible { border-color: var(--brand); background: var(--brand-soft); }
 .skill[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
-.skill .count { font-size: 0.8125rem; color: inherit; opacity: 0.75; font-variant-numeric: tabular-nums; }
+.skill .count { font-size: 0.8125rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+.skill[aria-pressed="true"] .count { color: inherit; opacity: 0.75; }
 .skill-projects { border-top: 1px solid var(--line); }
 .skill-projects li { border-bottom: 1px solid var(--line); transition: opacity var(--t-hover) var(--ease); }
 .skill-projects a { display: flex; align-items: center; min-height: 48px; padding: 6px 4px; color: var(--text); text-decoration: none; font-weight: 500; }
@@ -346,7 +352,7 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 .toc ol { border-left: 1px solid var(--line); }
 .toc a { display: flex; align-items: center; min-height: 36px; padding: 4px 12px; margin-left: -1px; border-left: 2px solid transparent; color: var(--muted); text-decoration: none; font-size: 0.93rem; transition: color var(--t-hover) var(--ease), border-color var(--t-hover) var(--ease); }
 .toc a:hover { color: var(--text); }
-.toc a[aria-current="true"] { color: var(--text); font-weight: 600; border-left-color: var(--brand); }
+.toc a[aria-current="true"] { color: var(--text); font-weight: 600; border-left-color: var(--accent); }
 .callout { margin: 0; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--brand); border-radius: var(--r-md); font-size: 0.95rem; color: var(--text-2); }
 .stack div { padding: 8px 0; border-top: 1px solid var(--line); }
 .stack dt { font-weight: 600; font-size: 0.93rem; }
@@ -354,7 +360,7 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 .aside-links a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-weight: 600; }
 .flow { margin: 18px 0 16px 14px; border-left: 2px solid var(--line-strong); }
 .flow li { position: relative; display: grid; padding: 10px 0 10px 28px; }
-.flow .n { position: absolute; left: -15px; top: 12px; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: var(--surface); border: 2px solid var(--brand); color: var(--brand); font-size: 0.8125rem; font-weight: 700; }
+.flow .n { position: absolute; left: -15px; top: 12px; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: var(--surface); border: 2px solid var(--accent); color: var(--accent); font-size: 0.8125rem; font-weight: 700; }
 .flow strong { font-family: var(--display); font-weight: 600; }
 .flow li > span:last-child { color: var(--muted); font-size: 0.93rem; }
 .note { font-size: 0.9rem; color: var(--muted); border-left: 2px solid var(--line-strong); padding-left: 14px; }
@@ -439,11 +445,11 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
    radii and borders; solid fallbacks where backdrop-filter is unsupported.
    ========================================================================== */
 :root {
-  --glass: rgba(26, 29, 31, 0.55);
-  --glass-strong: rgba(18, 20, 21, 0.72);
-  --glass-hover: rgba(30, 34, 36, 0.66);
-  --glass-edge: rgba(255, 255, 255, 0.07);
-  --glass-shine: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --glass: rgba(40, 44, 48, 0.62);
+  --glass-strong: rgba(22, 24, 26, 0.78);
+  --glass-hover: rgba(48, 53, 57, 0.7);
+  --glass-edge: rgba(255, 255, 255, 0.1);
+  --glass-shine: inset 0 1px 0 rgba(255, 255, 255, 0.08);
   --glass-blur: blur(14px) saturate(140%);
 }
 
@@ -456,7 +462,7 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
   background: radial-gradient(closest-side, rgba(198, 244, 50, 0.08), transparent);
 }
 #work::before { right: 0; top: 18%; }
-#demos::before { left: 0; top: 10%; }
+#demos::before { left: 0; top: 10%; background: radial-gradient(closest-side, rgba(180, 166, 255, 0.09), transparent); }
 #skills::before { right: 0; top: 30%; }
 
 /* Sticky header: frosted once the page scrolls */
