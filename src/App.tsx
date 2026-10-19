@@ -449,6 +449,14 @@ function ProjectPage() {
           <h2>{p.flowTitle}</h2>
           <Flow steps={p.flow} />
           {p.flowCaveat && <p className="note">{p.flowCaveat}</p>}
+          {p.diagram && (
+            <figure className="diagram">
+              <a href={asset(p.diagram.src)} target="_blank" rel="noopener noreferrer" aria-label="Open the full-size pipeline diagram in a new tab">
+                <img src={asset(p.diagram.src)} alt={p.diagram.alt} width={p.diagram.width} height={p.diagram.height} loading="lazy" />
+              </a>
+              <figcaption>{p.diagram.caption}</figcaption>
+            </figure>
+          )}
 
           <h2>Implementation</h2>
           {p.implementation.map((i) => (

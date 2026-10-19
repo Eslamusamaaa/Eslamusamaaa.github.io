@@ -58,6 +58,7 @@ export type Project = {
   video?: { url: string; id: string; title: string };
   samples?: { src: string; text: string; note: string }[];
   proof?: { src: string; alt: string; caption: string };
+  diagram?: { src: string; alt: string; caption: string; width: number; height: number };
   overview: string;
   problem: string;
   flowTitle: string;
@@ -148,8 +149,8 @@ export const projects: Project[] = [
     next: ["Purchase-conversion attribution via order webhooks.", "Generic adapter (JSON-LD / product feed)."],
     links: [],
     contribution:
-      "Repository history shows my commits throughout; I worked on the backend, catalog adapter, quiz engine and merchant tooling described above.",
-    role: "Backend, catalog adapter, quiz engine and merchant tooling.",
+      "I am the main committer and built the backend, catalog adapter, quiz engine and merchant tooling described above.",
+    role: "Main developer: backend, catalog adapter, quiz engine and merchant tooling.",
     outcome: "Working multi-tenant product, verified on demo stores with pricing, adaptation and branching test suites.",
   },
   {
@@ -504,6 +505,13 @@ export const projects: Project[] = [
       { title: "Stage 1", note: "DenseNet-121, low threshold for high recall" },
       { title: "Stage 2", note: "DenseNet-121 false-positive reduction" },
     ],
+    diagram: {
+      src: "img/luna16-pipeline.jpg",
+      alt: "Pipeline diagram in three panels: Stage 0 data acquisition and preprocessing with Stage 1 DenseNet-121 detector training on 64x64x64 patches; Stage 1 full-scan inference with a lung mask, sliding window and a very low threshold producing many candidates; Stage 2 false-positive reduction training with a second DenseNet-121 producing final predictions",
+      caption: "The full pipeline: data acquisition and Stage 1 detector training, full-scan inference with a sliding window inside the lung mask, and Stage 2 false-positive reduction.",
+      width: 1233,
+      height: 848,
+    },
     implementation: [
       {
         heading: "Lung segmentation without deep learning",
