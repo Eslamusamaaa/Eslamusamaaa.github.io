@@ -508,3 +508,32 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
   .card, .callout, .video-card, .samples li, .pager-link, .contact-list { background: var(--surface); }
   .card:hover, .card:focus-within { background: #181a1c; }
 }
+
+/* ==========================================================================
+   Contact and footer: hover and focus feedback (transform and opacity only)
+   ========================================================================== */
+.contact-list { transition: transform var(--t-hover) var(--ease), box-shadow var(--t-hover) var(--ease), border-color var(--t-hover) var(--ease); }
+.contact-list:hover, .contact-list:focus-within { transform: translateY(-3px); border-color: rgba(198, 244, 50, 0.22); box-shadow: var(--shadow-lift), var(--glass-shine), 0 0 0 1px rgba(198, 244, 50, 0.06); }
+.contact-list li { position: relative; margin: 0 -12px; padding: 0 12px; border-radius: var(--r-md); transition: background var(--t-hover) var(--ease); }
+.contact-list li:hover, .contact-list li:focus-within { background: rgba(255, 255, 255, 0.05); }
+.contact-list li span:first-child { transition: color var(--t-hover) var(--ease); }
+.contact-list li:hover span:first-child, .contact-list li:focus-within span:first-child { color: var(--accent); }
+.contact-list a { text-decoration-color: transparent; transition: color var(--t-hover) var(--ease), transform var(--t-hover) var(--ease), text-decoration-color var(--t-hover) var(--ease); }
+.contact-list a:hover, .contact-list a:focus-visible { color: var(--brand-strong); transform: translateX(3px); text-decoration-color: currentColor; }
+.contact-list .go { display: inline-flex; margin-left: 4px; opacity: 0; transform: translateX(-6px) rotate(-45deg); transition: opacity var(--t-hover) var(--ease), transform var(--t-hover) var(--ease); }
+.contact-list li:hover .go, .contact-list li:focus-within .go { opacity: 1; transform: translateX(0) rotate(-45deg); }
+.contact .btn { transition: background var(--t-hover) var(--ease), border-color var(--t-hover) var(--ease), color var(--t-hover) var(--ease), box-shadow var(--t-hover) var(--ease), transform var(--t-hover) var(--ease); }
+.contact .btn.secondary:hover { transform: translateY(-2px); }
+
+.footer-links a { border-radius: var(--r-md); transition: color var(--t-hover) var(--ease), transform var(--t-hover) var(--ease), background var(--t-hover) var(--ease); }
+.footer-links a:hover, .footer-links a:focus-visible { color: var(--brand); background: rgba(255, 255, 255, 0.05); transform: translateY(-2px); }
+.footer-links a:active { transform: scale(0.96); }
+
+/* Skills: chips pop slightly on hover and focus */
+.skill { transition: background var(--t-hover) var(--ease), border-color var(--t-hover) var(--ease), color var(--t-hover) var(--ease), transform var(--t-hover) var(--ease), box-shadow var(--t-hover) var(--ease); }
+.skill:hover, .skill:focus-visible { transform: translateY(-2px); box-shadow: 0 6px 16px -10px var(--brand-glow); }
+.skill:active { transform: scale(0.97); }
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-list:hover, .contact-list:focus-within, .contact-list a:hover, .footer-links a:hover, .skill:hover, .skill:focus-visible, .contact .btn.secondary:hover { transform: none; }
+}

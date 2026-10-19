@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { about, education, otherProjects, profile, projects, skillMap, skills, training, zikolaWork } from "../data";
 import { asset, finePointer, prefersReducedMotion } from "../lib";
 import { ProjectCard } from "./Work";
-import { CheckIcon, CopyIcon, GitHubIcon, LinkedInIcon, WaIcon } from "./icons";
+import { ArrowIcon, CheckIcon, CopyIcon, GitHubIcon, LinkedInIcon, WaIcon } from "./icons";
 
 export function Research() {
   const personal = projects.filter((p) => p.group === "personal");
@@ -140,7 +140,7 @@ export function Skills() {
       ),
     []
   );
-  const hits = current ? map[current] : null;
+  const hits = current && map[current]?.length ? map[current] : null;
 
   return (
     <section id="skills" className="section wrap" aria-labelledby="skills-title">
@@ -164,7 +164,7 @@ export function Skills() {
                 onBlur={() => setActive(null)}
                 onClick={() => setPinned(pinned === s.skill ? null : s.skill)}
               >
-                {s.skill} <span className="count">{map[s.skill].length}</span>
+                {s.skill}
               </button>
             </li>
           ))}
@@ -195,6 +195,13 @@ export function Skills() {
     </section>
   );
 }
+
+/** Small arrow that slides in when a contact row is hovered or focused. */
+const Go = () => (
+  <span className="go" aria-hidden="true">
+    <ArrowIcon size={14} />
+  </span>
+);
 
 export function Contact() {
   const [copied, setCopied] = useState(false);
@@ -246,30 +253,34 @@ export function Contact() {
         <ul className="contact-list">
           <li>
             <span>Email</span>
-            <a href={`mailto:${profile.email}`}>{profile.email}</a>
+            <a href={`mailto:${profile.email}`}>{profile.email}<Go /></a>
           </li>
           <li>
             <span>Phone</span>
             <a href={`tel:${profile.phone}`} dir="ltr">
               {profile.phoneDisplay}
+              <Go />
             </a>
           </li>
           <li>
             <span>WhatsApp</span>
             <a href={profile.whatsapp} target="_blank" rel="noopener noreferrer">
               <WaIcon size={16} /> Chat with me
+              <Go />
             </a>
           </li>
           <li>
             <span>LinkedIn</span>
             <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">
               linkedin.com/in/eslam-usamaaa
+              <Go />
             </a>
           </li>
           <li>
             <span>GitHub</span>
             <a href={profile.github} target="_blank" rel="noopener noreferrer">
               github.com/Eslamusamaaa
+              <Go />
             </a>
           </li>
         </ul>
