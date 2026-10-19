@@ -56,6 +56,8 @@ export type Project = {
   tags: string[];
   image?: { src: string; alt: string };
   video?: { url: string; id: string; title: string };
+  samples?: { src: string; text: string; note: string }[];
+  proof?: { src: string; alt: string; caption: string };
   overview: string;
   problem: string;
   flowTitle: string;
@@ -431,6 +433,15 @@ export const projects: Project[] = [
       { title: "Tokenize", note: "Wav2Vec2 features → BiCodec semantic + global tokens" },
       { title: "Fine-tune", note: "Spark-TTS 0.5B via Unsloth, bf16" },
     ],
+    samples: [
+      { src: "audio/elara-sample-1.mp3", text: "من بين كل عشرين شخصة حواليك هتلاقي شخص منهم مصاب", note: "Sample 1 · input text as shown in the notebook" },
+      { src: "audio/elara-sample-2.mp3", text: "وبتلاقوا صعوبة في اتخاذ القرارات اللي تخص الاستثمارات بتاعتكم", note: "Sample 2 · input text as shown in the notebook" },
+    ],
+    proof: {
+      src: "img/elara-notebook-proof.jpg",
+      alt: "Colab notebook TEST_ELARA running generate_elara_speech on an Arabic input text, logging 32 global tokens and 186 semantic tokens, with an audio player",
+      caption: "Frame from a screen recording of my test notebook: Arabic text goes in, the model generates global and semantic tokens, and the notebook detokenizes them into audio.",
+    },
     implementation: [
       {
         heading: "Dataset",
@@ -715,7 +726,7 @@ export const skills: { group: string; items: string[] }[] = [
     items: [
       "Python, TypeScript, JavaScript", "FastAPI, Flask, Node.js, Express", "REST APIs, WebSockets and webhooks",
       "Async and concurrent programming", "PostgreSQL, SQLite, SQLAlchemy, Redis", "OAuth, JWT, passkeys and role-based access",
-      "Docker, Vercel, Modal", "CI/CD with GitHub Actions", "Salla, WhatsApp Cloud API and n8n integrations", "Git",
+      "Docker, Vercel, Modal", "CI/CD with GitHub Actions", "n8n workflow automation and AI-agent workflows", "Salla and WhatsApp Cloud API integrations", "Git",
     ],
   },
 ];
