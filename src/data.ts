@@ -1048,6 +1048,8 @@ export const skillMap: { skill: string; keys: string[] }[] = [
   { skill: "Computer vision", keys: ["densenet", "3d ct", "vision", "segmentation"] },
   { skill: "NLP", keys: ["nlp", "arabic", "text", "token"] },
   { skill: "LLM agents", keys: ["langgraph", "agent", "tool calling", "llm"] },
+  { skill: "AI automation", keys: ["n8n", "automation", "webhook", "workflow"] },
+  { skill: "n8n", keys: ["n8n"] },
   { skill: "RAG", keys: ["rag", "retrieval", "faiss", "qdrant", "chroma"] },
   { skill: "Vector databases", keys: ["faiss", "qdrant", "chroma"] },
   { skill: "Prompt engineering", keys: ["prompt", "wording", "persona"] },
