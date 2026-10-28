@@ -684,8 +684,9 @@ export const projects: Project[] = [
   },
 ];
 
-export const otherProjects: { title: string; blurb: string; tags: string[]; href: string }[] = [
+export const otherProjects: { slug: string; title: string; blurb: string; tags: string[]; href: string }[] = [
   {
+    slug: "building-energy-twin",
     title: "Building energy digital twin",
     blurb:
       "Hierarchical regression: XGBoost sub-models for HVAC, lighting and plug loads feed a Keras neural-network meta-learner, served by a Flask API with scenario simulation and a React dashboard. Trained on a synthetic dataset.",
@@ -693,18 +694,21 @@ export const otherProjects: { title: string; blurb: string; tags: string[]; href
     href: "https://github.com/Eslamusamaaa/Building-Energy-Consumption-Twin-",
   },
   {
+    slug: "topic-classification",
     title: "Topic classification (AG News)",
     blurb: "TF-IDF with Naive Bayes and custom n-grams classifying news into four topics, with a Flask web app.",
     tags: ["NLP", "scikit-learn", "Flask"],
     href: "https://github.com/Eslamusamaaa/Topic-Classification-",
   },
   {
+    slug: "equipment-failure-prediction",
     title: "Equipment failure prediction",
     blurb: "Random forest classifier with a Flask front end.",
     tags: ["scikit-learn", "Flask"],
     href: "https://github.com/Eslamusamaaa/equipment_failure_Prediction",
   },
   {
+    slug: "sleep-quality-prediction",
     title: "Sleep quality prediction",
     blurb: "Random forest model with a web interface for analyzing and improving sleep quality.",
     tags: ["scikit-learn", "JavaScript"],

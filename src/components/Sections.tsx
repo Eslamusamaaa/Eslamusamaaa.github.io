@@ -1,9 +1,37 @@
 import { useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { about, education, otherProjects, profile, projects, skillMap, skills, training, zikolaWork } from "../data";
+import { galleries } from "../gallery";
 import { asset, finePointer, prefersReducedMotion } from "../lib";
+import { Gallery } from "./Gallery";
 import { ProjectCard } from "./Work";
 import { ArrowIcon, CheckIcon, CopyIcon, GitHubIcon, LinkedInIcon, WaIcon } from "./icons";
+
+function RepoItem({ p }: { p: (typeof otherProjects)[number] }) {
+  const [open, setOpen] = useState(false);
+  const groups = galleries[p.slug];
+  const count = groups?.reduce((n, g) => n + g.shots.length, 0) ?? 0;
+  return (
+    <li className={open ? "has-gallery" : undefined}>
+      <a href={p.href} target="_blank" rel="noopener noreferrer">
+        {p.title}
+      </a>
+      <span>{p.blurb}</span>
+      {groups && (
+        <>
+          <button type="button" className="repo-toggle" aria-expanded={open} aria-controls={`gal-${p.slug}`} onClick={() => setOpen(!open)}>
+            {open ? "Hide screenshots" : `View screenshots (${count})`}
+          </button>
+          {open && (
+            <div id={`gal-${p.slug}`} className="repo-gallery">
+              <Gallery groups={groups} idPrefix={p.slug} />
+            </div>
+          )}
+        </>
+      )}
+    </li>
+  );
+}
 
 export function Research() {
   const personal = projects.filter((p) => p.group === "personal");
@@ -23,12 +51,7 @@ export function Research() {
       <h3 className="quiet-head">More repositories</h3>
       <ul className="repos">
         {otherProjects.map((p) => (
-          <li key={p.title}>
-            <a href={p.href} target="_blank" rel="noopener noreferrer">
-              {p.title}
-            </a>
-            <span>{p.blurb}</span>
-          </li>
+          <RepoItem key={p.slug} p={p} />
         ))}
       </ul>
     </section>

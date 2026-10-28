@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { projects, type Project } from "../data";
+import { galleries } from "../gallery";
 import { asset, usePageMeta } from "../lib";
+import { Gallery } from "./Gallery";
 import { VideoLink } from "./Work";
 import { ArrowIcon, PlayIcon, WaIcon } from "./icons";
 
@@ -56,6 +58,7 @@ const sectionsFor = (p: Project) =>
     { id: "problem", label: "Problem" },
     { id: "flow", label: "How it works" },
     { id: "implementation", label: "Implementation" },
+    galleries[p.slug] && { id: "screenshots", label: "Screenshots" },
     p.challenges.length > 0 && { id: "challenges", label: "Challenges" },
     { id: "results", label: "Results and limits" },
     p.next.length > 0 && { id: "next", label: "Next" },
@@ -183,6 +186,13 @@ export default function ProjectPage() {
               </div>
             ))}
           </section>
+
+          {galleries[p.slug] && (
+            <section id="screenshots" aria-labelledby="h-screenshots">
+              <h2 id="h-screenshots">Screenshots and analysis</h2>
+              <Gallery groups={galleries[p.slug]} idPrefix={p.slug} />
+            </section>
+          )}
 
           {p.challenges.length > 0 && (
             <section id="challenges" aria-labelledby="h-challenges">
