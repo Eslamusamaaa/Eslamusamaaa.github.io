@@ -24,8 +24,8 @@ export const whatsappBots = [
   {
     id: "line-1",
     title: "Commerce bot · Line 1",
-    number: "57 017 9909",
-    href: wa("57 017 9909"),
+    number: "54 478 2562",
+    href: wa("54 478 2562"),
     blurb: "Guided product picker: budget, style, then product cards.",
   },
   {
