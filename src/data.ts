@@ -682,37 +682,272 @@ export const projects: Project[] = [
     ],
     contribution: "Modules as listed on my CV; the Student KPIs and Elara-TTS repositories are owned by my GitHub account.",
   },
-];
-
-export const otherProjects: { slug: string; title: string; blurb: string; tags: string[]; href: string }[] = [
   {
-    slug: "building-energy-twin",
+    slug: "building-energy-digital-twin",
     title: "Building energy digital twin",
-    blurb:
-      "Hierarchical regression: XGBoost sub-models for HVAC, lighting and plug loads feed a Keras neural-network meta-learner, served by a Flask API with scenario simulation and a React dashboard. Trained on a synthetic dataset.",
-    tags: ["XGBoost", "Keras", "Flask", "React"],
-    href: "https://github.com/Eslamusamaaa/Building-Energy-Consumption-Twin-",
+    kind: "Machine learning · forecasting · full-stack dashboard",
+    group: "personal",
+    status: "Public repository",
+    summary:
+      "XGBoost models predict hourly HVAC, lighting and plug-load energy for a smart building, served by a Flask API to a React dashboard with what-if scenarios and an efficiency optimizer.",
+    tags: ["XGBoost", "Flask", "React", "Time series"],
+    overview:
+      "A digital twin of a smart building. It predicts hourly energy use per sub-system, simulates scenarios such as a heatwave, remote work or an energy crisis, and ranks efficiency strategies by energy and cost saved. Everything is explorable in a five-tab dashboard.",
+    problem:
+      "Facility managers want to know what a change in weather, occupancy or tariff will do to consumption and cost before it happens, and which efficiency measure is worth doing first.",
+    flowTitle: "How the twin works",
+    flowCaveat: "Total energy in the data is exactly HVAC + lighting + plug + other, so the total is a sum of the three model outputs plus the base load; no extra model is needed.",
+    flow: [
+      { title: "Inputs", note: "Weather, occupancy, tariff and calendar features" },
+      { title: "Three XGBoost models", note: "One each for HVAC, lighting and plug loads" },
+      { title: "Total energy", note: "Sum of the three predictions plus the base load, in Wh" },
+      { title: "Scenarios and optimizer", note: "Cost, what-if simulation and ranked efficiency strategies" },
+      { title: "Flask API", note: "Predict, simulate, compare, optimize, history, health" },
+      { title: "React dashboard", note: "Live sensors, predictions, simulation, optimization, analytics" },
+    ],
+    cats: ["ML"],
+    motif: "grid",
+    oneLine: "Per-system energy forecasts with scenarios and an optimizer; trained on synthetic data.",
+    implementation: [
+      {
+        heading: "Data",
+        body: "A seeded synthetic hourly dataset for 2022 to 2025 with calendar, weather, occupancy, thermal, lighting and plug-load columns. Because the generator is seeded, the same file is produced every run.",
+      },
+      {
+        heading: "Models and evaluation",
+        body: "Three XGBoost regressors, one per sub-system. The split is chronological, not random: train 2022 to 2023, validation 2024 for early stopping and test 2025, which is the honest choice for a time series.",
+      },
+      {
+        heading: "One definition of the physics",
+        body: "A single recompute_physics() function defines the derived columns (temperature deviation, HVAC load estimate, occupancy interaction, ratios) for the dataset, the simulator and the optimizer, so training and serving agree and a scenario updates every dependent feature.",
+      },
+      {
+        heading: "API and dashboard",
+        body: "A Flask API exposes sensor, predict, simulate, comparison, optimize and historical endpoints with nine scenarios (baseline, heatwave, cold snap, high occupancy, remote work, energy crisis, green mode, solar peak, peak demand). A React and Recharts dashboard reads it.",
+      },
+      {
+        heading: "Optimizer",
+        body: "Efficiency strategies act on model inputs (set-points, load estimates, usage factors); the LED upgrade is a lighting multiplier applied after prediction. Each is scored on annual energy and cost.",
+      },
+    ],
+    stack: [
+      { name: "XGBoost, scikit-learn", role: "Per-system regression models" },
+      { name: "pandas", role: "Data generation and feature engineering" },
+      { name: "Flask, Flask-CORS", role: "Prediction and simulation API" },
+      { name: "React, Vite, Recharts", role: "Dashboard" },
+    ],
+    challenges: [
+      { challenge: "Training and serving drifting apart", solution: "One shared feature definition used by training, the API, the simulator and the optimizer." },
+      { challenge: "Leaking the future in a time series", solution: "A chronological train, validation and test split instead of a random one." },
+    ],
+    results: [
+      "On the held-out year 2025: HVAC R² 0.998, lighting 0.665, plug loads 0.801, and total energy R² 0.9965 with a mean absolute error of about 13,774 Wh.",
+      "Lighting and plug loads are noisier in the generator (35% multiplicative noise on lighting), which caps their R².",
+    ],
+    limitations: [
+      "The data is synthetic, so these numbers show how well the models recover the generator, not accuracy on a real building.",
+      "In this data HVAC energy does not depend on the indoor set-point, so the HVAC set-point strategy shows about 0% saving. That is a property of the generator.",
+    ],
+    next: ["Validate against real building meter data.", "Add uncertainty intervals to the predictions."],
+    links: [{ label: "View source code", href: "https://github.com/Eslamusamaaa/Building-Energy-Consumption-Twin-" }],
+    contribution: "Repository owned by my GitHub account: data generator, models, API and dashboard.",
   },
   {
-    slug: "topic-classification",
-    title: "Topic classification (AG News)",
-    blurb: "TF-IDF with Naive Bayes and custom n-grams classifying news into four topics, with a Flask web app.",
-    tags: ["NLP", "scikit-learn", "Flask"],
-    href: "https://github.com/Eslamusamaaa/Topic-Classification-",
+    slug: "topic-classification-ag-news",
+    title: "News topic classification (AG News)",
+    kind: "NLP · classical machine learning · Flask app",
+    group: "personal",
+    status: "Public repository",
+    summary:
+      "A four-topic news classifier built end to end: text cleaning, hand-built n-gram language models, a vectorizer and classifier comparison, and a Flask app with calibrated confidence.",
+    tags: ["NLP", "TF-IDF", "Linear SVC", "Flask"],
+    overview:
+      "An NLP project that classifies news into World, Sports, Business and Sci/Tech. It covers preprocessing, manually implemented unigram, bigram and trigram language models, a systematic model comparison and a web app for live predictions.",
+    problem:
+      "News needs to be routed to topics automatically, and a good project here has to evaluate honestly, without letting sentences of the same article leak between training and validation.",
+    flowTitle: "Pipeline",
+    flow: [
+      { title: "AG News", note: "120,000 training articles and 7,600 test articles, balanced across topics" },
+      { title: "Cleaning", note: "Lowercase, strip URLs, emails and numbers, tokenize, remove stop words, lemmatize" },
+      { title: "Vectorize", note: "Binary, count and TF-IDF features compared" },
+      { title: "Classify", note: "Linear SVC, logistic regression and Naive Bayes compared" },
+      { title: "Calibrate", note: "Linear SVC wrapped so the app shows a real probability" },
+      { title: "Flask app", note: "Paste a headline, get a topic and confidence" },
+    ],
+    cats: ["NLP"],
+    motif: "tokens",
+    oneLine: "TF-IDF with Linear SVC reaches 91.0% on the external test set; evaluated at article level.",
+    implementation: [
+      {
+        heading: "Preprocessing",
+        body: "One clean_text() function is used by both training and the app. Descriptions are split into sentences first, and training works on sentences.",
+      },
+      {
+        heading: "Honest evaluation",
+        body: "All sentences of one article stay on the same side of the split (GroupShuffleSplit), so validation is independent of training articles. The best vectorizer and classifier pair is chosen on validation data only, and the external test file is used once at the end.",
+      },
+      {
+        heading: "Model comparison",
+        body: "Three vectorizers against three classifiers. TF-IDF with Linear SVC was best on validation. The final model is refit on all training sentences and wrapped in CalibratedClassifierCV, so the confidence in the app is a calibrated probability, not a softmax of raw scores.",
+      },
+      {
+        heading: "Manual n-gram language models",
+        body: "Unigram, bigram and trigram counts built by hand with Laplace smoothing and scored in log space, since raw probability products underflow on long sentences.",
+      },
+    ],
+    stack: [
+      { name: "scikit-learn", role: "Vectorizers, classifiers, calibration" },
+      { name: "NLTK", role: "Tokenization, stop words, lemmatization" },
+      { name: "NumPy, pandas", role: "Data handling and n-gram models" },
+      { name: "Flask", role: "Web app" },
+    ],
+    challenges: [
+      { challenge: "Sentence-level training can leak across the split", solution: "Group by article so no article appears on both sides." },
+      { challenge: "Linear SVC has no probabilities", solution: "Calibrated with CalibratedClassifierCV so the displayed confidence is meaningful." },
+    ],
+    results: [
+      "Best model on validation (TF-IDF with Linear SVC): 88.3%. On the external test set of 7,600 unseen articles: 91.0%.",
+      "Business and Sci/Tech are the hardest pair to separate (about 87 to 89% F1); Sports is the easiest (about 96%).",
+      "Perplexity on 2,000 unseen sentences: unigram 5,423, bigram 13,963, trigram 33,198.",
+    ],
+    limitations: [
+      "Higher-order n-gram models score worse here: with a vocabulary of about 73,000 words, add-one smoothing gives huge probability mass to unseen n-grams. Kneser-Ney or backoff smoothing would reverse the order.",
+      "The classifier only knows the four AG News topics and its vocabulary is bag-of-words.",
+    ],
+    next: ["Better smoothing for the language models.", "Compare against a fine-tuned transformer."],
+    links: [{ label: "View source code", href: "https://github.com/Eslamusamaaa/Topic-Classification-" }],
+    contribution: "Repository owned by my GitHub account: preprocessing, n-gram models, training, evaluation and the Flask app.",
   },
   {
     slug: "equipment-failure-prediction",
     title: "Equipment failure prediction",
-    blurb: "Random forest classifier with a Flask front end.",
-    tags: ["scikit-learn", "Flask"],
-    href: "https://github.com/Eslamusamaaa/equipment_failure_Prediction",
+    kind: "Predictive maintenance · imbalanced classification · Flask app",
+    group: "personal",
+    status: "Public repository",
+    summary:
+      "A Flask app that predicts the type of machine failure from sensor readings on the AI4I 2020 dataset, with the work focused on the rare failure classes.",
+    tags: ["Imbalanced data", "Ensembles", "Feature engineering", "Flask"],
+    overview:
+      "A predictive-maintenance system that takes product type, temperatures, rotational speed, torque and tool wear, and returns a failure type or No Failure, with a stability confidence and a recommended action.",
+    problem:
+      "In this dataset 96.5% of rows are No Failure, so accuracy is high from the start and says nothing about the failures that matter. The goal is to do well on the rare classes and measure with macro-F1.",
+    flowTitle: "Approach",
+    flow: [
+      { title: "Sensor inputs", note: "Product type, air and process temperature, speed, torque, tool wear" },
+      { title: "Feature engineering", note: "Power, wear times torque, overstrain margin, heat-dissipation condition" },
+      { title: "Ensemble", note: "RandomForest, ExtraTrees and HistGradientBoosting with oversampling" },
+      { title: "Class weights", note: "Per-class probability weights tuned on out-of-fold predictions" },
+      { title: "Tool Wear rule", note: "Alert when the model says no failure but wear is 198 minutes or more" },
+      { title: "Recommendation", note: "Status, confidence and a maintenance action in the Flask app" },
+    ],
+    cats: ["ML"],
+    motif: "grid",
+    oneLine: "Macro-F1 0.81 on five learnable classes; the Tool Wear alert trades precision for recall.",
+    implementation: [
+      {
+        heading: "Imbalance",
+        body: "Resampling strategies were compared (random oversampling, SMOTE, undersampling, SMOTE plus undersampling, noise-based augmentation), applied to the train split only so the test split stays untouched.",
+      },
+      {
+        heading: "Physics-based features",
+        body: "Failure modes follow physical rules, for example overstrain is wear times torque above a per-type limit. Giving the model those quantities directly lifts Heat Dissipation, Overstrain and Power failure detection.",
+      },
+      {
+        heading: "Ensemble and tuning",
+        body: "An ensemble of three tree models with oversampling and per-class probability weights tuned on cross-validation out-of-fold predictions, never on the test set.",
+      },
+      {
+        heading: "One feature definition",
+        body: "The app loads the final model and uses the same feature code as training, so serving matches what was evaluated.",
+      },
+    ],
+    stack: [
+      { name: "scikit-learn", role: "RandomForest, ExtraTrees, HistGradientBoosting" },
+      { name: "Resampling", role: "Oversampling and SMOTE comparison" },
+      { name: "pandas", role: "Feature engineering" },
+      { name: "Flask", role: "Web form and prediction" },
+    ],
+    challenges: [
+      { challenge: "96.5% of rows are No Failure", solution: "Judge by macro-F1 and per-class F1, and resample only the training split." },
+      { challenge: "Tool Wear is not separable from normal operation by sensors alone", solution: "A transparent alert rule on tool wear that trades precision for recall." },
+    ],
+    results: [
+      "Baseline (6 classes) macro-F1 0.61. Final model on 5 classes: macro-F1 0.81 with accuracy 0.984.",
+      "Per class F1: Heat Dissipation 1.00, Power 1.00, Overstrain 0.97, No Failure 0.99.",
+      "With the Tool Wear alert the app catches 8 of 9 Tool Wear failures (recall 0.89), at about 157 false alarms on the test set and macro-F1 about 0.80.",
+    ],
+    limitations: [
+      "Random Failures (18 rows) are random by construction in this dataset and cannot be predicted, so they are excluded; on all 6 classes the best result is about 0.66.",
+      "Tool Wear has only 9 test samples, so its metrics move by a few points if the split changes.",
+    ],
+    next: ["Evaluate on a different predictive-maintenance dataset.", "Make the alert threshold adjustable in the interface."],
+    links: [{ label: "View source code", href: "https://github.com/Eslamusamaaa/equipment_failure_Prediction" }],
+    contribution: "Repository owned by my GitHub account: resampling study, features, model and Flask app.",
   },
   {
-    slug: "sleep-quality-prediction",
-    title: "Sleep quality prediction",
-    blurb: "Random forest model with a web interface for analyzing and improving sleep quality.",
-    tags: ["scikit-learn", "JavaScript"],
-    href: "https://github.com/Eslamusamaaa/Sleeping-Quality-Prediction-Optimization",
+    slug: "sleep-quality-consultant",
+    title: "Personalized sleep quality consultant",
+    kind: "Machine learning · what-if simulation · Flask app",
+    group: "personal",
+    status: "Public repository",
+    summary:
+      "A Random Forest sleep-quality predictor with a smooth score, a what-if simulation of lifestyle changes and a personalised action plan, behind a custom web interface.",
+    tags: ["Random Forest", "Synthetic data", "Flask", "What-if analysis"],
+    overview:
+      "A web app that analyses daily habits and returns a predicted sleep-quality score from 1 to 9, a breakdown of the habits, a simulation of which single change helps most, and an action plan tailored to the numbers and occupation.",
+    problem:
+      "People get raw health numbers from wearables but no clear answer to what to change tonight. The app turns the inputs into a score and ranked, concrete changes.",
+    flowTitle: "How a consultation is produced",
+    flow: [
+      { title: "Habits form", note: "Personal, work, sleep and health metrics" },
+      { title: "Random Forest", note: "Probability for each quality class from 1 to 9" },
+      { title: "Smooth score", note: "Probability-weighted average of the classes" },
+      { title: "What-if", note: "Each change scored alone: sleep +1 h, stress -2, caffeine -100 mg, screen time -2 h" },
+      { title: "Action plan", note: "Rule-based advice from the numbers and occupation" },
+    ],
+    cats: ["ML"],
+    motif: "graph",
+    oneLine: "88.0% accuracy on unseen real rows; about 98% of the training rows are synthetic.",
+    implementation: [
+      {
+        heading: "The score",
+        body: "The model is a classifier, but the number shown is the probability-weighted average of all classes. Quality classes are ordered, and a smooth score lets the what-if simulation show the effect of a small change even when the most likely class does not move.",
+      },
+      {
+        heading: "Data",
+        body: "The original dataset has 374 rows, only 132 unique, with scores 4 to 9. Three behavioural columns were added (caffeine intake, daily work hours, screen time) and about 24,300 records were generated to cover scores 1 to 3 and balance all nine classes. Every row has an Is Synthetic flag and generation is seeded.",
+      },
+      {
+        heading: "Evaluation on real rows",
+        body: "Because most rows are synthetic, a random split mostly measures how well the model relearns the generator (93.8%). So the model is also tested on real rows it never saw, over 5 repeated hold-outs, with the real rows given a higher sample weight in training.",
+      },
+      {
+        heading: "Advice and simulation",
+        body: "A predictor module validates input and runs the what-if simulation; an advice module produces the analysis and action plan text from rules.",
+      },
+    ],
+    stack: [
+      { name: "scikit-learn", role: "Random Forest, 200 trees, depth 15" },
+      { name: "pandas, NumPy", role: "Data preparation and generation" },
+      { name: "Flask", role: "Serving the UI and /predict" },
+      { name: "HTML, CSS, JavaScript", role: "Custom front end" },
+    ],
+    challenges: [
+      { challenge: "Almost all training data is synthetic", solution: "Flag synthetic rows, weight real rows higher and evaluate separately on held-out real rows." },
+      { challenge: "A class label does not respond to small habit changes", solution: "Use the probability-weighted score so the what-if effects are visible." },
+    ],
+    results: [
+      "On unseen real rows, the model trained on synthetic plus weighted real rows reaches 88.0% accuracy, 96.5% within one point and a mean absolute error of 0.16, against 26.5% for synthetic rows only.",
+      "A random split of all data gives 93.8%, reported for reference only.",
+    ],
+    limitations: [
+      "The synthetic rows are rule-generated, so the model reflects those rules, not clinical sleep science.",
+      "Scores 1 to 3 exist only in synthetic data and cannot be validated on real people. Hold-out sets are small, about 40 rows each.",
+      "Not a medical device and does not diagnose sleep disorders; the advice texts are generic rules.",
+    ],
+    next: ["Collect more real sleep records.", "Connect to wearable data sources."],
+    links: [{ label: "View source code", href: "https://github.com/Eslamusamaaa/Sleeping-Quality-Prediction-Optimization" }],
+    contribution: "Repository owned by my GitHub account: data generation, model, evaluation, advice engine, API and interface.",
   },
 ];
 

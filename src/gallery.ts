@@ -50,7 +50,7 @@ export const galleries: Record<string, GalleryGroup[]> = {
     },
   ],
 
-  "building-energy-twin": [
+  "building-energy-digital-twin": [
     {
       title: "Digital twin dashboard",
       note: "React dashboard over the Flask API, running on the synthetic dataset.",
@@ -72,7 +72,7 @@ export const galleries: Record<string, GalleryGroup[]> = {
     },
   ],
 
-  "topic-classification": [
+  "topic-classification-ag-news": [
     {
       title: "Web app",
       shots: [
@@ -106,7 +106,7 @@ export const galleries: Record<string, GalleryGroup[]> = {
     },
   ],
 
-  "sleep-quality-prediction": [
+  "sleep-quality-consultant": [
     {
       title: "Web app",
       shots: [

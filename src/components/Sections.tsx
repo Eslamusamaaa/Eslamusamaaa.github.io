@@ -1,37 +1,9 @@
 import { useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { about, education, otherProjects, profile, projects, skillMap, skills, training, zikolaWork } from "../data";
-import { galleries } from "../gallery";
+import { about, education, profile, projects, skillMap, skills, training, zikolaWork } from "../data";
 import { asset, finePointer, prefersReducedMotion } from "../lib";
-import { Gallery } from "./Gallery";
 import { ProjectCard } from "./Work";
 import { ArrowIcon, CheckIcon, CopyIcon, GitHubIcon, LinkedInIcon, WaIcon } from "./icons";
-
-function RepoItem({ p }: { p: (typeof otherProjects)[number] }) {
-  const [open, setOpen] = useState(false);
-  const groups = galleries[p.slug];
-  const count = groups?.reduce((n, g) => n + g.shots.length, 0) ?? 0;
-  return (
-    <li className={open ? "has-gallery" : undefined}>
-      <a href={p.href} target="_blank" rel="noopener noreferrer">
-        {p.title}
-      </a>
-      <span>{p.blurb}</span>
-      {groups && (
-        <>
-          <button type="button" className="repo-toggle" aria-expanded={open} aria-controls={`gal-${p.slug}`} onClick={() => setOpen(!open)}>
-            {open ? "Hide screenshots" : `View screenshots (${count})`}
-          </button>
-          {open && (
-            <div id={`gal-${p.slug}`} className="repo-gallery">
-              <Gallery groups={groups} idPrefix={p.slug} />
-            </div>
-          )}
-        </>
-      )}
-    </li>
-  );
-}
 
 export function Research() {
   const personal = projects.filter((p) => p.group === "personal");
@@ -41,19 +13,13 @@ export function Research() {
         <h2 id="research-title" className="mask-line">
           <span>Research and personal projects</span>
         </h2>
-        <p className="sub-lede">Speech, language models and medical imaging, built outside my day job.</p>
+        <p className="sub-lede">Speech, language models, medical imaging and applied machine learning, built outside my day job.</p>
       </div>
       <div className="cards cards-compact">
         {personal.map((p) => (
           <ProjectCard key={p.slug} p={p} variant="compact" />
         ))}
       </div>
-      <h3 className="quiet-head">More repositories</h3>
-      <ul className="repos">
-        {otherProjects.map((p) => (
-          <RepoItem key={p.slug} p={p} />
-        ))}
-      </ul>
     </section>
   );
 }
