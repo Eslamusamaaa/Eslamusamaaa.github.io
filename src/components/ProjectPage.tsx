@@ -7,25 +7,24 @@ import { Gallery } from "./Gallery";
 import { VideoLink } from "./Work";
 import { ArrowIcon, PlayIcon, WaIcon } from "./icons";
 
-function VideoCard({ p }: { p: Project }) {
+function VideoCard({ video }: { video: NonNullable<Project["video"]> }) {
   const [thumbFailed, setThumbFailed] = useState(false);
-  if (!p.video) return null;
   return (
-    <a className="video-card" href={p.video.url} target="_blank" rel="noopener noreferrer" aria-label={`Watch on YouTube: ${p.video.title}`}>
+    <a className="video-card" href={video.url} target="_blank" rel="noopener noreferrer" aria-label={`Watch on YouTube: ${video.title}`}>
       {thumbFailed ? (
         <span className="video-fallback" aria-hidden="true">
           <PlayIcon size={22} />
         </span>
       ) : (
         <span className="video-thumb">
-          <img src={`https://i.ytimg.com/vi/${p.video.id}/hqdefault.jpg`} alt="" width={480} height={360} loading="lazy" referrerPolicy="no-referrer" onError={() => setThumbFailed(true)} />
+          <img src={`https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`} alt="" width={480} height={360} loading="lazy" referrerPolicy="no-referrer" onError={() => setThumbFailed(true)} />
           <span className="play" aria-hidden="true">
             <PlayIcon size={18} />
           </span>
         </span>
       )}
       <span className="video-meta">
-        <strong dir="rtl" lang="ar">{p.video.title}</strong>
+        <strong dir="rtl" lang="ar">{video.title}</strong>
         <small>Project explanation video · opens YouTube</small>
       </span>
     </a>
@@ -127,7 +126,10 @@ export default function ProjectPage() {
           <section id="overview" aria-labelledby="h-overview">
             <h2 id="h-overview">Overview</h2>
             <p>{p.overview}</p>
-            <VideoCard p={p} />
+            {p.video && <VideoCard video={p.video} />}
+            {p.moreVideos?.map((v) => (
+              <VideoCard key={v.id} video={v} />
+            ))}
           </section>
 
           {p.samples && (

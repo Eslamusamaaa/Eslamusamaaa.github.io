@@ -57,6 +57,8 @@ export type Project = {
   tags: string[];
   image?: { src: string; alt: string };
   video?: { url: string; id: string; title: string };
+  /** Further explanation videos, shown on the case-study page after the main one. */
+  moreVideos?: { url: string; id: string; title: string }[];
   samples?: { src: string; text: string; note: string }[];
   proof?: { src: string; alt: string; caption: string };
   diagram?: { src: string; alt: string; caption: string; width: number; height: number };
@@ -95,6 +97,7 @@ export const projects: Project[] = [
     tags: ["TypeScript", "PostgreSQL", "Salla API", "LLM", "Multi-tenant"],
     image: { src: "img/rashihli-logo.png", alt: "Rashihli logo: a purple tile with a check mark" },
     video: { url: "https://www.youtube.com/watch?v=EIuLRemSntw", id: "EIuLRemSntw", title: "رشّحلي — مساعد تسوّق ذكي لمتاجر سلة" },
+    moreVideos: [{ url: "https://www.youtube.com/watch?v=mbIfK9MzrwE", id: "mbIfK9MzrwE", title: "رشّحلي | كويز ذكي يرشّح لعملائك المنتج المناسب — لمتاجر سلة" }],
     overview:
       "Rashihli lets a Salla merchant install an app, have their catalog imported automatically, and show a short adaptive quiz on their storefront. The questions, the options and the wording are generated from that store's products, in the store's own language, with nothing hardcoded per merchant. One backend serves many stores.",
     problem:
