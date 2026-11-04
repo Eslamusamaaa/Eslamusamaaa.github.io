@@ -134,11 +134,11 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 .hero::before { content: ""; position: absolute; inset: -80px 0 auto; height: 620px; pointer-events: none; z-index: -1; background: radial-gradient(ellipse 55% 60% at 30% 20%, rgba(76, 201, 240, 0.07), transparent 70%); }
 .hero-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(240px, 0.65fr); gap: clamp(40px, 7vw, 120px); align-items: center; }
 .hero h1 { max-width: 15em; }
-.portrait { position: relative; isolation: isolate; margin: clamp(8px, 2vw, 24px) clamp(0px, 2vw, 40px) 0 0; justify-self: end; width: min(100%, 380px); }
-.portrait::before { content: ""; position: absolute; z-index: -1; inset: -9% -14%; border-radius: 50%; background: radial-gradient(closest-side, rgba(76, 201, 240, 0.42), rgba(76, 201, 240, 0.12) 60%, transparent 100%); filter: blur(22px); }
+.portrait { margin: clamp(8px, 2vw, 24px) clamp(0px, 2vw, 40px) 0 0; justify-self: end; width: min(100%, 380px); }
 .portrait a { position: relative; display: block; border-radius: var(--r-lg); }
-.portrait img { width: 100%; aspect-ratio: 1278 / 2000; object-fit: cover; border-radius: var(--r-lg); border: 1px solid rgba(76, 201, 240, 0.55); box-shadow: 0 0 0 6px rgba(76, 201, 240, 0.08), 0 28px 56px -24px rgba(76, 201, 240, 0.5), var(--shadow); }
-.portrait-badge { position: absolute; left: 12px; bottom: 12px; display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border-radius: 999px; background: rgba(14, 15, 16, 0.85); border: 1px solid var(--line-strong); color: var(--wa); font-size: 0.875rem; font-weight: 600; box-shadow: var(--shadow); transition: transform var(--t-hover) var(--ease); }
+/* The photo sits on the same graphite ramp as the page: hairline border, no glow, no colour in the shadow. */
+.portrait img { width: 100%; aspect-ratio: 1278 / 2000; object-fit: cover; border-radius: var(--r-lg); border: 1px solid rgba(241, 242, 238, 0.1); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 24px 48px -28px rgba(0, 0, 0, 0.8); }
+.portrait-badge { position: absolute; left: 12px; bottom: 12px; display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border-radius: 999px; background: rgba(14, 15, 16, 0.78); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid rgba(241, 242, 238, 0.12); color: var(--wa); font-size: 0.875rem; font-weight: 600; transition: transform var(--t-hover) var(--ease); }
 .portrait a:hover .portrait-badge { transform: translateY(-2px); }
 
 .hear { display: grid; grid-template-columns: auto auto 1fr; align-items: center; gap: 14px; margin-top: 28px; padding: 12px 16px 12px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); max-width: 40rem; }
@@ -568,4 +568,4 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 @media (prefers-reduced-motion: reduce) { .gal-item { transition: none; } }
 
 /* Background pattern: faint blue dot grid that fades out toward the lower page */
-body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: radial-gradient(rgba(76, 201, 240, 0.32) 1.1px, transparent 1.4px); background-size: 28px 28px; -webkit-mask-image: radial-gradient(ellipse 90% 75% at 50% 0%, #000 25%, transparent 85%); mask-image: radial-gradient(ellipse 90% 75% at 50% 0%, #000 25%, transparent 85%); }
+body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: radial-gradient(rgba(190, 210, 225, 0.2) 1.1px, transparent 1.4px); background-size: 28px 28px; -webkit-mask-image: radial-gradient(ellipse 90% 75% at 50% 0%, #000 25%, transparent 85%); mask-image: radial-gradient(ellipse 90% 75% at 50% 0%, #000 25%, transparent 85%); }
