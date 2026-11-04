@@ -59,7 +59,7 @@ export default function Hero() {
           <a href={profile.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="Chat with Eslam Usama on WhatsApp (opens in a new tab)">
             <picture>
               <source type="image/webp" srcSet={`${asset("img/eslam-400.webp")} 400w, ${asset("img/eslam-800.webp")} 800w`} sizes="(max-width: 900px) 280px, 400px" />
-              <img src={asset("img/eslam-profile.jpg")} alt="Portrait of Eslam Usama" width={800} height={800} fetchPriority="high" />
+              <img src={asset("img/eslam-profile.jpg")} alt="Portrait of Eslam Usama" width={1278} height={2000} fetchPriority="high" />
             </picture>
             <span className="portrait-badge">
               <WaIcon size={16} /> Chat on WhatsApp
