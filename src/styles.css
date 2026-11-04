@@ -13,11 +13,11 @@
   --text-2: #c8cbc6;
   --muted: #a6aba7;
 
-  /* Brand: neon lime. Actions, links, focus, the waveform. Dark ink on top of it. */
-  --brand: #c6f432;
-  --brand-strong: #d8ff63;
-  --brand-soft: rgba(198, 244, 50, 0.1);
-  --brand-glow: rgba(198, 244, 50, 0.22);
+  /* Brand: electric sky blue. Actions, links, focus, the waveform. Dark ink on top of it. */
+  --brand: #4cc9f0;
+  --brand-strong: #8fdfff;
+  --brand-soft: rgba(76, 201, 240, 0.1);
+  --brand-glow: rgba(76, 201, 240, 0.22);
   --on-brand: #0e0f10;
 
   /* Secondary accent: soft lavender. Labels, numbers, markers; never primary actions. */
@@ -39,7 +39,7 @@
   --r-md: 10px;
   --r-lg: 14px;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 20px -12px rgba(0, 0, 0, 0.6);
-  --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.45), 0 18px 36px -18px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(198, 244, 50, 0.08);
+  --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.45), 0 18px 36px -18px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(76, 201, 240, 0.08);
 
   /* Layout */
   --page: min(92%, 1440px);
@@ -131,7 +131,7 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 
 /* ---------- Hero ---------- */
 .hero { position: relative; padding: clamp(40px, 6vw, 88px) 0 0; }
-.hero::before { content: ""; position: absolute; inset: -80px 0 auto; height: 620px; pointer-events: none; z-index: -1; background: radial-gradient(ellipse 55% 60% at 30% 20%, rgba(198, 244, 50, 0.07), transparent 70%); }
+.hero::before { content: ""; position: absolute; inset: -80px 0 auto; height: 620px; pointer-events: none; z-index: -1; background: radial-gradient(ellipse 55% 60% at 30% 20%, rgba(76, 201, 240, 0.07), transparent 70%); }
 .hero-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(240px, 0.65fr); gap: clamp(40px, 7vw, 120px); align-items: center; }
 .hero h1 { max-width: 15em; }
 .portrait { margin: 0; justify-self: end; width: min(100%, 380px); }
@@ -453,13 +453,13 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
   --glass-blur: blur(14px) saturate(140%);
 }
 
-/* Faint, static lime light behind the sections that carry glass, so the blur has something to catch. */
+/* Faint, static blue light behind the sections that carry glass, so the blur has something to catch. */
 #work, #research, #demos, #skills { position: relative; isolation: isolate; }
 #work, #demos, #skills { overflow-x: clip; }
 #work::before, #demos::before, #skills::before {
   content: ""; position: absolute; z-index: -1; pointer-events: none; border-radius: 50%;
   width: min(60vw, 720px); height: 420px; filter: blur(40px);
-  background: radial-gradient(closest-side, rgba(198, 244, 50, 0.08), transparent);
+  background: radial-gradient(closest-side, rgba(76, 201, 240, 0.08), transparent);
 }
 #work::before { right: 0; top: 18%; }
 #demos::before { left: 0; top: 10%; background: radial-gradient(closest-side, rgba(180, 166, 255, 0.09), transparent); }
@@ -479,7 +479,7 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
   border-color: var(--glass-edge);
   box-shadow: var(--shadow), var(--glass-shine);
 }
-.card:hover, .card:focus-within { background: var(--glass-hover); border-color: rgba(198, 244, 50, 0.18); }
+.card:hover, .card:focus-within { background: var(--glass-hover); border-color: rgba(76, 201, 240, 0.18); }
 .contact-list { padding: 4px 20px; border: 1px solid var(--glass-edge); border-radius: var(--r-lg); }
 .contact-list li:first-child { border-top: 0; }
 .contact-list li:last-child { border-bottom: 0; }
@@ -513,7 +513,7 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
    Contact and footer: hover and focus feedback (transform and opacity only)
    ========================================================================== */
 .contact-list { transition: transform var(--t-hover) var(--ease), box-shadow var(--t-hover) var(--ease), border-color var(--t-hover) var(--ease); }
-.contact-list:hover, .contact-list:focus-within { transform: translateY(-3px); border-color: rgba(198, 244, 50, 0.22); box-shadow: var(--shadow-lift), var(--glass-shine), 0 0 0 1px rgba(198, 244, 50, 0.06); }
+.contact-list:hover, .contact-list:focus-within { transform: translateY(-3px); border-color: rgba(76, 201, 240, 0.22); box-shadow: var(--shadow-lift), var(--glass-shine), 0 0 0 1px rgba(76, 201, 240, 0.06); }
 .contact-list li { position: relative; margin: 0 -12px; padding: 0 12px; border-radius: var(--r-md); transition: background var(--t-hover) var(--ease); }
 .contact-list li:hover, .contact-list li:focus-within { background: rgba(255, 255, 255, 0.05); }
 .contact-list li span:first-child { transition: color var(--t-hover) var(--ease); }

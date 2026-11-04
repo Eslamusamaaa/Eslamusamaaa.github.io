@@ -11,6 +11,48 @@ const s = (dir: string, file: string, width: number, height: number, caption: st
 
 /** Screenshots and analysis figures, keyed by project slug (or repository slug for the smaller repos). */
 export const galleries: Record<string, GalleryGroup[]> = {
+  "volleyball-group-activity-recognition": [
+    {
+      title: "Group activity samples",
+      note: "Test-split clips from videos never used in training, shown only where the pipeline's prediction matches the ground truth. They illustrate the output and are not an accuracy measurement.",
+      shots: [
+        s("volleyball-activity", "group_l_set", 1280, 720, "Group activity: left team set, with tracked players and predicted actions drawn on the frame."),
+        s("volleyball-activity", "group_r_spike", 1280, 720, "Group activity: right team spike."),
+        s("volleyball-activity", "group_r_pass", 1280, 720, "Group activity: right team pass."),
+        s("volleyball-activity", "group_l_winpoint", 1280, 720, "Group activity: left team wins the point."),
+      ],
+    },
+    {
+      title: "Player action samples",
+      shots: [
+        s("volleyball-activity", "player_spiking", 1280, 720, "Player action: spiking."),
+        s("volleyball-activity", "player_blocking", 1920, 1080, "Player action: blocking."),
+        s("volleyball-activity", "player_setting", 1920, 1080, "Player action: setting."),
+        s("volleyball-activity", "player_digging", 1920, 1080, "Player action: digging."),
+      ],
+    },
+    {
+      title: "Model pipelines",
+      note: "Every diagram uses the same real test clip (Brazil against France, FIVB World League Finals 2015, label right spike), so only the architecture changes.",
+      shots: [
+        s("volleyball-activity", "b1_pipeline", 1466, 862, "B1: whole-frame ResNet50 to one scene label, 72.2% test accuracy."),
+        s("volleyball-activity", "b5_pipeline", 2200, 862, "B5: one LSTM per tracked player, then max-pool, 79.0%."),
+        s("volleyball-activity", "b8_pipeline", 1702, 862, "B8: per-player LSTM, team-separated pooling and a scene LSTM, 88.8%."),
+        s("volleyball-activity", "b8mt_pipeline", 1512, 862, "B8-mt: B8 plus a per-player action head trained jointly, 87.4% scene and 75.7% player action."),
+        s("volleyball-activity", "explainer_static_vs_tracked_box", 2600, 390, "A static centre-frame box against the real tracked box across the 9 frames."),
+      ],
+    },
+    {
+      title: "Model evaluation",
+      shots: [
+        s("volleyball-activity", "b8_confusion_matrix", 1040, 910, "B8 confusion matrix on the test split."),
+        s("volleyball-activity", "b8mt_scene_confusion_matrix", 1040, 910, "B8-mt scene confusion matrix."),
+        s("volleyball-activity", "b8_training_curve", 1040, 910, "B8 training curve."),
+        s("volleyball-activity", "b3a_v1_vs_v2_curve", 910, 585, "Player-action backbone: weighted loss (kept) against focal loss with a balanced sampler (worse on rare classes)."),
+      ],
+    },
+  ],
+
   "arabic-medical-llm": [
     {
       title: "Chat interface",

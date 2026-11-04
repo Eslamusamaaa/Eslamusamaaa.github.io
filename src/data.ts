@@ -439,6 +439,90 @@ export const projects: Project[] = [
     outcome: "Catalog bot captured 63 of 63 store products with complete fields in its last recorded run.",
   },
   {
+    slug: "volleyball-group-activity-recognition",
+    title: "Volleyball group activity recognition",
+    kind: "Computer vision · video understanding · web platform",
+    group: "personal",
+    status: "Public repository · live demo · educational and experimental project",
+    summary:
+      "A hierarchical deep temporal model (CVPR 2016) reproduced and extended in PyTorch: it classifies team-level plays and individual player actions, and a pipeline turns raw match footage into a timestamped event timeline.",
+    tags: ["PyTorch", "ResNet50", "LSTM", "YOLOv8", "ByteTrack", "FastAPI"],
+    overview:
+      "A reproduction and extension of \"A Hierarchical Deep Temporal Model for Group Activity Recognition\" (Ibrahim et al., CVPR 2016) on the official Volleyball dataset, written fresh in PyTorch. For a 9-frame clip it predicts the team's group activity (8 classes, such as right spike or left winpoint) and each player's action (9 classes). A detector, tracker and sliding window then turn a raw match video into a timeline of events, served through a FastAPI backend and a web studio.",
+    problem:
+      "A single accuracy number says that a model works, not why. Group activity depends on who is where and how they move, and a new video has no player boxes at all. The project had to isolate which design choices matter (players, time, pooling) and then find the players automatically on unseen footage.",
+    flowTitle: "From match video to event timeline",
+    flowCaveat: "Accuracy figures are measured on the official test split (videos never used for training). Predictions on new footage are not yet evaluated at dataset scale.",
+    flow: [
+      { title: "Player detector", note: "YOLOv8n fine-tuned on the dataset's own player boxes: 95.3% precision, 94.2% recall, 0.98 mAP50" },
+      { title: "Tracker", note: "ByteTrack gives each player a consistent ID; 97.7% of ground-truth players matched on 18 validation clips" },
+      { title: "Sliding window", note: "9-frame windows; per-player crops from the tracked boxes" },
+      { title: "Player LSTM", note: "ResNet50 features per crop, one LSTM per player over the 9 frames" },
+      { title: "Team pooling", note: "Max-pool each team's 6 players separately, concatenate, scene-level LSTM" },
+      { title: "Timeline", note: "Frames converted to seconds; consecutive windows with the same class merged into one event" },
+    ],
+    cats: ["Vision"],
+    motif: "scan",
+    oneLine: "88.8% group-activity accuracy on the test split with team-separated pooling; 6.9 points above the paper's 81.9%.",
+    implementation: [
+      {
+        heading: "An eight-step ablation ladder",
+        body: "Instead of one model, eight baselines (B1 to B8) were built, each changing exactly one thing: whole image against player crops, frozen against fine-tuned backbone, adding time with an LSTM, pooling before or after the temporal model, a second scene-level LSTM, and finally pooling each team separately. Every jump or drop in accuracy points to one isolated cause.",
+      },
+      {
+        heading: "Team-separated pooling fixed the hardest confusion",
+        body: "B1 to B7 all confused left and right winpoint, because pooling all 12 players into one vector loses which side of the court a signal came from. Pooling each team's 6 players separately and concatenating them (B8) raised left winpoint recall from 0.63 to 0.88 and right winpoint from 0.46 to 0.86, and every one of the 8 classes scores above 0.81 recall.",
+      },
+      {
+        heading: "Real tracking, not a static box",
+        body: "Player boxes are taken per frame from the tracking annotations (IoU-matched to ground-truth players, 99.8% matched) instead of reusing the centre-frame box nine times, as the paper does. Aggregate accuracy barely changes, but per-class recall shifts, so tracked boxes were kept.",
+      },
+      {
+        heading: "Joint scene and player-action model",
+        body: "The final model (B8-mt) attaches a 9-way action head to the player LSTM and trains both heads together, so one forward pass gives the team activity and every player's action. The rare classes jumping, digging and waiting all improve over the standalone player model.",
+      },
+      {
+        heading: "Honest handling of failures",
+        body: "A focal-loss and balanced-sampler fix for class imbalance made the rare class worse and was rejected. The pool-before-LSTM baseline first underperformed, then was diagnosed (the winning player changes frame to frame) and trained longer. A resume bug that restarted the cosine schedule was found and fixed.",
+      },
+      {
+        heading: "Web platform",
+        body: "A FastAPI backend with background jobs and a plain HTML, CSS and ES-module frontend, with no framework or charting library: upload or import a video, watch pipeline stages, get an annotated video with a synced event timeline and charts. Sample frames are shown only when the pipeline's prediction matches the ground truth, and are labelled as illustrations, not an accuracy measurement.",
+      },
+    ],
+    stack: [
+      { name: "PyTorch, ResNet50", role: "Backbone fine-tuning and temporal models" },
+      { name: "LSTM", role: "Player-level and scene-level temporal modelling" },
+      { name: "YOLOv8n, ByteTrack", role: "Player detection and tracking on new video" },
+      { name: "FastAPI", role: "Analysis jobs and API" },
+      { name: "HTML, CSS, JavaScript, SVG", role: "Studio front end with hand-written charts" },
+      { name: "Modal, Vercel, Docker", role: "Backend and front-end deployment" },
+    ],
+    challenges: [
+      { challenge: "Severe class imbalance (standing outnumbers jumping about 100 to 1)", solution: "Class-weighted loss; focal loss with a balanced sampler was tried, measured worse and rejected." },
+      { challenge: "Pooling all players mixes the two teams", solution: "Team-separated pooling, concatenated per frame." },
+      { challenge: "Off-the-shelf detector also fires on referees and coaches", solution: "Fine-tuned YOLOv8n on the project's own player boxes, raising tracker match from 72.1% to 97.7%." },
+      { challenge: "Limited 4 GB GPU memory", solution: "Cached backbone features and trained the temporal models on them." },
+    ],
+    results: [
+      "Group activity, test split (4,830 clips, 55 videos): B1 72.2%, B4 73.4%, B5 79.0%, B7 78.8%, and B8 with team-separated pooling 88.8%, against 81.9% reported for the same configuration in the paper.",
+      "Final joint model B8-mt: 87.4% scene accuracy and 75.7% player-action accuracy from a single forward pass.",
+      "End to end smoke test: a clip with ground truth right spike produced a right spike event with 0.999 confidence.",
+    ],
+    limitations: [
+      "Jumping has about 28% recall and digging about 51%; the 75.7% player-action accuracy is dominated by the standing class.",
+      "No dataset-scale accuracy exists for raw-video inference: the detector and tracker are validated individually, the full pipeline by a smoke test.",
+      "Trained on broadcast footage with a full-court view; other camera angles are out of distribution. CPU inference is slow.",
+      "The paper's own smaller dataset gives different numbers from the later released dataset used here, so comparisons are against the later reference table.",
+    ],
+    next: ["Evaluate the full video pipeline on unseen match footage.", "Add the raw backbone feature to the player representation, as in the paper."],
+    links: [
+      { label: "Live demo", href: "https://volleyball-group-activity-recogni.vercel.app" },
+      { label: "View source code", href: "https://github.com/Eslamusamaaa/Volleyball-group-activity-recognition" },
+    ],
+    contribution: "Repository owned by my GitHub account: all training code, baselines, detector and tracker integration, inference pipeline, backend and web interface.",
+  },
+  {
     slug: "elara-tts-egyptian-arabic",
     title: "Elara-TTS: Egyptian Arabic speech synthesis",
     kind: "Elara · speech AI",
@@ -984,7 +1068,7 @@ export const skills: { group: string; items: string[] }[] = [
   {
     group: "Computer Vision",
     items: [
-      "OpenCV", "Image classification", "Object detection", "Keypoint and pose estimation", "Action recognition in video",
+      "OpenCV", "Image classification", "Object detection", "Keypoint and pose estimation", "Action recognition in video", "Object detection and tracking (YOLOv8, ByteTrack)",
       "Image segmentation", "3D medical image processing", "Candidate detection and false-positive reduction",
       "Patch extraction and sliding-window inference", "Image preprocessing and normalisation", "Dataset annotation and augmentation",
     ],
