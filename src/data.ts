@@ -1114,9 +1114,9 @@ export const training = [
 
 export const hero = {
   kicker: "AI Engineer · Egypt",
-  title: "I design and build AI systems that solve real-world problems.",
+  title: "AI engineer building Arabic voice agents, shopping assistants and vision models",
   lede:
-    "From LLM agents and retrieval-augmented generation to speech models, computer vision and classic machine learning, I take AI from prototype to working product. Currently an AI Engineer at Zikola.",
+    "I work across LLM agents, retrieval, speech, computer vision and classic machine learning, and take them from prototype to a working product. Currently at Zikola, building assistants and voice agents for online stores.",
 };
 
 export const about = [
