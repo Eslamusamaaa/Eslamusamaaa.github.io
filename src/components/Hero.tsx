@@ -57,14 +57,9 @@ export default function Hero() {
         </div>
         <figure className="portrait fade-in">
           <a href={profile.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="Chat with Eslam Usama on WhatsApp (opens in a new tab)">
-            <svg className="portrait-arcs" viewBox="0 0 400 500" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-              <path className="a3" d="M-20 410 C 90 300, 210 470, 420 330" />
-              <path className="a1" d="M-20 380 C 100 250, 230 440, 420 290" />
-              <path className="a2" d="M-20 330 C 120 200, 250 390, 420 240" />
-            </svg>
             <img
-              src={asset("img/eslam-cutout-800.webp")}
-              srcSet={`${asset("img/eslam-cutout-400.webp")} 400w, ${asset("img/eslam-cutout-800.webp")} 800w`}
+              src={asset("img/eslam-frame.jpg")}
+              srcSet={`${asset("img/eslam-frame-400.webp")} 400w, ${asset("img/eslam-frame-800.webp")} 800w`}
               sizes="(max-width: 900px) 280px, 400px"
               alt="Portrait of Eslam Usama"
               width={1278}

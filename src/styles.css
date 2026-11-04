@@ -137,19 +137,10 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 .hero::before { content: ""; position: absolute; inset: -90px 0 auto; height: 760px; pointer-events: none; z-index: -1; background: radial-gradient(ellipse 50% 55% at 28% 22%, rgba(60, 195, 238, 0.16), transparent 70%), radial-gradient(ellipse 40% 50% at 86% 40%, rgba(106, 88, 214, 0.1), transparent 70%); }
 .hero-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(240px, 0.65fr); gap: clamp(40px, 7vw, 120px); align-items: center; }
 .hero h1 { max-width: 15em; }
-.portrait { position: relative; isolation: isolate; margin: clamp(8px, 2vw, 24px) clamp(0px, 2vw, 40px) 0 0; justify-self: end; width: min(100%, 400px); }
-.portrait a { position: relative; display: block; }
-/* The photo is a cut-out with a transparent background, lit by the same sky-blue light as the page:
-   a soft halo behind it, flowing light curves, a ground glow and a bottom fade into the page. */
-.portrait::before { content: ""; position: absolute; z-index: -2; left: 50%; top: 4%; width: 135%; aspect-ratio: 1; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 255, 255, 0.95) 0, rgba(124, 214, 245, 0.55) 45%, rgba(60, 195, 238, 0.14) 72%, transparent 100%); filter: blur(6px); }
-.portrait::after { content: ""; position: absolute; z-index: -1; left: -30%; right: -30%; bottom: -2%; height: 38%; background: radial-gradient(ellipse 50% 60% at 50% 100%, rgba(60, 195, 238, 0.32), transparent 72%); }
-.portrait-arcs { position: absolute; z-index: -1; left: -34%; top: 6%; width: 168%; height: 88%; pointer-events: none; overflow: visible; }
-.portrait-arcs path { fill: none; stroke-linecap: round; vector-effect: non-scaling-stroke; }
-.portrait-arcs .a1 { stroke: rgba(60, 195, 238, 0.55); stroke-width: 2; }
-.portrait-arcs .a2 { stroke: rgba(106, 88, 214, 0.28); stroke-width: 1.5; }
-.portrait-arcs .a3 { stroke: rgba(255, 255, 255, 0.9); stroke-width: 3; }
-.portrait img { width: 100%; aspect-ratio: 1278 / 2000; object-fit: cover; border: 0; border-radius: 0; box-shadow: none; filter: drop-shadow(0 18px 26px rgba(14, 70, 120, 0.28)) drop-shadow(0 2px 3px rgba(14, 70, 120, 0.18)); -webkit-mask-image: linear-gradient(180deg, #000 0, #000 74%, transparent 99%), linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(180deg, #000 0, #000 74%, transparent 99%), linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%); mask-composite: intersect; }
-.portrait-badge { position: absolute; left: 50%; bottom: 14px; translate: -50% 0; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 0 14px; border-radius: 999px; background: rgba(255, 255, 255, 0.78); border: 1px solid rgba(14, 60, 100, 0.12); color: var(--wa-ink); font-size: 0.875rem; font-weight: 600; box-shadow: var(--shadow); transition: transform var(--t-hover) var(--ease); }
+.portrait { margin: clamp(8px, 2vw, 24px) clamp(0px, 2vw, 40px) 0 0; justify-self: end; width: min(100%, 380px); }
+.portrait a { position: relative; display: block; border-radius: var(--r-lg); }
+.portrait img { width: 100%; aspect-ratio: 1278 / 2000; object-fit: cover; border-radius: var(--r-lg); border: 1px solid var(--line-strong); box-shadow: var(--shadow-lift); }
+.portrait-badge { position: absolute; left: 12px; bottom: 12px; display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 0 14px; border-radius: 999px; background: rgba(255, 255, 255, 0.82); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid rgba(14, 60, 100, 0.12); color: var(--wa-ink); font-size: 0.875rem; font-weight: 600; box-shadow: var(--shadow); transition: transform var(--t-hover) var(--ease); }
 .portrait a:hover .portrait-badge { transform: translateY(-2px); }
 
 .hear { display: grid; grid-template-columns: auto auto 1fr; align-items: center; gap: 14px; margin-top: 28px; padding: 12px 16px 12px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); max-width: 40rem; }
