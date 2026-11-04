@@ -237,6 +237,8 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 .motif .mbar, .motif .mfill-strong, .motif .mdot { fill: var(--brand); }
 .motif .mfill { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1; }
 .motif .mline { fill: none; stroke: var(--line-strong); stroke-width: 1.5; }
+.motif-volley .mline { stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.motif .mnet { stroke: var(--line-strong); stroke-width: 1.5; }
 .motif .mscan { stroke: var(--brand); stroke-width: 1.5; opacity: 0.8; }
 .motif .mbar { transform-box: fill-box; transform-origin: center; }
 @media (prefers-reduced-motion: no-preference) {

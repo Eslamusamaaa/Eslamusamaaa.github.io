@@ -55,6 +55,23 @@ export function Motif({ type }: { type: Project["motif"] }) {
           <line x1="14" x2="106" y1="36" y2="36" className="mscan" />
         </svg>
       );
+    case "volley":
+      return (
+        <svg {...common}>
+          {/* net, post and floor */}
+          <line x1="60" x2="60" y1="24" y2="68" className="mnet" />
+          <path d="M54 26 H66 M54 32 H66 M54 38 H66 M56 24 V42 M60 24 V42 M64 24 V42" className="mnet" />
+          <line x1="8" x2="112" y1="68" y2="68" className="mnet" />
+          {/* left player, jumping to spike */}
+          <circle cx="34" cy="22" r="5" className="mfill-strong" />
+          <path d="M34 28 L36 44 M36 44 L29 56 M36 44 L43 54 M35 32 L46 16 M35 32 L26 38" className="mline" />
+          {/* right player, blocking */}
+          <circle cx="88" cy="26" r="5" className="mfill-strong" />
+          <path d="M88 32 L87 46 M87 46 L82 62 M87 46 L94 62 M88 35 L79 18 M88 35 L96 20" className="mline" />
+          {/* ball */}
+          <circle cx="56" cy="9" r="4.5" className="mfill-strong" />
+        </svg>
+      );
     case "tokens":
       return (
         <svg {...common}>

@@ -80,7 +80,7 @@ export type Project = {
   /** Filter categories used by the work section. */
   cats: string[];
   /** Small visual motif drawn on cards. */
-  motif: "wave" | "scan" | "tokens" | "chat" | "grid" | "graph";
+  motif: "wave" | "scan" | "tokens" | "chat" | "grid" | "graph" | "volley";
   /** One true sentence shown on the collapsed card. */
   oneLine: string;
 };
@@ -462,7 +462,7 @@ export const projects: Project[] = [
       { title: "Timeline", note: "Frames converted to seconds; consecutive windows with the same class merged into one event" },
     ],
     cats: ["Vision"],
-    motif: "scan",
+    motif: "volley",
     oneLine: "88.8% group-activity accuracy on the test split with team-separated pooling; 6.9 points above the paper's 81.9%.",
     implementation: [
       {
