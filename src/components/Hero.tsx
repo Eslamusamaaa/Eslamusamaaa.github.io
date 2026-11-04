@@ -57,15 +57,10 @@ export default function Hero() {
         </div>
         <figure className="portrait fade-in">
           <a href={profile.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="Chat with Eslam Usama on WhatsApp (opens in a new tab)">
-            <img
-              src={asset("img/eslam-photo.jpg")}
-              srcSet={`${asset("img/eslam-photo-400.webp")} 400w, ${asset("img/eslam-photo-800.webp")} 800w`}
-              sizes="(max-width: 900px) 280px, 400px"
-              alt="Portrait of Eslam Usama"
-              width={1278}
-              height={2000}
-              fetchPriority="high"
-            />
+            <picture>
+              <source type="image/webp" srcSet={`${asset("img/eslam-400.webp")} 400w, ${asset("img/eslam-800.webp")} 800w`} sizes="(max-width: 900px) 280px, 400px" />
+              <img src={asset("img/eslam-profile.jpg")} alt="Portrait of Eslam Usama" width={800} height={800} fetchPriority="high" />
+            </picture>
             <span className="portrait-badge">
               <WaIcon size={16} /> Chat on WhatsApp
             </span>
