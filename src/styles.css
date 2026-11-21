@@ -210,6 +210,7 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 .card-flagship .card-foot { grid-area: foot; justify-content: flex-start; gap: 8px 28px; }
 
 .card-compact { padding: 18px; gap: 8px; }
+.card-compact .card-logo { width: 48px; height: 48px; }
 .card-compact h3 { font-size: 1.05rem; }
 .card-compact .card-line { font-size: 0.93rem; }
 

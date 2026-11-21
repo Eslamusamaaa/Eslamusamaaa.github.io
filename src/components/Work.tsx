@@ -22,7 +22,7 @@ export function ProjectCard({ p, variant, index }: { p: Project; variant: "flags
   return (
     <article className={`card card-${variant}${voice ? " is-voice" : ""}`} id={index !== undefined ? `p-${p.slug}` : undefined} data-cats={p.cats.join(" ")}>
       <div className="card-top">
-        {p.image && variant === "flagship" ? (
+        {p.image ? (
           <img className="card-logo" src={asset(p.image.src)} alt="" width={64} height={64} loading="lazy" />
         ) : (
           <Motif type={p.motif} />

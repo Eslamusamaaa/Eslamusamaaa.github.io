@@ -176,4 +176,51 @@ export const galleries: Record<string, GalleryGroup[]> = {
       ],
     },
   ],
+  "akhessai-platform": [
+    {
+      title: "Parent flow",
+      note: "One complete case with fictional test data, from a local run. The parent registers a child and answers the adaptive questionnaire.",
+      shots: [
+        s("akhessai", "register-child-form", 800, 502, "Parent dashboard: register a new child."),
+        s("akhessai", "register-child-filled", 800, 502, "Registration form with fictional test data and the screening specialties selected."),
+        s("akhessai", "parent-dashboard-child-registered", 800, 500, "Case created, with the progress tracker at step 2 of 6."),
+        s("akhessai", "parent-question-single-choice", 800, 500, "Single-choice question in Arabic (RTL)."),
+        s("akhessai", "parent-question-rating-scale", 800, 500, "A 1 to 5 rating-scale question."),
+        s("akhessai", "parent-question-answer-selected", 800, 500, "An answer selected before saving and continuing."),
+        s("akhessai", "parent-question-language", 800, 500, "Adaptive follow-up question on speech and language."),
+        s("akhessai", "parent-dashboard-waiting-for-teacher", 800, 500, "After finishing, the case waits for the teacher."),
+      ],
+    },
+    {
+      title: "Teacher flow",
+      note: "The teacher answers the school-environment questionnaire for the same case.",
+      shots: [
+        s("akhessai", "teacher-question", 800, 500, "Teacher questionnaire with school-environment items."),
+        s("akhessai", "teacher-question-social", 800, 500, "Social interaction question."),
+        s("akhessai", "teacher-dashboard-awaiting-clinical-observation", 800, 500, "Teacher dashboard: the case moves on to the clinician."),
+      ],
+    },
+    {
+      title: "Specialist flow",
+      note: "The specialist records a clinical observation and reviews the deterministic rule-engine results.",
+      shots: [
+        s("akhessai", "specialist-dashboard", 800, 500, "Specialist dashboard: a case awaiting clinical observation."),
+        s("akhessai", "clinical-observation-form", 800, 500, "Clinical observation form with 1 to 5 scales."),
+        s("akhessai", "clinical-observation-submit", 800, 500, "Observation notes and submit."),
+        s("akhessai", "results-domain-severity-scores", 800, 500, "Severity level and anxiety index per domain, from the rule engine."),
+        s("akhessai", "results-priority-tier-and-informant-gaps", 800, 500, "Overall priority tier and parent and teacher discrepancy flags."),
+      ],
+    },
+    {
+      title: "Final report",
+      note: "Captured from a real run against the live deployment with a synthetic test case (autism specialty), not a mockup. The specialist sees the scores and the AI draft on one editable page before approving.",
+      shots: [
+        s("akhessai", "clinical-observation-review", 1280, 900, "Clinical observation review."),
+        s("akhessai", "domain-severity-scores", 1280, 900, "Domain severity scores from the deterministic rule engine."),
+        s("akhessai", "ai-report-summary", 1280, 900, "AI-drafted report: narrative summary and differential considerations."),
+        s("akhessai", "ai-report-smart-goals", 1280, 900, "AI-drafted report: SMART goals."),
+        s("akhessai", "ai-report-referrals", 1280, 900, "AI-drafted report: specialty referrals."),
+      ],
+    },
+  ],
 };

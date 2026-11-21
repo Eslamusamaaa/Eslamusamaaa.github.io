@@ -440,6 +440,68 @@ export const projects: Project[] = [
       "I built the calling engine, the playbooks and the store integrations.",
   },
   {
+    slug: "media-buying-analytics",
+    title: "Media-buying analytics automation",
+    kind: "Zikola · data pipeline · AI-agent workflows",
+    group: "professional",
+    status: "Built at Zikola for the media-buying and SEO teams · internal tool",
+    summary:
+      "An ETL engine that turns ad-platform exports from Meta, TikTok and Snapchat into ROAS, CPA, CTR and CPC, and feeds n8n AI-agent workflows that produce merchant reports automatically.",
+    tags: ["ETL", "n8n", "AI agents", "ROAS"],
+    overview:
+      "Merchants advertise on several platforms at once, and each platform exports its numbers differently. At Zikola I built an automated media-buying ETL engine that takes the CSV exports from Meta, TikTok and Snapchat, calculates the KPIs the team cares about (ROAS, CPA, CTR and CPC) and hands them to n8n AI-agent workflows. The workflows turn the numbers into reports for each merchant, and the same figures help the media-buying and SEO teams see what is working without building spreadsheets by hand.",
+    problem:
+      "Reading ROAS and cost per acquisition across three ad platforms means opening three dashboards, exporting three differently shaped files and recalculating the same metrics each time. Doing that for every merchant is slow and easy to get wrong, and the reports arrive late.",
+    flowTitle: "From ad exports to merchant reports",
+    flow: [
+      { title: "Platform exports", note: "CSV files from Meta, TikTok and Snapchat" },
+      { title: "Unify", note: "Each platform's columns are mapped into one common structure" },
+      { title: "Calculate KPIs", note: "ROAS, CPA, CTR and CPC computed the same way for every platform and merchant" },
+      { title: "AI-agent workflows", note: "n8n workflows read the metrics and write the analysis" },
+      { title: "Reports", note: "Merchant reports generated automatically for the media-buying and SEO teams" },
+    ],
+    cats: ["Agents", "Commerce"],
+    motif: "graph",
+    oneLine: "Ad-platform exports in, ROAS, CPA, CTR and CPC out, and merchant reports generated automatically.",
+    implementation: [
+      {
+        heading: "One structure for three platforms",
+        body: "Meta, TikTok and Snapchat name and format their columns differently. The engine maps each export into one common structure, so every later step works the same way whichever platform the data came from.",
+      },
+      {
+        heading: "KPIs calculated the same way every time",
+        body: "ROAS, CPA, CTR and CPC are computed by the engine rather than in a spreadsheet, so the formulas are defined once and the numbers match across merchants, platforms and reports.",
+      },
+      {
+        heading: "AI-agent workflows in n8n",
+        body: "The calculated metrics feed n8n workflows built around AI agents, which read the figures and produce the written analysis. Keeping the arithmetic in the engine and the interpretation in the agents means the model never has to calculate a number.",
+      },
+      {
+        heading: "Reports for merchants and internal teams",
+        body: "Merchant reports are generated automatically. The same metrics support the media-buying team deciding where spend works, and the SEO team seeing how paid and organic results compare.",
+      },
+    ],
+    stack: [
+      { name: "ETL engine", role: "Ingesting and unifying multi-platform CSV exports" },
+      { name: "Meta, TikTok, Snapchat exports", role: "Source data for every merchant" },
+      { name: "n8n", role: "AI-agent workflows and report automation" },
+      { name: "LLM agents", role: "Written analysis on top of calculated KPIs" },
+    ],
+    challenges: [
+      { challenge: "Every platform exports different columns", solution: "A common structure that each export is mapped into before any calculation." },
+      { challenge: "Models should not do arithmetic", solution: "KPIs are calculated in the engine; the agents only interpret the finished numbers." },
+    ],
+    results: ["A working pipeline that produces merchant reports automatically and supports the media-buying and SEO teams."],
+    limitations: [
+      "Merchant data and campaign figures are private and not shown here.",
+      "No time-saved or revenue figures are published.",
+    ],
+    next: [],
+    links: [],
+    contribution:
+      "I developed the ETL engine, the KPI calculations and the integration with the n8n AI-agent workflows.",
+  },
+  {
     slug: "volleyball-group-activity-recognition",
     title: "Volleyball group activity recognition",
     kind: "Computer vision · video understanding · web platform",
@@ -771,6 +833,100 @@ export const projects: Project[] = [
     contribution: "Modules as listed on my CV; the Student KPIs and Elara-TTS repositories are owned by my GitHub account.",
   },
   {
+    slug: "akhessai-platform",
+    title: "Akhessai: AI-assisted special-education assessment",
+    kind: "Full-stack · RAG · clinical decision support",
+    group: "personal",
+    status: "Public repository · live deployment · proof of concept",
+    summary:
+      "An Arabic-first, multi-role platform: parents, teachers and specialists answer a structured screening, a transparent rule engine scores 17 developmental domains, and a RAG-grounded LLM drafts a report that a licensed specialist must approve.",
+    tags: ["RAG", "FastAPI", "Rule engine", "Qdrant"],
+    image: { src: "img/akhessai-logo.svg", alt: "Akhessai logo: a white brain-circuit icon on a teal tile" },
+    overview:
+      "Akhessai (أخصائي) is a case-management platform for special education. A child goes through a multi-informant screening in which a parent, a teacher and a licensed specialist each answer questions across 17 developmental domains. A deterministic rule engine scores the domains and flags which of 6 clinical specialties are relevant and how urgent the case is. Retrieval over a 120-document Arabic clinical corpus then grounds an LLM that drafts a structured report, which a specialist reviews, edits and approves. The interface and clinical content are in Arabic (RTL).",
+    problem:
+      "Specialists need a consistent, auditable way to turn several people's observations into a report, and they cannot trust a black-box score or a model that invents clinical claims. The design goal was transparent scoring, AI limited to drafting from retrieved guidelines, and a human signing off on every report.",
+    flowTitle: "How a report is built",
+    flowCaveat: "A proof of concept: the repository states it is not certified for clinical deployment, and the AI never outputs a standalone diagnosis.",
+    flow: [
+      { title: "Multi-informant screening", note: "Parent, teacher and specialist answer a weighted question bank tagged by domain" },
+      { title: "Rule engine", note: "A YAML rules file scores 17 domains, triggers 6 specialties and sets a priority tier" },
+      { title: "Discrepancy check", note: "Large parent and teacher gaps on a domain are flagged as a clinical signal" },
+      { title: "Retrieval", note: "The top domains and specialties become a query over the Arabic guideline corpus; the best 6 documents are kept" },
+      { title: "LLM draft", note: "Gemini 2.5 Flash returns a JSON report validated against a Pydantic schema" },
+      { title: "Specialist sign-off", note: "The specialist edits and approves; only then is it saved as an official report" },
+    ],
+    cats: ["LLM"],
+    motif: "graph",
+    oneLine: "A rule engine scores 17 domains, RAG over 120 Arabic documents grounds the draft, and a specialist approves every report.",
+    implementation: [
+      {
+        heading: "An adaptive questionnaire with a fixed order of informants",
+        body: "An 80-question bank, each question tagged with its domains, specialties, age bands, weight and informant, drives the screening. Core questions always come first, follow-ups appear only when an earlier answer calls for them, and each informant has a cap (35 for the parent, 20 for the teacher, 15 for the specialist) to avoid questionnaire fatigue. Sequencing lives on the server, so the front end just renders one question at a time.",
+      },
+      {
+        heading: "A session state machine",
+        body: "Each case moves through core screening by the parent, specialised screening by the teacher and a clinical observation by the specialist, then report generation and approval. The server enforces whose turn it is, and an answer posted out of turn is rejected with the expected informant named in the error.",
+      },
+      {
+        heading: "An auditable rule engine, not ML",
+        body: "Every threshold and weight is a readable value in a YAML file, so a clinician can see exactly why a specialty triggered or a case became urgent. Domains get a 1 to 5 severity, the highest severities roll up into a Priority 1, 2 or 3 tier with a written rationale, and domains with very low scores are surfaced as strengths, not only challenges.",
+      },
+      {
+        heading: "RAG over an Arabic clinical corpus",
+        body: "A 120-document Arabic corpus, adapted from published clinical guidelines, is filtered by specialty and age band, embedded with a multilingual MiniLM model and searched by cosine similarity through Qdrant, with an in-memory fallback when Qdrant is not running.",
+      },
+      {
+        heading: "Constrained report generation",
+        body: "The model works at a low temperature under fixed rules: no independent diagnosis, no invented numbers, and an explicit flag when data is insufficient. Its output must match a strict ten-field schema, and a safe fallback draft is returned if the call or the validation fails.",
+      },
+      {
+        heading: "Privacy and security",
+        body: "Child identifiers and specialist notes are encrypted column by column, identifying details are redacted before anything reaches the external LLM, passwords use Argon2id, access is role-based with JWT, and an audit log records logins, generations and approvals without raw patient data.",
+      },
+      {
+        heading: "Authentication and abuse protection",
+        body: "Short-lived JWT access tokens (30 minutes) with refresh tokens (7 days), self-registration limited to the parent and teacher roles, five failed logins locking a username for 15 minutes, and strict security headers with no-store caching on every API response.",
+      },
+      {
+        heading: "Deployment",
+        body: "The front end and the API are two separate Vercel projects joined by a same-origin /api rewrite, so the browser never makes a cross-origin call. Data lives in managed PostgreSQL (Neon), and a Docker Compose stack runs PostgreSQL, Qdrant, the API and the front end locally.",
+      },
+      {
+        heading: "Four role-scoped dashboards",
+        body: "A React and TypeScript front end with RTL-first Tailwind layouts serves parents, teachers, specialists and admins, each seeing only what their role allows.",
+      },
+    ],
+    stack: [
+      { name: "React, TypeScript, Vite, Tailwind", role: "Arabic RTL front end and four role dashboards" },
+      { name: "FastAPI, SQLAlchemy, PostgreSQL", role: "API, persistence and role-based access" },
+      { name: "YAML rule engine (Python)", role: "Transparent domain scoring and triage" },
+      { name: "sentence-transformers, Qdrant", role: "Multilingual embeddings and vector search" },
+      { name: "Gemini 2.5 Flash via OpenRouter, Pydantic", role: "Schema-validated report drafting" },
+      { name: "Docker Compose, Vercel", role: "Local stack and deployment" },
+    ],
+    challenges: [
+      { challenge: "Clinicians must be able to audit the scoring", solution: "A deterministic rules file instead of a learned model, with a written rationale for every priority tier." },
+      { challenge: "An LLM must not invent clinical claims", solution: "Retrieval-grounded prompts, hard rules, schema validation, a safe fallback and mandatory specialist approval." },
+      { challenge: "Sensitive data about children", solution: "Field-level encryption, redaction before the LLM call and an audit trail without raw patient data." },
+    ],
+    results: [
+      "The full pipeline is implemented and deployed: an 80-question adaptive screening, 17-domain scoring across 6 specialties, retrieval over 120 documents, a drafted report and specialist approval.",
+      "The screenshots below come from one complete case, including a run against the live deployment.",
+    ],
+    limitations: [
+      "A proof of concept, not certified for clinical deployment or HIPAA/GDPR compliance, and not a diagnostic tool.",
+      "The live platform needs a login: parents and teachers can register, while specialist and admin accounts are created by an administrator.",
+      "No clinical validation or accuracy figures are published.",
+    ],
+    next: [],
+    links: [
+      { label: "Live platform", href: "https://frontend-rust-rho-unmixly180.vercel.app" },
+      { label: "View source code", href: "https://github.com/Eslamusamaaa/akhessai-platform" },
+    ],
+    contribution: "Repository owned by my GitHub account; listed on my CV.",
+  },
+  {
     slug: "building-energy-digital-twin",
     title: "Building energy digital twin",
     kind: "Machine learning · forecasting · full-stack dashboard",
@@ -1071,7 +1227,7 @@ export const zikolaWork: { title: string; body: string; links: ExperienceLink[] 
   {
     title: "Multi-Platform Media Analytics & Automation",
     body: "Developed an automated media-buying ETL engine processing multi-platform CSVs (Meta, TikTok, Snapchat) with auto-calculated KPIs (ROAS, CPA, CTR, CPC) integrated into n8n AI-agent workflows.",
-    links: [],
+    links: [{ label: "Case study", to: "/projects/media-buying-analytics" }],
   },
 ];
 
