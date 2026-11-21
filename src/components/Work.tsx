@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { projects, type Project } from "../data";
 import { asset, MOTION, ScrollTrigger, useMotion } from "../lib";
@@ -54,18 +54,15 @@ export function ProjectCard({ p, variant, index }: { p: Project; variant: "flags
 
 export default function Work() {
   const pro = projects.filter((p) => p.group === "professional");
-  const cats = useMemo(() => ["All", ...Array.from(new Set(pro.flatMap((p) => p.cats)))], [pro]);
-  const [filter, setFilter] = useState("All");
   const [current, setCurrent] = useState(pro[0].slug);
   const ref = useRef<HTMLElement>(null);
-  const shown = pro.filter((p) => filter === "All" || p.cats.includes(filter));
 
   // Highlight the project currently in view in the sticky index.
   useMotion(
     ref,
     (mm) => {
       mm.add("(min-width: 1101px)", () => {
-        shown.forEach((p) => {
+        pro.forEach((p) => {
           ScrollTrigger.create({
             trigger: `#p-${p.slug}`,
             start: "top 55%",
@@ -76,7 +73,7 @@ export default function Work() {
       });
       mm.add(MOTION, () => undefined);
     },
-    [filter]
+    []
   );
 
   return (
@@ -90,41 +87,20 @@ export default function Work() {
       <div className="work-layout">
         <nav className="work-index" aria-label="Projects in this section">
           <ol>
-            {pro.map((p, i) => {
-              const hidden = !shown.includes(p);
-              return (
-                <li key={p.slug} className={`${current === p.slug ? "is-current" : ""}${hidden ? " is-hidden" : ""}`}>
-                  <a href={`#p-${p.slug}`} aria-current={current === p.slug ? "true" : undefined} tabIndex={hidden ? -1 : undefined}>
-                    <span className="num">{String(i + 1).padStart(2, "0")}</span>
-                    <span>{p.title.split(":")[0]}</span>
-                  </a>
-                </li>
-              );
-            })}
+            {pro.map((p, i) => (
+              <li key={p.slug} className={current === p.slug ? "is-current" : ""}>
+                <a href={`#p-${p.slug}`} aria-current={current === p.slug ? "true" : undefined}>
+                  <span className="num">{String(i + 1).padStart(2, "0")}</span>
+                  <span>{p.title.split(":")[0]}</span>
+                </a>
+              </li>
+            ))}
           </ol>
         </nav>
-        <div>
-          <div className="filters" role="group" aria-label="Filter projects">
-            {cats.map((c) => (
-              <button key={c} type="button" className="chip" aria-pressed={filter === c} onClick={() => setFilter(c)}>
-                {c}
-              </button>
-            ))}
-          </div>
-          <p className="sr" aria-live="polite">
-            {shown.length} {shown.length === 1 ? "project" : "projects"} shown
-          </p>
-          {shown.length === 0 ? (
-            <p className="empty">
-              No projects in this category yet. <button type="button" className="text-btn" onClick={() => setFilter("All")}>Show all projects</button>
-            </p>
-          ) : (
-            <div className="cards" key={filter}>
-              {shown.map((p, i) => (
-                <ProjectCard key={p.slug} p={p} variant={i === 0 && p.slug === pro[0].slug ? "flagship" : "standard"} index={i} />
-              ))}
-            </div>
-          )}
+        <div className="cards">
+          {pro.map((p, i) => (
+            <ProjectCard key={p.slug} p={p} variant={i === 0 ? "flagship" : "standard"} index={i} />
+          ))}
         </div>
       </div>
     </section>
