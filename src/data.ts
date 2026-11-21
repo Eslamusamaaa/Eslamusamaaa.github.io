@@ -80,7 +80,7 @@ export type Project = {
   /** Filter categories used by the work section. */
   cats: string[];
   /** Small visual motif drawn on cards. */
-  motif: "wave" | "scan" | "tokens" | "chat" | "grid" | "graph" | "volley";
+  motif: "wave" | "scan" | "tokens" | "chat" | "grid" | "graph" | "volley" | "assess";
   /** One true sentence shown on the collapsed card. */
   oneLine: string;
 };
@@ -841,7 +841,6 @@ export const projects: Project[] = [
     summary:
       "An Arabic-first, multi-role platform: parents, teachers and specialists answer a structured screening, a transparent rule engine scores 17 developmental domains, and a RAG-grounded LLM drafts a report that a licensed specialist must approve.",
     tags: ["RAG", "FastAPI", "Rule engine", "Qdrant"],
-    image: { src: "img/akhessai-logo.svg", alt: "Akhessai logo: a white brain-circuit icon on a teal tile" },
     overview:
       "Akhessai (أخصائي) is a case-management platform for special education. A child goes through a multi-informant screening in which a parent, a teacher and a licensed specialist each answer questions across 17 developmental domains. A deterministic rule engine scores the domains and flags which of 6 clinical specialties are relevant and how urgent the case is. Retrieval over a 120-document Arabic clinical corpus then grounds an LLM that drafts a structured report, which a specialist reviews, edits and approves. The interface and clinical content are in Arabic (RTL).",
     problem:
@@ -857,7 +856,7 @@ export const projects: Project[] = [
       { title: "Specialist sign-off", note: "The specialist edits and approves; only then is it saved as an official report" },
     ],
     cats: ["LLM"],
-    motif: "graph",
+    motif: "assess",
     oneLine: "A rule engine scores 17 domains, RAG over 120 Arabic documents grounds the draft, and a specialist approves every report.",
     implementation: [
       {

@@ -99,6 +99,30 @@ export function Motif({ type }: { type: Project["motif"] }) {
           ))}
         </svg>
       );
+    case "assess":
+      return (
+        <svg {...common}>
+          {/* three informants: parent, teacher, specialist */}
+          {[14, 36, 58].map((y) => (
+            <circle key={y} cx="12" cy={y} r="5" className="mfill" />
+          ))}
+          <path d="M18 14 L40 30 M18 36 L40 36 M18 58 L40 42" className="mline" />
+          {/* rule-based domain scores */}
+          {[
+            [42, 22],
+            [54, 38],
+            [66, 28],
+          ].map(([x, h], i) => (
+            <rect key={x} x={x} y={62 - h} width="8" height={h} rx="2.5" className={i === 1 ? "mfill-strong" : "mfill"} />
+          ))}
+          <line x1="40" x2="78" y1="62" y2="62" className="mnet" />
+          <path d="M78 36 H86" className="mline" />
+          {/* the report a specialist signs off */}
+          <rect x="88" y="10" width="26" height="52" rx="5" className="mline" />
+          <path d="M94 22 H108 M94 29 H108 M94 36 H104" className="mline" />
+          <path d="M95 49 L100 54 L108 44" className="mscan" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
     case "graph":
       return (
         <svg {...common}>
