@@ -80,7 +80,7 @@ export type Project = {
   /** Filter categories used by the work section. */
   cats: string[];
   /** Small visual motif drawn on cards. */
-  motif: "wave" | "scan" | "tokens" | "chat" | "grid" | "graph" | "volley" | "assess";
+  motif: "quiz" | "meeting" | "chat" | "mic" | "call" | "analytics" | "volley" | "assess" | "speech" | "scan" | "medllm" | "ecosystem" | "energy" | "topics" | "gear" | "sleep";
   /** One true sentence shown on the collapsed card. */
   oneLine: string;
 };
@@ -112,7 +112,7 @@ export const projects: Project[] = [
       { title: "Results", note: "Explicit answers filter, preferences rank; each pick gets a reason" },
     ],
     cats: ["Agents", "Commerce"],
-    motif: "grid",
+    motif: "quiz",
     oneLine: "A working multi-tenant Salla app, verified on demo stores with pricing, adaptation and branching test suites.",
     implementation: [
       {
@@ -189,7 +189,7 @@ export const projects: Project[] = [
       { title: "Reports", note: "PDF for users, Word for admins; stored in PostgreSQL" },
     ],
     cats: ["Voice", "Agents"],
-    motif: "wave",
+    motif: "meeting",
     oneLine: "Working end to end: browser capture, Arabic and English transcription, reviewed reports in PDF and Word.",
     implementation: [
       {
@@ -330,7 +330,7 @@ export const projects: Project[] = [
       { title: "Playback", note: "Barge-in stops the assistant the moment the user speaks" },
     ],
     cats: ["Voice", "Agents"],
-    motif: "wave",
+    motif: "mic",
     oneLine: "Real-time voice assistants that answer from your own data, built for different problems and plugged into different systems.",
     implementation: [
       {
@@ -399,7 +399,7 @@ export const projects: Project[] = [
       { title: "Write-back", note: "The outcome is saved to the order and follow-up tasks are created for the merchant" },
     ],
     cats: ["Voice", "Agents", "Commerce"],
-    motif: "wave",
+    motif: "call",
     oneLine: "AI phone calls that confirm orders, collect feedback and guide customers on using what they bought.",
     implementation: [
       {
@@ -461,7 +461,7 @@ export const projects: Project[] = [
       { title: "Reports", note: "Merchant reports generated automatically for the media-buying and SEO teams" },
     ],
     cats: ["Agents", "Commerce"],
-    motif: "graph",
+    motif: "analytics",
     oneLine: "Ad-platform exports in, ROAS, CPA, CTR and CPC out, and merchant reports generated automatically.",
     implementation: [
       {
@@ -616,7 +616,7 @@ export const projects: Project[] = [
       caption: "Frame from a screen recording of my test notebook: Arabic text goes in, the model generates global and semantic tokens, and the notebook detokenizes them into audio.",
     },
     cats: ["Voice"],
-    motif: "wave",
+    motif: "speech",
     oneLine: "About 18,900 Egyptian Arabic samples; generated audio is on the page.",
     implementation: [
       {
@@ -748,7 +748,7 @@ export const projects: Project[] = [
       { title: "Response", note: "Text, elapsed seconds, device" },
     ],
     cats: ["LLM"],
-    motif: "tokens",
+    motif: "medllm",
     oneLine: "Fine-tuned model served through FastAPI with a chat UI; no benchmark scores are claimed.",
     implementation: [
       {
@@ -800,7 +800,7 @@ export const projects: Project[] = [
       { title: "Student KPIs", note: "Performance level classifier" },
     ],
     cats: ["LLM", "Voice"],
-    motif: "graph",
+    motif: "ecosystem",
     oneLine: "Four modules around one learning product; module details come from my CV.",
     implementation: [
       {
@@ -949,7 +949,7 @@ export const projects: Project[] = [
       { title: "React dashboard", note: "Live sensors, predictions, simulation, optimization, analytics" },
     ],
     cats: ["ML"],
-    motif: "grid",
+    motif: "energy",
     oneLine: "Per-system energy forecasts with scenarios and an optimizer; trained on synthetic data.",
     implementation: [
       {
@@ -1018,7 +1018,7 @@ export const projects: Project[] = [
       { title: "Flask app", note: "Paste a headline, get a topic and confidence" },
     ],
     cats: ["NLP"],
-    motif: "tokens",
+    motif: "topics",
     oneLine: "TF-IDF with Linear SVC reaches 91.0% on the external test set; evaluated at article level.",
     implementation: [
       {
@@ -1084,7 +1084,7 @@ export const projects: Project[] = [
       { title: "Recommendation", note: "Status, confidence and a maintenance action in the Flask app" },
     ],
     cats: ["ML"],
-    motif: "grid",
+    motif: "gear",
     oneLine: "Macro-F1 0.81 on five learnable classes; the Tool Wear alert trades precision for recall.",
     implementation: [
       {
@@ -1149,7 +1149,7 @@ export const projects: Project[] = [
       { title: "Action plan", note: "Rule-based advice from the numbers and occupation" },
     ],
     cats: ["ML"],
-    motif: "graph",
+    motif: "sleep",
     oneLine: "88.0% accuracy on unseen real rows; about 98% of the training rows are synthetic.",
     implementation: [
       {

@@ -218,10 +218,31 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 .card-flagship .card-reveal { grid-area: tags; }
 
 /* Motifs */
-.motif { width: 96px; height: 58px; flex: none; }
+.motif { width: 104px; height: 62px; flex: none; overflow: visible; }
+.motif path, .motif line { stroke-linecap: round; stroke-linejoin: round; }
 .motif .mbar, .motif .mfill-strong, .motif .mdot { fill: var(--brand); }
 .motif .mfill { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1; }
 .motif .mline { fill: none; stroke: var(--line-strong); stroke-width: 1.5; }
+.motif .mnet { stroke: var(--line-strong); stroke-width: 1.5; }
+.motif .mscan { stroke: var(--brand); stroke-width: 1.5; opacity: 0.8; }
+.motif .mbar { transform-box: fill-box; transform-origin: center; }
+.motif .mbar.soft { fill: var(--accent); opacity: 0.55; }
+.motif .mdim { fill: var(--line-strong); }
+.motif .mbg { fill: var(--bg); stroke: var(--accent); stroke-width: 1; }
+.motif .mbg-line { fill: none; stroke: var(--accent); stroke-width: 1.2; }
+.motif .ms { fill: none; stroke: var(--brand); stroke-width: 1.75; }
+.motif .ms.thick { stroke-width: 3.2; }
+.motif .ma { fill: none; stroke: var(--accent); stroke-width: 1.5; }
+.motif .ma.faint { opacity: 0.45; }
+.motif .ma.dash { stroke-dasharray: 3 4; }
+.motif .mtxt { fill: none; stroke: var(--line-strong); stroke-width: 2.2; }
+.motif .mtxt.thin { stroke-width: 1.6; }
+.motif .mcheck { fill: none; stroke: var(--brand); stroke-width: 2; }
+.motif-call .mcheck { stroke: var(--bg); }
+.motif .mcheck.thin { stroke-width: 1.8; }
+.motif .mcross { fill: none; stroke: var(--brand); stroke-width: 4; }
+.motif .mgauge { fill: none; stroke: var(--brand); stroke-width: 3; stroke-dasharray: 70 100; transform: rotate(-200deg); transform-origin: 94px 26px; }
+.motif .mdashline { stroke: var(--accent); stroke-width: 1.2; stroke-dasharray: 3 3; opacity: 0.7; }
 .motif-volley .mline { stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .motif .mnet { stroke: var(--line-strong); stroke-width: 1.5; }
 .motif .mscan { stroke: var(--brand); stroke-width: 1.5; opacity: 0.8; }

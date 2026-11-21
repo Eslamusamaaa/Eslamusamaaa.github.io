@@ -18,9 +18,8 @@ export function VideoLink({ p }: { p: Project }) {
 /** Whole card is one link (stretched); the video link sits above it with its own tab stop. */
 export function ProjectCard({ p, variant, index }: { p: Project; variant: "flagship" | "standard" | "compact"; index?: number }) {
   const to = `/projects/${p.slug}`;
-  const voice = p.motif === "wave";
   return (
-    <article className={`card card-${variant}${voice ? " is-voice" : ""}`} id={index !== undefined ? `p-${p.slug}` : undefined} data-cats={p.cats.join(" ")}>
+    <article className={`card card-${variant}`} id={index !== undefined ? `p-${p.slug}` : undefined} data-cats={p.cats.join(" ")}>
       <div className="card-top">
         {p.image ? (
           <img className="card-logo" src={asset(p.image.src)} alt="" width={64} height={64} loading="lazy" />
