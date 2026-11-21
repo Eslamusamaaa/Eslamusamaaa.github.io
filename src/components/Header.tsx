@@ -5,7 +5,7 @@ import { gsap, MOTION, prefersReducedMotion, scrollToId } from "../lib";
 
 export const NAV = [
   { id: "work", label: "Work" },
-  { id: "research", label: "Research" },
+  { id: "projects", label: "Projects" },
   { id: "demos", label: "Live demos" },
   { id: "experience", label: "Experience" },
   { id: "about", label: "About" },

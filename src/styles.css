@@ -184,10 +184,6 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 
 /* Card: one link (stretched), details on hover/focus for fine pointers */
 .card { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 22px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow); transition: transform var(--t-hover) var(--ease), box-shadow var(--t-hover) var(--ease), border-color var(--t-hover) var(--ease); }
-.card::before { content: ""; position: absolute; left: 22px; right: 22px; top: -1px; height: 2px; background: var(--brand); box-shadow: 0 0 12px var(--brand-glow); transform: scaleX(0); transform-origin: left center; transition: transform var(--t-hover) var(--ease); border-radius: 2px; }
-.card:hover, .card:focus-within { transform: translateY(-3px); box-shadow: var(--shadow-lift); border-color: var(--line-strong); background: #181a1c; }
-.card:hover::before, .card:focus-within::before { transform: scaleX(1); }
-.card:active { transform: scale(0.98); }
 .card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; }
 .card-kind { font-size: 0.8125rem; color: var(--accent); text-align: right; }
 .card-logo { width: 56px; height: 56px; border-radius: var(--r-md); border: 1px solid var(--line); background: #fff; }
@@ -202,8 +198,6 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 .card-tags li + li::before { content: "·"; margin: 0 8px; color: var(--accent-line); }
 .card-foot { margin-top: auto; padding-top: 8px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
 .card-cta { display: inline-flex; align-items: center; gap: 6px; color: var(--brand); font-weight: 600; font-size: 0.95rem; }
-.card-cta svg { transition: transform var(--t-hover) var(--ease); }
-.card:hover .card-cta svg, .card:focus-within .card-cta svg { transform: translateX(3px); }
 .video-link { position: relative; z-index: 2; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; color: var(--text); font-weight: 600; font-size: 0.9rem; text-decoration: underline; text-decoration-color: var(--line-strong); }
 .video-link:hover { color: var(--brand); text-decoration-color: var(--brand); }
 
@@ -219,18 +213,8 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 .card-compact h3 { font-size: 1.05rem; }
 .card-compact .card-line { font-size: 0.93rem; }
 
-/* Reveal cell: tags by default. On fine pointers the role sentence replaces them on hover or focus,
-   in the same grid cell, so nothing shifts. Compact cards reveal their stack on hover instead. */
 .card-reveal { display: grid; gap: 6px; }
 .card-flagship .card-reveal { grid-area: tags; }
-@media (hover: hover) and (pointer: fine) {
-  .card-reveal > * { grid-area: 1 / 1; align-self: start; transition: opacity var(--t-hover) var(--ease), transform var(--t-hover) var(--ease); }
-  .card-reveal .card-detail { opacity: 0; transform: translateY(4px); }
-  .card:hover .card-reveal .card-detail, .card:focus-within .card-reveal .card-detail { opacity: 1; transform: none; }
-  .card:hover .card-reveal:has(.card-detail) .card-tags, .card:focus-within .card-reveal:has(.card-detail) .card-tags { opacity: 0; transform: translateY(-4px); }
-  .card-compact .card-tags { opacity: 0; transform: translateY(4px); }
-  .card-compact:hover .card-tags, .card-compact:focus-within .card-tags { opacity: 1; transform: none; }
-}
 
 /* Motifs */
 .motif { width: 96px; height: 58px; flex: none; }
@@ -241,12 +225,6 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 .motif .mnet { stroke: var(--line-strong); stroke-width: 1.5; }
 .motif .mscan { stroke: var(--brand); stroke-width: 1.5; opacity: 0.8; }
 .motif .mbar { transform-box: fill-box; transform-origin: center; }
-@media (prefers-reduced-motion: no-preference) {
-  .card.is-voice:hover .mbar, .card.is-voice:focus-within .mbar { animation: mbar 0.4s var(--ease) infinite alternate; animation-delay: var(--d); }
-  .card:hover .motif-scan .mscan, .card:focus-within .motif-scan .mscan { animation: scan 0.5s var(--ease) infinite alternate; }
-}
-@keyframes mbar { from { transform: scaleY(1); } to { transform: scaleY(0.45); } }
-@keyframes scan { from { transform: translateY(-22px); } to { transform: translateY(22px); } }
 
 /* ---------- Live demos ---------- */
 .demos { display: grid; grid-template-columns: minmax(260px, 340px) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
@@ -438,7 +416,6 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-  .card:hover, .card:focus-within { transform: none; }
 }
 
 /* ==========================================================================
@@ -456,7 +433,7 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 }
 
 /* Faint, static blue light behind the sections that carry glass, so the blur has something to catch. */
-#work, #research, #demos, #skills { position: relative; isolation: isolate; }
+#work, #projects, #demos, #skills { position: relative; isolation: isolate; }
 #work, #demos, #skills { overflow-x: clip; }
 #work::before, #demos::before, #skills::before {
   content: ""; position: absolute; z-index: -1; pointer-events: none; border-radius: 50%;
@@ -481,7 +458,6 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
   border-color: var(--glass-edge);
   box-shadow: var(--shadow), var(--glass-shine);
 }
-.card:hover, .card:focus-within { background: var(--glass-hover); border-color: rgba(76, 201, 240, 0.18); }
 .contact-list { padding: 4px 20px; border: 1px solid var(--glass-edge); border-radius: var(--r-lg); }
 .contact-list li:first-child { border-top: 0; }
 .contact-list li:last-child { border-bottom: 0; }
@@ -508,7 +484,6 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .site-header.scrolled, .site-header.open, nav#primary-nav { background: rgba(14, 15, 16, 0.97); }
   .card, .callout, .video-card, .samples li, .pager-link, .contact-list { background: var(--surface); }
-  .card:hover, .card:focus-within { background: #181a1c; }
 }
 
 /* ==========================================================================

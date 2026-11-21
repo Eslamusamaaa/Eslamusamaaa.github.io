@@ -35,14 +35,12 @@ export function ProjectCard({ p, variant, index }: { p: Project; variant: "flags
         </Link>
       </h3>
       <p className="card-line">{p.oneLine}</p>
-      {/* Tags show by default; the role sentence takes their place on hover or focus (fine pointers). */}
       <div className="card-reveal">
         <ul className="card-tags" aria-label="Main technologies">
           {p.tags.slice(0, variant === "compact" ? 4 : 3).map((t) => (
             <li key={t}>{t}</li>
           ))}
         </ul>
-        {p.role && <p className="card-detail">My role: {p.role.replace(/\.$/, "")}.</p>}
       </div>
       <div className="card-foot">
         <span className="card-cta" aria-hidden="true">
@@ -87,7 +85,7 @@ export default function Work() {
         <h2 id="work-title" className="mask-line">
           <span>Professional work at Zikola</span>
         </h2>
-        <p className="sub-lede">Case studies written from project documentation and repository history. Private source code and customer data are not shown.</p>
+        <p className="sub-lede">The AI services and products I build at Zikola. Private source code and customer data are not shown.</p>
       </div>
       <div className="work-layout">
         <nav className="work-index" aria-label="Projects in this section">

@@ -5,13 +5,13 @@ import { asset, finePointer, prefersReducedMotion } from "../lib";
 import { ProjectCard } from "./Work";
 import { ArrowIcon, CheckIcon, CopyIcon, GitHubIcon, LinkedInIcon, WaIcon } from "./icons";
 
-export function Research() {
+export function Projects() {
   const personal = projects.filter((p) => p.group === "personal");
   return (
-    <section id="research" className="section wrap" aria-labelledby="research-title">
+    <section id="projects" className="section wrap" aria-labelledby="projects-title">
       <div className="sec-head">
-        <h2 id="research-title" className="mask-line">
-          <span>Research and personal projects</span>
+        <h2 id="projects-title" className="mask-line">
+          <span>Projects</span>
         </h2>
         <p className="sub-lede">Speech, language models, medical imaging and applied machine learning, built outside my day job.</p>
       </div>
@@ -35,16 +35,27 @@ export function Experience() {
       <ol className="timeline">
         <li>
           <p className="when">April 2026 to present · Employment</p>
-          <h3>AI Engineer, Zikola</h3>
+          <h3>AI & Machine Learning Engineer, Zikola</h3>
           <ul className="tl-items">
             {zikolaWork.map((w) => (
               <li key={w.title}>
-                <strong>{w.title}.</strong> {w.short}{" "}
-                {w.slug && (
-                  <Link to={`/projects/${w.slug}`} className="tl-link">
-                    Case study<span className="sr">: {w.title}</span>
-                  </Link>
-                )}
+                <strong>{w.title}:</strong> {w.body}{" "}
+                {w.links.map((l, i) => (
+                  <span key={l.label}>
+                    {i > 0 && <span className="muted"> · </span>}
+                    {l.to ? (
+                      <Link to={l.to} className="tl-link">
+                        {l.label}
+                        <span className="sr">: {w.title}</span>
+                      </Link>
+                    ) : (
+                      <a href={l.href} className="tl-link" target="_blank" rel="noopener noreferrer">
+                        {l.label}
+                        <span className="sr">: {w.title} (opens in a new tab)</span>
+                      </a>
+                    )}
+                  </span>
+                ))}
               </li>
             ))}
           </ul>
@@ -287,7 +298,7 @@ export function Footer() {
           <a className="name-link" href={profile.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="Eslam Usama, chat on WhatsApp (opens in a new tab)">
             {profile.name}
           </a>{" "}
-          · AI Engineer
+          · AI & Machine Learning Engineer
         </span>
         <span className="footer-links">
           <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in a new tab)">

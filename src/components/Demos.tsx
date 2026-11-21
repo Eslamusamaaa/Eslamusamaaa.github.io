@@ -103,7 +103,7 @@ export default function Demos() {
             <span>Live demos</span>
           </h2>
           <p className="sub-lede">
-            My WhatsApp commerce bots run on these numbers. Message one to try it. <Link to="/projects/whatsapp-commerce-bots">How they work</Link>.
+            My WhatsApp AI chatbots run on these numbers. Message one to try it. <Link to="/projects/whatsapp-ai-chatbots">How they work</Link>.
           </p>
           <a className="btn wa" href={whatsappBots[0].href} target="_blank" rel="noopener noreferrer">
             <WaIcon /> Try it live

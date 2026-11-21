@@ -7,7 +7,7 @@ import Hero from "./components/Hero";
 import Work from "./components/Work";
 import Demos from "./components/Demos";
 import ProjectPage from "./components/ProjectPage";
-import { About, Contact, Experience, Footer, Research, Skills } from "./components/Sections";
+import { About, Contact, Experience, Footer, Projects, Skills } from "./components/Sections";
 import { Waveform } from "./components/Motifs";
 
 const HOME_SCROLL = "home-scroll";
@@ -19,7 +19,7 @@ function Divider() {
 function Home() {
   const loc = useLocation();
   const ref = useRef<HTMLElement>(null);
-  usePageMeta("Eslam Usama · AI Engineer", `${hero.title} ${hero.lede}`, "/");
+  usePageMeta("Eslam Usama · AI & Machine Learning Engineer",`${hero.title} ${hero.lede}`, "/");
 
   // Return to the right place: a section requested by the nav, or where you left off.
   useLayoutEffect(() => {
@@ -63,7 +63,7 @@ function Home() {
       <Hero />
       <Work />
       <Divider />
-      <Research />
+      <Projects />
       <Divider />
       <Demos />
       <Experience />

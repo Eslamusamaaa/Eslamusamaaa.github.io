@@ -103,7 +103,7 @@ export default function ProjectPage() {
 
   const prev = projects[(i - 1 + projects.length) % projects.length];
   const next = projects[(i + 1) % projects.length];
-  const isBots = p.slug === "whatsapp-commerce-bots";
+  const isBots = p.slug === "whatsapp-ai-chatbots";
 
   return (
     <main id="main" tabIndex={-1} className="wrap page">

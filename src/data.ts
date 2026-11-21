@@ -5,7 +5,7 @@
 export const profile = {
   name: "Eslam Usama",
   shortName: "Eslam Usama",
-  title: "AI Engineer",
+  title: "AI & Machine Learning Engineer",
   location: "Egypt",
   email: "eslamosamamahmoud3@gmail.com",
   phone: "+201095178021", // from the CV
@@ -239,204 +239,205 @@ export const projects: Project[] = [
     outcome: "Working end to end: extension, backend, dashboard, reports and admin console.",
   },
   {
-    slug: "ai-voice-calling",
-    title: "AI voice calling: Tele Confirm and the Voice Assistant",
-    kind: "Zikola · voice AI · two related systems",
+    slug: "whatsapp-ai-chatbots",
+    title: "WhatsApp AI chatbots",
+    kind: "Zikola · conversational AI · WhatsApp",
     group: "professional",
-    status: "Tele Confirm: test environment, real calls switched off · private repositories",
+    status: "Built for online stores at Zikola · live demo lines below · private repositories",
     summary:
-      "Tele Confirm places AI phone calls for Salla merchants, starting with cash-on-delivery order confirmation. A separate RAG voice assistant answers customer questions in Saudi Arabic.",
-    tags: ["LangGraph", "Vapi", "Saudi Arabic", "RAG", "Qdrant"],
+      "WhatsApp assistants for online stores: a guided button workflow, free-text answers from an LLM agent, RAG over the store's own data, and support for voice notes and photos.",
+    tags: ["WhatsApp Cloud API", "LangGraph", "RAG", "OCR", "Voice notes"],
     overview:
-      "Two distinct projects share the voice theme. Tele Confirm listens to a store's order events, decides when a call is worth making, calls the customer in Saudi Arabic and writes the result back to the order. The Zikola Voice Assistant is a streaming speech-in, speech-out RAG assistant built on a LangGraph workflow.",
+      "At Zikola I build WhatsApp assistants that sell and support customers inside the chat app they already use. Each one combines a guided, button-driven workflow for the steps that must be exact with a free-text mode where an LLM agent answers open questions. Behind both sits a RAG system over the store's own catalog and content, so answers and recommendations come from real data instead of the model's memory. The assistants also handle voice notes and photos: speech is transcribed and answered, OCR reads text from images, and a photo can be used to recommend matching products.",
     problem:
-      "A cash-on-delivery order refused at the door costs the merchant shipping both ways and ties up stock; a one-minute call confirming items, total and address prevents much of that. A voice agent must also never say, promise or change something it should not.",
-    flowTitle: "Tele Confirm: an order event becomes a call",
+      "Free-text-only bots tend to invent products, prices and links, while button-only bots feel rigid. Customers also send voice notes and photos instead of typing. The goal was one assistant that is exact where exactness matters, flexible where customers are not, and always grounded in what the store actually sells.",
+    flowTitle: "What happens to a customer message",
     flow: [
-      { title: "Salla order event", note: "Webhook intake, one run per feature and subject" },
-      { title: "Run graph", note: "LangGraph, checkpointed after every step; waits are interrupts" },
-      { title: "Pre-dial gate", note: "Store, quota, consent and calling hours re-checked before each attempt" },
-      { title: "Call", note: "Vapi voice adapter, Saudi Arabic, tools the model may call mid-call" },
-      { title: "Write-back", note: "Outcome to the Salla order note and status, plus merchant tasks" },
+      { title: "Customer message", note: "Text, a button tap, a voice note or a photo, through the WhatsApp API" },
+      { title: "Understand the input", note: "Voice notes are transcribed; photos are read with OCR and image understanding" },
+      { title: "Route", note: "A LangGraph workflow sends it to the guided flow or to the LLM agent" },
+      { title: "Retrieve", note: "RAG over the store's catalog and content; exact facts come from tools, not the model" },
+      { title: "Reply", note: "Buttons, product cards, photos or text, and a handoff to a person when needed" },
     ],
-    cats: ["Voice", "Agents", "Commerce"],
-    motif: "wave",
-    oneLine: "Tested live on a Salla test store; calls to real customers are switched off.",
+    cats: ["Agents", "Commerce"],
+    motif: "chat",
+    oneLine: "One WhatsApp assistant that combines guided workflows, free-text answers, RAG, voice notes and image-based recommendations.",
     implementation: [
       {
-        heading: "Engine separated from runtime",
-        body: "The call engine (domain, playbooks, tools, orchestration) has no server, database driver or voice platform in it, and talks to the outside through ports. The voice platform, storefront and database are replaceable; what a call is stays fixed.",
+        heading: "Guided workflows for the exact steps",
+        body: "Browsing by category, price or style, product details and order tracking run as button flows. Taps arrive as exact machine ids, so the bot cannot mis-identify a product or an order.",
       },
       {
-        heading: "Call playbooks",
-        body: "One file per feature across confirmation, payments, fulfilment, post-delivery and merchant operations, from COD confirmation and address checks to unpaid-order follow-up and satisfaction surveys. Marketing features stay off until a merchant confirms consent per feature.",
+        heading: "Free-text answers from an LLM agent",
+        body: "For open questions a stateful LangGraph agent decides what to do and calls tools. Prices, stock, links and images are read from the store's data by those tools, so the database decides what is true and the model decides what to do.",
       },
       {
-        heading: "Safety as code",
-        body: "Rules are enforced in the engine rather than the prompt: tools are the only way a call changes anything, no payment feature marks an order paid or reads bank details aloud, an oversell call never dials without merchant approval, and a single opt-out ends further calls.",
+        heading: "RAG over the store's own data",
+        body: "The catalog and store content are chunked, embedded and indexed in a vector store. Retrieval grounds both the answers and the product recommendations, which keeps the assistant from recommending things the store does not sell.",
       },
       {
-        heading: "Zikola Voice Assistant",
-        body: "A LangGraph workflow runs STT, query understanding, RAG retrieval, context validation, LLM response and TTS. Documents (PDF, DOCX, TXT) are chunked 1000/200 into a Qdrant collection; Deepgram handles speech recognition, an OpenRouter-hosted model generates answers and ElevenLabs produces speech, with session memory and a Saudi Arabic personality.",
+        heading: "Voice notes, photos and OCR",
+        body: "Voice notes go through speech-to-text and are answered like typed messages. Photos are read with OCR and image understanding, which lets a customer send a picture and get matching products back.",
+      },
+      {
+        heading: "Many stores, one platform",
+        body: "The assistants run on a multi-tenant platform where each store has its own catalog and settings, with order tracking and a human handoff built in.",
       },
     ],
     stack: [
-      { name: "TypeScript, LangGraph", role: "Tele Confirm run graph and call engine" },
-      { name: "Vapi, Azure Saudi voices", role: "Telephony and voice platform" },
-      { name: "Salla OAuth, webhooks", role: "Order events and write-back" },
-      { name: "SQLite", role: "Test-environment storage (Postgres planned for production)" },
-      { name: "FastAPI, LangGraph, Qdrant", role: "Voice Assistant backend and vector store" },
-      { name: "Deepgram, ElevenLabs", role: "Voice Assistant STT and TTS" },
+      { name: "WhatsApp Cloud API", role: "Messaging channel and webhooks" },
+      { name: "LangGraph, LangChain", role: "Workflow routing and the LLM agent" },
+      { name: "RAG with a vector store (Chroma, Qdrant)", role: "Catalog and content retrieval for recommendations" },
+      { name: "Speech-to-text", role: "Understanding voice notes" },
+      { name: "OCR and image understanding", role: "Reading photos and recommending from images" },
+      { name: "FastAPI, PostgreSQL, Redis", role: "Backend, storage and state" },
+    ],
+    challenges: [
+      { challenge: "Wrong images and invented URLs", solution: "Deterministic tools for everything exact; the model never types a URL, price or image link." },
+      { challenge: "Customers send voice notes and photos, not only text", solution: "Convert every input to text or structured data first, then use the same grounded pipeline." },
+      { challenge: "Serving many stores with different catalogs", solution: "Per-store data and settings on one multi-tenant platform." },
+    ],
+    results: ["Working WhatsApp assistants, available to try on the demo lines on this page."],
+    limitations: [
+      "The assistants advise and link; checkout happens on the store's website.",
+      "No conversion or usage figures are published here.",
+    ],
+    next: [],
+    links: [],
+    contribution:
+      "At Zikola I built these assistants: the guided workflows, the LLM agent, the retrieval layer and the WhatsApp API integration.",
+  },
+  {
+    slug: "ai-voice-assistants",
+    title: "AI voice assistants",
+    kind: "Zikola · real-time voice · RAG",
+    group: "professional",
+    status: "Working prototypes and integrations · private repositories",
+    summary:
+      "Real-time Arabic voice assistants that answer from a knowledge base: advising shoppers, explaining things on a website, or adding a voice layer to a chatbot or an existing system.",
+    tags: ["Deepgram", "ElevenLabs", "RAG", "LangGraph"],
+    overview:
+      "A voice assistant is a pattern more than a single product, so I built it as a reusable pipeline: speech in, retrieval over the right knowledge base, a language model, and speech out, all streaming so the conversation feels natural. The same pipeline has been pointed at different problems: advising a shopper and recommending from a catalog, explaining something a visitor does not understand on a website, and adding voice to a chatbot or another system.",
+    problem:
+      "Typing a question is a barrier for many people. A voice assistant has to be fast enough to feel like a conversation, sound natural in spoken Arabic, let the user interrupt, and only say what its knowledge base supports.",
+    flowTitle: "A spoken turn",
+    flow: [
+      { title: "Microphone", note: "Audio streamed to the server in real time" },
+      { title: "Speech-to-text", note: "Streaming Arabic recognition" },
+      { title: "Retrieval", note: "RAG over the knowledge base for that use case" },
+      { title: "Language model", note: "Streaming answer with tool calling" },
+      { title: "Text-to-speech", note: "Synthesised sentence by sentence as the answer is written" },
+      { title: "Playback", note: "Barge-in stops the assistant the moment the user speaks" },
+    ],
+    cats: ["Voice", "Agents"],
+    motif: "wave",
+    oneLine: "Real-time voice assistants that answer from your own data, built for different problems and plugged into different systems.",
+    implementation: [
+      {
+        heading: "Latency by design",
+        body: "Recognition, generation and synthesis all stream. Each complete sentence goes to speech synthesis as soon as it is ready, so time to first audio depends on the first sentence rather than the whole reply.",
+      },
+      {
+        heading: "Barge-in and turn-taking",
+        body: "A state machine moves between listening, thinking and speaking. Interrupting the assistant cancels the model request, the speech synthesis and the playback together, because cancelling only part of that leaves audio playing over the user.",
+      },
+      {
+        heading: "One pipeline, many use cases",
+        body: "Swapping the knowledge base and the persona turns the same pipeline into a product advisor, a website explainer or the voice layer of a chatbot. The assistant can recommend, take an order, and hand over to a person when it cannot help.",
+      },
+      {
+        heading: "Spoken-Arabic persona",
+        body: "Prompts constrain the assistant to a natural spoken register and forbid emoji, markdown and filler, since every word is spoken aloud.",
+      },
+      {
+        heading: "A workflow version with validation",
+        body: "A LangGraph variant runs speech-to-text, query understanding, retrieval, a context-validation step, the model response and speech synthesis, with session memory. Uploaded documents are chunked and indexed in a vector store.",
+      },
+    ],
+    stack: [
+      { name: "Deepgram", role: "Streaming speech recognition" },
+      { name: "ElevenLabs", role: "Streaming speech synthesis" },
+      { name: "LLM via OpenRouter", role: "Streaming responses and tool calling" },
+      { name: "RAG (LangChain, Qdrant)", role: "Knowledge-base retrieval" },
+      { name: "LangGraph", role: "Voice workflow and context validation" },
+      { name: "WebSockets, FastAPI, Node.js", role: "Real-time audio transport and backend" },
+    ],
+    challenges: [
+      { challenge: "Perceived latency in a spoken conversation", solution: "End-to-end streaming and sentence-level hand-off to speech synthesis." },
+      { challenge: "Users interrupting mid-sentence", solution: "Barge-in that cancels model, synthesis and playback together." },
+      { challenge: "Text that sounds wrong when read aloud", solution: "Prompt rules for spoken output and a dialect-aware persona." },
+    ],
+    results: ["Working real-time voice assistants for several use cases, including product advice for a retailer."],
+    limitations: [
+      "Some of these are prototypes still being hardened for production.",
+      "No latency or conversion figures are published here.",
+    ],
+    next: ["Harden configuration and webhooks, and ship an embeddable voice widget."],
+    links: [],
+    contribution:
+      "I built the voice pipeline, the retrieval layer and the integrations with each system it plugs into.",
+  },
+  {
+    slug: "ai-voice-calling",
+    title: "AI voice calling",
+    kind: "Zikola · voice AI · automated calls",
+    group: "professional",
+    status: "Built and tested end to end in a test environment · private repositories",
+    summary:
+      "Automated AI phone calls for online stores: confirming cash-on-delivery orders, collecting customer feedback, and explaining how to use a product after it arrives.",
+    tags: ["Voice AI", "LangGraph", "Vapi", "Arabic"],
+    overview:
+      "At Zikola I built an AI calling service for online merchants. A store event or a schedule triggers a call to the customer in Arabic, the agent follows a short playbook for that type of call, and the outcome is written back to the order. One engine supports several kinds of call: confirming an order, calling after delivery to ask for feedback, and explaining how to use the product once it has arrived.",
+    problem:
+      "A cash-on-delivery order refused at the door costs the merchant shipping both ways, and silence after delivery means no feedback and customers who never learn to use what they bought. A call helps with both, but a voice agent must never say, promise or change something it should not.",
+    flowTitle: "From a store event to a call",
+    flow: [
+      { title: "Trigger", note: "An order event or a schedule from the store" },
+      { title: "Call planning", note: "A workflow decides whether and when to call, checking consent, calling hours and limits" },
+      { title: "Call", note: "A voice agent speaks Arabic and follows the playbook for that call type" },
+      { title: "Tools", note: "The agent can confirm, cancel, reschedule or hand over to a person, only through tools" },
+      { title: "Write-back", note: "The outcome is saved to the order and follow-up tasks are created for the merchant" },
+    ],
+    cats: ["Voice", "Agents", "Commerce"],
+    motif: "wave",
+    oneLine: "AI phone calls that confirm orders, collect feedback and guide customers on using what they bought.",
+    implementation: [
+      {
+        heading: "One engine, several call types",
+        body: "Each call type is a playbook: order confirmation, address checks, post-delivery feedback, product-usage guidance, and follow-up on unpaid orders. Adding a call type means adding a playbook, not rebuilding the engine.",
+      },
+      {
+        heading: "Event-driven and resumable",
+        body: "Runs are a LangGraph workflow that is checkpointed after every step, so waits and scheduled calls survive restarts.",
+      },
+      {
+        heading: "Safety rules in code, not in the prompt",
+        body: "Tools are the only way a call changes anything. A call never marks an order paid or reads payment details aloud, the merchant's limits and consent are re-checked before every attempt, and a single opt-out ends further calls.",
+      },
+      {
+        heading: "Real-time Arabic voice",
+        body: "The calls run on a telephony and voice platform with Arabic voices, so the engine stays independent of the voice provider and the provider can be replaced.",
+      },
+    ],
+    stack: [
+      { name: "LangGraph", role: "Call workflow and orchestration" },
+      { name: "Vapi", role: "Telephony and real-time voice" },
+      { name: "Store APIs and webhooks (Salla)", role: "Order events and write-back" },
+      { name: "TypeScript, Node.js", role: "Call engine and integrations" },
     ],
     challenges: [
       { challenge: "Calls must never exceed what the merchant allowed", solution: "A pre-dial gate re-checked on every attempt, plus per-feature consent and quotas." },
       { challenge: "Long waits and restarts", solution: "Runs checkpointed after every step; scheduled calls survive restarts." },
     ],
-    results: ["Tele Confirm's README records its call features as built and tested live on a Salla test store."],
+    results: ["The call types above are built and exercised end to end on a test store."],
     limitations: [
-      "Tele Confirm is a test environment: dialing real customers is off, and a Saudi outbound number, production database and panel login are still missing per its README.",
-      "No latency, call-volume or success-rate figures are claimed. The Voice Assistant is an MVP.",
+      "Calls to real customers are switched off while the production phone number, database and merchant login are still being set up.",
+      "No success-rate or call-volume figures are published here.",
     ],
-    next: ["Persistent checkpointer on Postgres, panel login, production number."],
+    next: ["Persistent checkpointing on PostgreSQL, merchant login and a production phone number."],
     links: [],
     contribution:
-      "Tele Confirm's history shows my commits only; the Voice Assistant has no commit history in the copy I reviewed, so its authorship is described by my CV and role at Zikola.",
-    role: "Tele Confirm engine and integrations; voice assistant described via CV.",
-    outcome: "Tele Confirm tested live on a Salla test store; real customer calls are switched off.",
-  },
-  {
-    slug: "ai-fragrance-concierge",
-    title: "AI Fragrance Concierge: Arabic voice and chat assistant",
-    kind: "Zikola · conversational AI · RAG · voice",
-    group: "professional",
-    status: "Working prototype · private repository",
-    summary:
-      "A real-time Arabic assistant for a fragrance retailer: it answers product questions by voice, recommends from the catalog, and places automated calls to confirm cash-on-delivery orders.",
-    tags: ["Deepgram", "ElevenLabs", "RAG", "Vapi", "TypeScript"],
-    overview:
-      "Two voice surfaces share one retrieval and catalog engine. A browser voice assistant handles pre-purchase advice and recommendations over a WebSocket, and an outbound call path built on Vapi confirms or cancels cash-on-delivery orders after checkout.",
-    problem:
-      "A fragrance shopper needs advice, not a search box, and a refused cash-on-delivery order costs the merchant shipping both ways. The assistant has to sound natural in spoken Saudi Arabic, respond fast enough to interrupt, and only recommend products that exist.",
-    flowTitle: "A spoken turn in the browser assistant",
-    flow: [
-      { title: "Microphone", note: "AudioWorklet frames streamed to the server over WebSocket" },
-      { title: "Speech-to-text", note: "Deepgram nova-3, Arabic, streaming" },
-      { title: "Retrieval", note: "RAG over the fragrance knowledge base plus catalog context" },
-      { title: "Language model", note: "OpenRouter (Gemini 2.5 Flash), streaming with tool calling" },
-      { title: "Text-to-speech", note: "ElevenLabs streaming, sentence by sentence" },
-      { title: "Playback", note: "Barge-in cancels generation and speech immediately" },
-    ],
-    cats: ["Voice", "Agents", "Commerce"],
-    motif: "wave",
-    oneLine: "A working prototype: spoken product advice plus order-confirmation calls.",
-    implementation: [
-      {
-        heading: "Latency by design",
-        body: "Recognition, generation and synthesis all stream. A sentence splitter hands each complete Arabic sentence to speech synthesis as soon as it is ready, so time to first audio depends on the first sentence rather than the whole reply. The speech recognizer connects lazily on the first audio chunk.",
-      },
-      {
-        heading: "Barge-in and turn-taking",
-        body: "A state machine moves between listening, thinking and speaking. Interrupting the assistant aborts the model request, destroys the synthesis socket and resets the splitter together, because cancelling only part of that leaves audio playing over the user. A turn ends on whichever comes first: client voice-activity detection, a server silence timer or the recognizer's utterance-end event.",
-      },
-      {
-        heading: "Spoken-Arabic persona",
-        body: "Prompts constrain the assistant to a direct contemporary Saudi register and forbid emoji, markdown and filler greetings, since every word is spoken. Beginner and enthusiast conversation journeys, budget matching and a human handoff when it cannot help sit on top of the retrieval engine.",
-      },
-      {
-        heading: "Order confirmation calls",
-        body: "Cash-on-delivery checkout creates an order awaiting confirmation. A delayed job places a Vapi call with per-order details, and the call agent exposes confirm and cancel as tools and can transfer to a person. An end-of-call webhook reconciles the order and writes a call log.",
-      },
-      {
-        heading: "Accounts and storage",
-        body: "Signup and login with hashed passwords and JWT sessions, phone numbers validated to E.164, and SQLite for orders and call logs.",
-      },
-    ],
-    stack: [
-      { name: "Node.js, TypeScript, Express, ws", role: "Server and WebSocket voice transport" },
-      { name: "Deepgram nova-3", role: "Streaming Arabic speech recognition" },
-      { name: "ElevenLabs", role: "Streaming speech synthesis" },
-      { name: "OpenRouter (Gemini 2.5 Flash)", role: "Streaming responses and tool calling" },
-      { name: "RAG engine (LangChain core + custom)", role: "Catalog and knowledge-base retrieval" },
-      { name: "Vapi", role: "Outbound order-confirmation calls" },
-      { name: "SQLite", role: "Orders, users and call logs" },
-    ],
-    challenges: [
-      { challenge: "Perceived latency in a spoken conversation", solution: "End-to-end streaming and sentence-level hand-off to speech synthesis." },
-      { challenge: "Users interrupting mid-sentence", solution: "Barge-in that cancels model, synthesis and splitter together." },
-      { challenge: "Text that sounds wrong when read aloud", solution: "Prompt rules for spoken output and a dialect-specific persona." },
-    ],
-    results: ["The browser assistant and the order-confirmation call path are both implemented in the repository."],
-    limitations: [
-      "A prototype: the repository's own roadmap lists configuration hardening, a persistent call queue and a storefront widget as remaining phases.",
-      "No latency, call-volume or conversion figures are claimed.",
-    ],
-    next: ["Persist the call queue, harden webhooks and configuration, and ship a storefront voice widget."],
-    links: [],
-    contribution:
-      "Repository history shows my commits only; I built the voice pipeline, retrieval, ordering and call-confirmation flow described above.",
-    role: "Voice pipeline, retrieval engine, ordering and call-confirmation flow.",
-    outcome: "Browser voice assistant and outbound confirmation calls implemented; still a prototype.",
-  },
-  {
-    slug: "whatsapp-commerce-bots",
-    title: "WhatsApp commerce bots",
-    kind: "Zikola · conversational commerce",
-    group: "professional",
-    status: "Catalog bot with recorded verification; platform is a team repository",
-    summary:
-      "Catalog-grounded WhatsApp sales assistants: a guided button flow for the answers that must be exact, and an LLM only for open questions.",
-    tags: ["WhatsApp Cloud API", "LangGraph", "FastAPI", "Chroma", "PostgreSQL"],
-    overview:
-      "Two pieces of work: a multi-tenant WhatsApp commerce platform at Zikola, and a standalone WhatsApp sales bot I built for a Salla chandelier store. Both follow one rule: the database decides what is true and the model decides what to do.",
-    problem:
-      "Early free-text versions confidently sent the wrong product image, quoted a non-customer-facing price and fabricated product URLs. Prompt instructions did not stop it, so the architecture had to change.",
-    flowTitle: "Message path in the catalog bot",
-    flow: [
-      { title: "WhatsApp", note: "Customer message or button tap via the Meta Cloud API" },
-      { title: "FastAPI webhook", note: "Verified, deduplicated and rate limited" },
-      { title: "LangGraph", note: "Routes to the button workflow or the LLM agent" },
-      { title: "Tools", note: "Prices, stock, links and images read from SQLite, not typed by the model" },
-      { title: "Reply", note: "Interactive buttons, product cards and photos" },
-    ],
-    cats: ["Agents", "Commerce"],
-    motif: "chat",
-    oneLine: "The catalog bot captured 63 of 63 store products with complete fields in its last recorded run.",
-    implementation: [
-      {
-        heading: "Workflow first, free text second",
-        body: "A button-driven flow (price tier, style, shape, paginated results, product detail) arrives as exact machine ids, so it cannot mis-identify a product. The LLM, Gemini via OpenRouter, handles open questions through tools that emit URLs, prices and images from the source of truth.",
-      },
-      {
-        heading: "Scrape, index, serve",
-        body: "A Playwright scraper reads the store's live catalog on a schedule into SQLite; product text is embedded into a persistent Chroma index; the bot never touches the live site. Verification scripts check the scraped data across several mapping layers.",
-      },
-      {
-        heading: "Zikola's multi-tenant platform",
-        body: "FastAPI, PostgreSQL with forced row-level security, Redis, a durable worker for webhooks and outbound messages, encrypted tenant credentials, and a React admin console. A client is onboarded from a storefront URL alone, and the LLM reaches the catalog only through a fixed tool registry. This is a team repository owned by another account, so I describe its design, not my share of it.",
-      },
-    ],
-    stack: [
-      { name: "WhatsApp Cloud API", role: "Messaging channel" },
-      { name: "FastAPI, LangGraph", role: "Webhook server and agent graph" },
-      { name: "Playwright, SQLite, Chroma", role: "Scraping, structured catalog, semantic search" },
-      { name: "OpenRouter (Gemini 2.5 Pro)", role: "Open-question answers in the catalog bot" },
-      { name: "PostgreSQL, Redis, React", role: "Platform storage, state and admin console" },
-    ],
-    challenges: [
-      { challenge: "Wrong images and invented URLs", solution: "Deterministic tools for everything exact; the model never types a URL, price or image link." },
-      { challenge: "Page-wide scraping picked up other products' images", solution: "Gallery-scoped extraction covering both of the store's image path shapes." },
-    ],
-    results: ["63 of 63 catalog products captured with complete fields in the last recorded run."],
-    limitations: [
-      "The catalog bot advises and links; checkout happens on the website. Style and shape facets still derive partly from product names.",
-      "Which merchant each demo line below belongs to is not stated on this page.",
-    ],
-    next: [],
-    links: [],
-    contribution:
-      "I authored the catalog bot. My role on the Zikola platform is documented only by my CV, which lists integrating WhatsApp APIs into the conversational agent.",
-    role: "Authored the catalog bot; WhatsApp API integration on the Zikola platform.",
-    outcome: "Catalog bot captured 63 of 63 store products with complete fields in its last recorded run.",
+      "I built the calling engine, the playbooks and the store integrations.",
   },
   {
     slug: "volleyball-group-activity-recognition",
@@ -1038,30 +1039,61 @@ export const projects: Project[] = [
   },
 ];
 
-export const zikolaWork: { title: string; body: string; short: string; slug?: string }[] = [
-  { title: "Arabic voice and chat concierge", short: "Real-time Arabic voice assistant with RAG recommendations and order-confirmation calls.", slug: "ai-fragrance-concierge", body: "A real-time voice assistant with RAG recommendations, barge-in, and Vapi-based order-confirmation calls for a retailer." },
-  { title: "WhatsApp commerce chatbots", short: "Catalog-grounded WhatsApp sales assistants: guided buttons plus an LLM agent.", slug: "whatsapp-commerce-bots", body: "Catalog-grounded WhatsApp sales assistants on the Meta Cloud API: a button-driven guided flow for exact answers and an LLM agent (LangGraph, tool calling) for open questions, backed by a scraped catalog and a vector index." },
-  { title: "Multi-tenant messaging platform", short: "WhatsApp integration on Zikola's multi-tenant commerce messaging platform.", slug: "whatsapp-commerce-bots", body: "WhatsApp integration work on Zikola's multi-tenant commerce messaging platform, where a client is onboarded from a storefront URL and the LLM reaches the catalog only through a fixed tool registry." },
-  { title: "Multi-modal conversational agent", short: "Stateful LangGraph agents with RAG and speech, over WhatsApp and the web.", slug: "ai-voice-calling", body: "Stateful agentic workflows with LangGraph and LangChain integrating LLMs, a tailored RAG pipeline and STT/TTS engines, reachable through WhatsApp APIs and web platforms." },
-  { title: "Real-time meeting intelligence", short: "Chrome extension audio capture with word alignment to attendee names.", slug: "zikola-meeting-assistant", body: "Dual-channel audio capture in a Chrome MV3 extension and a custom word-alignment algorithm that maps diarization tags to attendee names." },
-  { title: "Async LLM pipeline", short: "Parallel transcript processing that always returns valid JSON.", slug: "zikola-meeting-assistant", body: "Parallel asyncio processing of multi-hour transcripts with a state-machine auto-repair parser guaranteeing valid JSON." },
-  { title: "Security and RBAC", short: "Passkeys, OTPs, multi-tenant roles, offboarding and audit logs.", slug: "zikola-meeting-assistant", body: "WebAuthn passkeys, SHA-256 OTPs, multi-tenant RBAC, automated offboarding, JWT invalidation and immutable audit logging." },
-  { title: "Media-buying analytics ETL", short: "Ad-platform CSVs turned into ROAS, CPA, CTR and CPC for n8n agent workflows.", body: "Meta, TikTok and Snapchat CSVs processed into ROAS, CPA, CTR and CPC and fed into n8n AI-agent workflows." },
+/** Experience bullets mirror the CV, in the same order and wording. */
+export type ExperienceLink = { label: string; to?: string; href?: string };
+export const zikolaWork: { title: string; body: string; links: ExperienceLink[] }[] = [
+  {
+    title: "AI Shopping Assistant (WhatsApp + Web)",
+    body: "Built a bilingual (Arabic/English) assistant for online stores that answers customers from each store's real catalog using LangGraph, LangChain, and RAG. Handles voice notes, photos, order tracking, and human handoff, serving many stores from one platform.",
+    links: [{ label: "Case study", to: "/projects/whatsapp-ai-chatbots" }],
+  },
+  {
+    title: "Real-Time Audio & Meeting Intelligence Engine",
+    body: "Built a Chrome extension that records and transcribes meetings and attributes speech to the right attendees, with an asynchronous LLM pipeline that turns multi-hour transcripts into validated action items, summaries, and sentiment reports. Secured with passwordless WebAuthn authentication, multi-tenant RBAC, and audit logging.",
+    links: [{ label: "Case study", to: "/projects/zikola-meeting-assistant" }],
+  },
+  {
+    title: "Salla App for AI Product Recommendations (Rashihli)",
+    body: "Built and shipped a multi-tenant Salla app that adds an Arabic-first shopping quiz to storefronts, generated from each store's own catalogue, with subscription plans and a merchant panel inside the Salla dashboard.",
+    links: [
+      { label: "Case study", to: "/projects/rashihli-salla-widget" },
+      { label: "Demo video", href: "https://www.youtube.com/watch?v=EIuLRemSntw" },
+    ],
+  },
+  {
+    title: "Arabic Voice AI (Concierge + Order-Confirmation Calls)",
+    body: "Built a real-time Arabic voice assistant (Deepgram, ElevenLabs) with barge-in and human handoff, plus an event-driven calling engine on LangGraph and Vapi that confirms cash-on-delivery orders by phone and updates the order, with compliance rules enforced in code.",
+    links: [
+      { label: "Voice assistants", to: "/projects/ai-voice-assistants" },
+      { label: "Voice calling", to: "/projects/ai-voice-calling" },
+    ],
+  },
+  {
+    title: "Multi-Platform Media Analytics & Automation",
+    body: "Developed an automated media-buying ETL engine processing multi-platform CSVs (Meta, TikTok, Snapchat) with auto-calculated KPIs (ROAS, CPA, CTR, CPC) integrated into n8n AI-agent workflows.",
+    links: [],
+  },
 ];
 
 export const skills: { group: string; items: string[] }[] = [
+  {
+    group: "Programming",
+    items: ["Python", "TypeScript", "JavaScript", "C", "C++", "PHP", "SQL"],
+  },
   {
     group: "Machine Learning",
     items: [
       "Scikit-learn", "XGBoost", "TensorFlow / Keras", "Pandas, NumPy",
       "Supervised classification and regression", "Feature engineering", "Model evaluation and validation",
-      "Exploratory data analysis", "Data preprocessing and augmentation", "Ensemble methods",
+      "Cross-validation and hyperparameter tuning", "Imbalanced-data learning (SMOTE, class weights)", "Time-series forecasting",
+      "Recommendation systems", "Model explainability (feature importance)", "Exploratory data analysis",
+      "Data preprocessing and augmentation", "Ensemble methods", "Data visualisation (Matplotlib, Seaborn)",
     ],
   },
   {
     group: "Deep Learning",
     items: [
-      "PyTorch", "Convolutional networks (DenseNet-121 from scratch)", "Transformer fine-tuning", "Transfer learning",
+      "PyTorch", "Convolutional networks (DenseNet-121 from scratch)", "Recurrent networks (LSTM)", "Transformer fine-tuning", "Transfer learning",
       "Class-imbalance handling", "Mixed-precision (bf16) training", "GPU memory optimisation", "Training loops and checkpointing",
     ],
   },
@@ -1069,16 +1101,17 @@ export const skills: { group: string; items: string[] }[] = [
     group: "Computer Vision",
     items: [
       "OpenCV", "Image classification", "Object detection", "Keypoint and pose estimation", "Action recognition in video", "Object detection and tracking (YOLOv8, ByteTrack)",
-      "Image segmentation", "3D medical image processing", "Candidate detection and false-positive reduction",
-      "Patch extraction and sliding-window inference", "Image preprocessing and normalisation", "Dataset annotation and augmentation",
+      "OCR (text extraction from images)", "Image understanding and image-based recommendation", "Image segmentation", "3D medical image processing",
+      "Candidate detection and false-positive reduction", "Patch extraction and sliding-window inference", "Image preprocessing and normalisation", "Dataset annotation and augmentation",
     ],
   },
   {
     group: "NLP and Speech",
     items: [
       "Hugging Face Transformers", "NLTK", "Text classification (TF-IDF, n-grams)", "Arabic text normalisation",
-      "Embeddings and semantic search", "Speech-to-text and diarization (faster-whisper, Deepgram)",
+      "Embeddings and semantic search", "Speech-to-text and diarization (faster-whisper, Deepgram, Wav2Vec2)",
       "Text-to-speech and voice synthesis (Spark-TTS, ElevenLabs)", "Voice activity detection",
+      "Real-time voice assistants (streaming, barge-in)", "Voice-note understanding", "Telephony and AI voice calling (Vapi)",
     ],
   },
   {
@@ -1086,15 +1119,19 @@ export const skills: { group: string; items: string[] }[] = [
     items: [
       "LLM fine-tuning (LoRA, QLoRA, Unsloth, PEFT / TRL)", "Prompt engineering", "Retrieval-augmented generation (FAISS, Qdrant, Chroma)",
       "Chunking and retrieval tuning", "Tool and function calling", "Stateful agents (LangGraph, LangChain)",
-      "Structured and schema-validated output", "Streaming LLM responses", "LLM serving (vLLM)",
+      "Multi-modal agents (text, voice, images)", "Conversational design (guided workflows plus free text)", "Human handoff and human-in-the-loop",
+      "Guardrails and safety rules enforced in code", "Structured and schema-validated output", "Streaming LLM responses",
+      "LLM serving (vLLM)", "LLM APIs (Gemini, OpenRouter)",
     ],
   },
   {
     group: "Tools and Infrastructure",
     items: [
-      "Python, TypeScript, JavaScript", "FastAPI, Flask, Node.js, Express", "REST APIs, WebSockets and webhooks",
-      "Async and concurrent programming", "PostgreSQL, SQLite, SQLAlchemy, Redis", "OAuth, JWT, passkeys and role-based access",
-      "Docker, Vercel, Modal", "CI/CD with GitHub Actions", "n8n workflow automation and AI-agent workflows", "Salla and WhatsApp Cloud API integrations", "Git",
+      "FastAPI, Flask, Streamlit, Node.js, Express", "REST APIs, WebSockets and webhooks",
+      "Async and concurrent programming", "PostgreSQL, SQL Server, SQLite, SQLAlchemy, Redis", "OAuth, JWT, WebAuthn passkeys and role-based access",
+      "Multi-tenant architecture", "Docker, Vercel, Modal", "CI/CD with GitHub Actions", "n8n workflow automation and AI-agent workflows",
+      "Salla and WhatsApp Cloud API integrations", "Chrome extensions (Manifest V3)", "React and Tailwind CSS",
+      "Web scraping (Playwright)", "Google Apps Script", "Git, GitHub, Jupyter / Colab",
     ],
   },
 ];
@@ -1113,16 +1150,16 @@ export const training = [
 ];
 
 export const hero = {
-  kicker: "AI Engineer · Egypt",
+  kicker: "AI & Machine Learning Engineer · Egypt",
   title: "I design and build AI systems that solve real-world problems.",
   lede:
-    "From LLM agents and retrieval-augmented generation to speech models, computer vision and classic machine learning, I take AI from prototype to working product. Currently an AI Engineer at Zikola.",
+    "From LLM agents and retrieval-augmented generation to speech models, computer vision and classic machine learning, I take AI from prototype to working product. Currently an AI & Machine Learning Engineer at Zikola.",
 };
 
 export const about = [
-  "I'm Eslam Usama, an AI Engineer focused on building intelligent systems that turn complex problems into practical AI-powered solutions. My interests span Machine Learning, Deep Learning, Computer Vision, Natural Language Processing and Generative AI.",
-  "I studied Computer Science at the Faculty of Computers and Information, Mansoura University (2022 to 2026), and I have worked as an AI Engineer at Zikola since April 2026.",
-  "Much of my recent work is in Arabic: Saudi Arabic voice agents and assistants for online stores, and an Egyptian Arabic text-to-speech model.",
+  "I'm Eslam Usama, an AI & Machine Learning Engineer focused on building intelligent systems that turn complex problems into practical AI-powered solutions. My interests span Machine Learning, Deep Learning, Computer Vision, Natural Language Processing and Generative AI.",
+  "I studied Computer Science at the Faculty of Computers and Information, Mansoura University (2022 to 2026), and I have worked as an AI & Machine Learning Engineer at Zikola since April 2026.",
+  "Much of my recent work is in Arabic: WhatsApp and voice assistants for online stores, automated AI calls, and an Egyptian Arabic text-to-speech model.",
 ];
 
 /** Skills mapped to projects by matching keywords against each project's tags, stack and kind. */
@@ -1130,6 +1167,11 @@ export const skillMap: { skill: string; keys: string[] }[] = [
   { skill: "Machine learning", keys: ["scikit", "xgboost", "random forest", "classifier", "regression"] },
   { skill: "Deep learning", keys: ["pytorch", "densenet", "keras", "neural", "fine-tun"] },
   { skill: "Computer vision", keys: ["densenet", "3d ct", "vision", "segmentation"] },
+  { skill: "OCR and image understanding", keys: ["ocr", "image understanding"] },
+  { skill: "Chatbots and conversational AI", keys: ["whatsapp", "chatbot", "conversational", "assistant"] },
+  { skill: "Voice AI", keys: ["voice", "vapi", "deepgram", "elevenlabs"] },
+  { skill: "Recommendation systems", keys: ["recommend", "quiz"] },
+  { skill: "Time-series forecasting", keys: ["time series"] },
   { skill: "NLP", keys: ["nlp", "arabic", "text", "token"] },
   { skill: "LLM agents", keys: ["langgraph", "agent", "tool calling", "llm"] },
   { skill: "AI automation", keys: ["n8n", "automation", "webhook", "workflow"] },
