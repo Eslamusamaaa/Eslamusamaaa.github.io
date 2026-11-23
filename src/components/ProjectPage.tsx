@@ -54,12 +54,12 @@ const sectionsFor = (p: Project) =>
   [
     { id: "overview", label: "Overview" },
     p.samples && { id: "samples", label: "Audio samples" },
-    { id: "problem", label: "Problem" },
-    { id: "flow", label: "How it works" },
-    { id: "implementation", label: "Implementation" },
+    p.problem && { id: "problem", label: "Problem" },
+    p.flow.length > 0 && { id: "flow", label: "How it works" },
+    p.implementation.length > 0 && { id: "implementation", label: "Implementation" },
     galleries[p.slug] && { id: "screenshots", label: "Screenshots" },
     p.challenges.length > 0 && { id: "challenges", label: "Challenges" },
-    { id: "results", label: "Results and limits" },
+    p.results.length + p.limitations.length > 0 && { id: "results", label: "Results and limits" },
     p.next.length > 0 && { id: "next", label: "Next" },
   ].filter(Boolean) as { id: string; label: string }[];
 
@@ -160,44 +160,50 @@ export default function ProjectPage() {
             </section>
           )}
 
-          <section id="problem" aria-labelledby="h-problem">
-            <h2 id="h-problem">Problem and motivation</h2>
-            <p>{p.problem}</p>
-          </section>
+          {p.problem && (
+            <section id="problem" aria-labelledby="h-problem">
+              <h2 id="h-problem">Problem and motivation</h2>
+              <p>{p.problem}</p>
+            </section>
+          )}
 
-          <section id="flow" aria-labelledby="h-flow">
-            <h2 id="h-flow">{p.flowTitle}</h2>
-            <ol className="flow">
-              {p.flow.map((s, n) => (
-                <li key={s.title}>
-                  <span className="n" aria-hidden="true">
-                    {n + 1}
-                  </span>
-                  <strong>{s.title}</strong>
-                  <span>{s.note}</span>
-                </li>
+          {p.flow.length > 0 && (
+            <section id="flow" aria-labelledby="h-flow">
+              <h2 id="h-flow">{p.flowTitle}</h2>
+              <ol className="flow">
+                {p.flow.map((s, n) => (
+                  <li key={s.title}>
+                    <span className="n" aria-hidden="true">
+                      {n + 1}
+                    </span>
+                    <strong>{s.title}</strong>
+                    <span>{s.note}</span>
+                  </li>
+                ))}
+              </ol>
+              {p.flowCaveat && <p className="note">{p.flowCaveat}</p>}
+              {p.diagram && (
+                <figure className="diagram">
+                  <a href={asset(p.diagram.src)} target="_blank" rel="noopener noreferrer" aria-label="Open the full-size diagram in a new tab">
+                    <img src={asset(p.diagram.src)} alt={p.diagram.alt} width={p.diagram.width} height={p.diagram.height} loading="lazy" />
+                  </a>
+                  <figcaption>{p.diagram.caption}</figcaption>
+                </figure>
+              )}
+            </section>
+          )}
+
+          {p.implementation.length > 0 && (
+            <section id="implementation" aria-labelledby="h-implementation">
+              <h2 id="h-implementation">Implementation</h2>
+              {p.implementation.map((x) => (
+                <div key={x.heading}>
+                  <h3>{x.heading}</h3>
+                  <p>{x.body}</p>
+                </div>
               ))}
-            </ol>
-            {p.flowCaveat && <p className="note">{p.flowCaveat}</p>}
-            {p.diagram && (
-              <figure className="diagram">
-                <a href={asset(p.diagram.src)} target="_blank" rel="noopener noreferrer" aria-label="Open the full-size diagram in a new tab">
-                  <img src={asset(p.diagram.src)} alt={p.diagram.alt} width={p.diagram.width} height={p.diagram.height} loading="lazy" />
-                </a>
-                <figcaption>{p.diagram.caption}</figcaption>
-              </figure>
-            )}
-          </section>
-
-          <section id="implementation" aria-labelledby="h-implementation">
-            <h2 id="h-implementation">Implementation</h2>
-            {p.implementation.map((x) => (
-              <div key={x.heading}>
-                <h3>{x.heading}</h3>
-                <p>{x.body}</p>
-              </div>
-            ))}
-          </section>
+            </section>
+          )}
 
           {galleries[p.slug] && (
             <section id="screenshots" aria-labelledby="h-screenshots">
@@ -219,19 +225,21 @@ export default function ProjectPage() {
             </section>
           )}
 
-          <section id="results" aria-labelledby="h-results">
-            <h2 id="h-results">Results and limitations</h2>
-            <ul className="bullets">
-              {p.results.map((r) => (
-                <li key={r}>{r}</li>
-              ))}
-              {p.limitations.map((r) => (
-                <li key={r} className="limit">
-                  {r}
-                </li>
-              ))}
-            </ul>
-          </section>
+          {p.results.length + p.limitations.length > 0 && (
+            <section id="results" aria-labelledby="h-results">
+              <h2 id="h-results">Results and limitations</h2>
+              <ul className="bullets">
+                {p.results.map((r) => (
+                  <li key={r}>{r}</li>
+                ))}
+                {p.limitations.map((r) => (
+                  <li key={r} className="limit">
+                    {r}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           {p.next.length > 0 && (
             <section id="next" aria-labelledby="h-next">

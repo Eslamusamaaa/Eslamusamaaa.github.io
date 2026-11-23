@@ -101,79 +101,14 @@ export const projects: Project[] = [
     video: { url: "https://www.youtube.com/watch?v=EIuLRemSntw", id: "EIuLRemSntw", title: "رشّحلي — مساعد تسوّق ذكي لمتاجر سلة" },
     moreVideos: [{ url: "https://www.youtube.com/watch?v=mbIfK9MzrwE", id: "mbIfK9MzrwE", title: "رشّحلي | كويز ذكي يرشّح لعملائك المنتج المناسب — لمتاجر سلة" }],
     overview:
-      "Rashihli (رشّحلي) is a complete product, built end to end: a merchant installs it from the Salla App Store, the store's catalogue imports automatically, a launcher appears on the storefront, and shoppers answer a few questions and get ranked suggestions. No question, option or wording is hardcoded. A language model designs the question tree once per store from the store's own products, in Arabic, and from then on the quiz is only looked up, so a shopper taking it costs nothing to serve. One backend serves many stores, with a React merchant panel that runs inside the Salla dashboard, an operator admin panel, a branded landing page and the App Store listing assets. The repository's history runs from August to November 2026 and is entirely my commits.",
-    problem:
-      "A shopping assistant is only useful if it knows what the store sells. A hardcoded question list works for one merchant and cannot be sold to a second, and a generic LLM will happily recommend products that do not exist, quote the wrong price or promise a size that is not in stock. Running a model on every shopper interaction also makes the bill grow with traffic. The hard parts were making every question and recommendation come from the store's real catalogue, keeping prices and stock correct, keeping the cost per store bounded, and making all of it safe for many merchants on one backend.",
-    flowTitle: "From install to recommendation",
-    flow: [
-      { title: "Install", note: "Salla OAuth with a single-use state, or Easy Mode through a webhook; read-only product scope, tokens kept per store" },
-      { title: "Catalogue sync", note: "Paged and rate-limited, proactive token refresh, mapped by an adapter into one neutral product shape and stored as a copy; webhooks keep it fresh" },
-      { title: "Quiz design", note: "The model designs a question tree branch by branch from the store's products, once per store, under a hard spend cap" },
-      { title: "Storefront widget", note: "A launcher injected through an app snippet, rendered in a shadow root, opened with a short-lived session token" },
-      { title: "Serving", note: "A lookup in the stored tree: only in-stock answers are offered, at most seven questions, no model call" },
-      { title: "Recommendations", note: "Up to three products ranked by how many answers name them, each card saying why; budget applied last" },
-    ],
+      "Rashihli (رشّحلي) is an app on the Salla App Store. A merchant installs it, the store's catalogue imports automatically, and a launcher appears on the storefront. Shoppers answer a few short questions, written from that store's own products in Arabic, and get up to three ranked recommendations, each with the reason it fits. Merchants manage the quiz from a panel inside their Salla dashboard. One backend serves many stores.",
+    problem: "",
+    flowTitle: "",
+    flow: [],
     cats: ["Agents", "Commerce"],
     motif: "quiz",
     oneLine: "Approved on the Salla App Store: a multi-tenant app whose quiz is designed from each store's own products and costs nothing to serve.",
-    implementation: [
-      {
-        heading: "Installing safely and reading the catalogue",
-        body: "The OAuth state is random and single-use, consumed with a DELETE ... RETURNING so two concurrent callbacks cannot both succeed, and the app requests only read access to products plus webhooks. The catalogue is walked page by page with a pause between pages, a token refresh 24 hours before expiry, one retry on a 401 and the retry-after header honoured on a 429. A 500-page ceiling throws instead of silently truncating, because a truncated catalogue is a wrong catalogue, and an empty API response never wipes a store's stored copy.",
-      },
-      {
-        heading: "Products as Salla really returns them",
-        body: "Salla returns eleven price fields, and the first version of the adapter read four. The mapping now resolves tax-inclusive prices, ranges from per-SKU prices, a from price when only the cheapest variant is known, option surcharges, live sale windows and money in several shapes. Products with no resolvable price, bundles and open-amount donations are never quoted, banded or ranked as cheap. Product types map through a table and anything unknown stays unknown, status is authoritative for stock, HTML in descriptions is stripped, and merchant options become variants so filtering asks whether one SKU satisfies every chosen facet together, not each facet separately.",
-      },
-      {
-        heading: "A quiz designed from the store's own products",
-        body: "A build renders every offerable product as one line of text, including its whole description, and asks the model for the root question: a kind (need, detail or budget) and the choices, each with the product ids it fits. Each choice then gets the same call with only its own products and the path so far, so different branches ask different questions. Branches run four at a time and stop at one product, when the model has nothing useful left to ask, or at depth seven. The merchant's free-text instructions reach the model as quoted data, limited to 1,500 characters, and the prompt tells it to ignore any request to favour a product, because pinning exists for that.",
-      },
-      {
-        heading: "Cost control",
-        body: "Builds use Claude Haiku 4.5 through OpenRouter at temperature zero. A hard ceiling of $0.50 per build is enforced on recorded dollars: before each call the caller reserves its worst case, and a call that could cross the cap is not sent, so a large catalogue gives a shallower tree instead of a failed build. Every call is written to a usage table, and the admin panel shows cost per store. A store's first build is paid by the platform, and a merchant rebuild spends one of the plan's monthly adaptations only after it has produced a quiz.",
-      },
-      {
-        heading: "Serving costs nothing",
-        body: "Serving walks the stored tree from the root along the shopper's answers. The session gate checks, in order, that the quiz is not paused, that a tree exists, that the subscription is entitled, the session rate and the month's quota. Only answers that still have an in-stock product behind them are offered, a question left with one live answer is skipped, and the quiz ends after seven answers at most. A quiz is counted against the quota once, at the first answered question, in a table kept apart from analytics so a funnel can never double-bill.",
-      },
-      {
-        heading: "Recommendations that stay correct",
-        body: "Only products behind the answers given are ever recommended, ranked by how many of the shopper's answers name them, with a pinned product leading among equals. The budget is applied last: products within it lead and the rest follow, marked as outside the chosen budget, and nothing is hidden for price. Each card shows why it was chosen and, never hidden, what its listing does not state. When even the best product is named by no answer, the widget says these are the closest products. Answers that do not exist in the tree are ignored, so a stale or hand-crafted request cannot reach products from elsewhere.",
-      },
-      {
-        heading: "A merchant panel inside Salla",
-        body: "The panel is a React 18 app, Arabic first and written with logical CSS so one attribute mirrors it for English. Its six screens are Overview, Insights, Appearance, Products, Instructions and Settings: the quiz funnel as stat tiles, colours and launcher position, pin or exclude any product, instructions with Apply and rebuild, and a Try the quiz preview that runs the real widget without being billed. Inside Salla it opens as an Embedded Page, verified server-side by introspecting the session token with Salla, adopts Salla's palette and navigation, and follows the dashboard's language and theme. A heartbeat with an ETag refreshes it live, and the bundle is versioned by content hash so a deploy never leaves a stale panel in the iframe.",
-      },
-      {
-        heading: "The embedded-app problems that took real debugging",
-        body: "Each of these fixed a real failure: a process shim needed before Salla's SDK so its messages are not dropped, the bootstrap page that becomes the panel instead of redirecting (a redirect made Salla reset the iframe in a loop), calling ready only after the session is verified, refreshing a stale token once instead of looping, and retrying for up to a minute when a merchant opens the app before the install webhook has created their store.",
-      },
-      {
-        heading: "Plans, subscriptions and add-ons",
-        body: "Salla is merchant of record, so the app keeps only a copy of subscription state. One plan table drives every gate: the session check, the rebuild limit, the panel, the admin table and the FAQ. The tiers differ in monthly quizzes (250 on trial, 500, 2,500, unlimited), monthly rebuilds and analytics depth. An unrecognised plan name falls to the lowest tier, so a mismatch under-serves a paying merchant rather than handing out the unlimited plan. Extra quizzes and extra rebuilds are sold as Salla add-ons whose webhooks grant units idempotently, and a cancellation takes back only what is unspent.",
-      },
-      {
-        heading: "Multi-tenancy and security",
-        body: "Every query is scoped by store id and there is no current-store global. The tenant comes from the request's Origin, which a browser cannot forge, with the store id Salla renders into the snippet as the fallback on Salla's shared demo host. Session tokens are 5-minute JWTs bound to store, widget and origin, webhook signatures are HMAC-SHA256 over the raw body compared in constant time, credentials are deleted on uninstall, and logins are rate-limited. The merchant's free text is data that is reduced before it reaches a prompt, and links and images are accepted only as absolute http(s). The panel is the only thing allowed in an iframe, and only from Salla's origin.",
-      },
-      {
-        heading: "A widget that survives any theme",
-        body: "The storefront widget is a plain JavaScript bundle with no build step, rendered inside a shadow root, so a merchant's theme cannot reach in. A demo page deliberately attacks it with global important resets, forced fonts and colours and display none on its own class names, as a standing check that the isolation holds. The snippet waits briefly for Salla's SDK so the store can be identified, then injects anyway, because a widget that loads with less information beats one that never loads.",
-      },
-      {
-        heading: "Admin, deployment and operations",
-        body: "An operator admin panel with its own username, password and emailed code shows every store: status, products, sessions, last sync and AI cost, with pause, resync and open-panel actions and a CSV export, plus a delivery log for login codes. Production runs as two memory-capped containers, the app and its PostgreSQL, behind Traefik on a shared VPS, and deployment notes cover the checks that keep other workloads on that host untouched.",
-      },
-      {
-        heading: "Brand, landing page and the store listing",
-        body: "The product follows the Rashihli brand kit: a violet palette, the self-hosted Readex Pro typeface, right-to-left layout and the logo used unmodified. The Arabic and English landing page at rashihli.app runs as its own container behind a strict content security policy, with a click-to-load video, and proxies the privacy, terms and FAQ pages that Salla requires. The Salla listing assets live in the repository too: gallery screenshots, feature images, banners and an 89-second promo video with a synthesised soundtrack. For the review, a generator builds a complete demo catalogue of a second, unrelated shop, to prove the questions are derived from the store and not from skincare vocabulary.",
-      },
-      {
-        heading: "Verification",
-        body: "Everything asserts rather than prints, and runs with only the repository: no Docker, provisioned Postgres, Salla account or model calls. Database checks run against an in-memory Postgres that executes the real repository queries. Eighteen verification scripts cover pricing against deliberately difficult Salla payloads, architecture boundaries, tree walking and building with the model replaced by canned replies, the merchant controls, the subscription gate, plans, add-ons, install and OAuth paths, embedded sessions and the framing policy. Two simulations then walk ten unrelated trades, and a sweep of trades, catalogue sizes and listing qualities, through the real serving code, checking question limits, answer counts, repeats and that no recommendation ever leaks across stores. The simulation also found a real stock bug.",
-      },
-    ],
+    implementation: [],
     stack: [
       { name: "TypeScript, Node.js 20, Express", role: "Backend, quiz engine and Salla adapter" },
       { name: "PostgreSQL (pg, JSONB)", role: "Multi-tenant storage: catalogue copy, quiz trees, plans, usage, analytics; tables created on boot" },
@@ -186,36 +121,10 @@ export const projects: Project[] = [
       { name: "nginx", role: "Landing page at rashihli.app with a strict CSP" },
       { name: "pg-mem", role: "Real repository queries in verification, with no database to provision" },
     ],
-    challenges: [
-      { challenge: "Merchants leave tags and attributes empty", solution: "The model reads each product's whole description and designs the questions from it, assigning only real product ids to each choice and dropping any that do not exist." },
-      { challenge: "A model on every shopper interaction would make cost grow with traffic", solution: "The model designs a stored tree once per store; serving is a lookup, so a shopper costs nothing and a build is capped at $0.50." },
-      { challenge: "Wrong prices undermine trust", solution: "A mapping that resolves every price field, never quotes a price it cannot resolve, and is exercised against deliberately difficult payloads." },
-      { challenge: "Variant combinations that do not exist", solution: "Variants resolved from SKU links and filtered jointly, so red and XL is satisfied only by a variant that is both." },
-      { challenge: "A missed webhook or a bad upstream response corrupting a catalogue", solution: "Prefix-matched product events, signature checks, full reconcile, and a guard that leaves the catalogue alone when the API returns nothing." },
-      { challenge: "Making the panel work inside Salla's iframe", solution: "A bootstrap page that becomes the panel, a verified session via token introspection, and fixes for the SDK handshake, stale tokens and the install race." },
-      { challenge: "Many merchants on one backend", solution: "Store-scoped queries, tenant identity from Origin, per-store quotas and rate limits, and a plan table that every gate reads." },
-    ],
-    results: [
-      "Approved and listed on the Salla App Store, with a merchant panel that runs inside the Salla dashboard.",
-      "A quiz of at most seven questions ending in at most three recommendations, with no model call while a shopper answers.",
-      "Eighteen verification scripts plus two simulations pass without Docker, a provisioned database, a Salla account or model calls; the simulations walk ten unrelated trades and a sweep of catalogue sizes and listing qualities.",
-      "The repository holds 326 commits from August to November 2026 and roughly 28,000 lines of server, panel and script code, with the landing page and listing assets alongside.",
-    ],
-    limitations: [
-      "Purchase conversion is not tracked: analytics stop at sessions and product click-through, because correlating a session with an order needs an order scope the app deliberately does not request.",
-      "The mapping was validated against Salla's documented schema and a handful of demo stores across a few verticals, not a wide sample of live shops.",
-      "The quiz tree is written in Arabic only, even for English-language stores.",
-      "A model-designed tree is not reshaped: a product added after a build is not offered until the merchant rebuilds, and some question edits are saved but not applied to it.",
-      "Question limits are asked of the model in the prompt rather than checked by code, and the quality verdict is informational.",
-      "The storefront widget has no automated tests, multi-currency stores get budget bands in one currency only, and Salla's embedded SDK is loaded from a CDN.",
-      "No sales, usage or conversion figures are claimed here.",
-    ],
-    next: [
-      "Purchase-conversion attribution through order webhooks.",
-      "Incremental tree updates so new products appear without a full rebuild.",
-      "An English quiz and a generic adapter for other platforms (the adapter contract already exists).",
-      "Automated tests for the widget and self-hosting Salla's embedded SDK.",
-    ],
+    challenges: [],
+    results: [],
+    limitations: [],
+    next: [],
     links: [
       { label: "View the app on the Salla App Store", href: "https://apps.salla.sa/en/app/332818570" },
       { label: "Landing page (rashihli.app)", href: "https://rashihli.app/" },
