@@ -223,4 +223,17 @@ export const galleries: Record<string, GalleryGroup[]> = {
       ],
     },
   ],
+  "rashihli-salla-widget": [
+    {
+      title: "Salla App Store listing artwork",
+      note: "The gallery images submitted with the app listing. They are illustrations made for the store page, with sample products and sample numbers, not screenshots of a live store.",
+      shots: [
+        s("rashihli", "listing-hero", 1280, 720, "Listing hero: the quiz widget over a storefront, in Arabic."),
+        s("rashihli", "listing-questions", 1280, 720, "Questions written from the store's own products, with a progress bar and a choice per answer."),
+        s("rashihli", "listing-results", 1280, 720, "Up to three recommendations, each with the reason it fits."),
+        s("rashihli", "listing-dashboard", 1280, 720, "The merchant panel: the funnel, pausing the quiz and resyncing products."),
+        s("rashihli", "listing-setup", 1280, 720, "Install, catalogue read and the widget appearing on the storefront, with no setup."),
+      ],
+    },
+  ],
 };
