@@ -91,7 +91,7 @@ export const projects: Project[] = [
     title: "Rashihli: AI shopping quiz for Salla stores",
     kind: "Zikola · multi-tenant SaaS · Salla app",
     group: "professional",
-    status: "Working product, verified on demo stores · private repository",
+    status: "Approved and listed on the Salla App Store · private repository",
     summary:
       "A widget that interviews each shopper with questions generated from that store's own products, then returns ranked recommendations with a written reason for each.",
     tags: ["TypeScript", "PostgreSQL", "Salla API", "LLM", "Multi-tenant"],
@@ -113,7 +113,7 @@ export const projects: Project[] = [
     ],
     cats: ["Agents", "Commerce"],
     motif: "quiz",
-    oneLine: "A working multi-tenant Salla app, verified on demo stores with pricing, adaptation and branching test suites.",
+    oneLine: "Approved and listed on the Salla App Store: a multi-tenant app verified with pricing, adaptation and branching test suites.",
     implementation: [
       {
         heading: "Questions come from the store, not from a template",
@@ -160,7 +160,7 @@ export const projects: Project[] = [
       "A generic adapter for platforms beyond Salla is planned, not built. No sales or usage figures are claimed here.",
     ],
     next: ["Purchase-conversion attribution via order webhooks.", "Generic adapter (JSON-LD / product feed)."],
-    links: [],
+    links: [{ label: "View the app on the Salla App Store", href: "https://apps.salla.sa/en/app/332818570" }],
     contribution:
       "I am the main committer and built the backend, catalog adapter, quiz engine and merchant tooling described above.",
     role: "Main developer: backend, catalog adapter, quiz engine and merchant tooling.",
@@ -1213,6 +1213,7 @@ export const zikolaWork: { title: string; body: string; links: ExperienceLink[] 
     links: [
       { label: "Case study", to: "/projects/rashihli-salla-widget" },
       { label: "Demo video", href: "https://www.youtube.com/watch?v=EIuLRemSntw" },
+      { label: "Salla App Store", href: "https://apps.salla.sa/en/app/332818570" },
     ],
   },
   {
