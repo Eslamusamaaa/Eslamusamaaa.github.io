@@ -343,6 +343,8 @@ nav#primary-nav .nav-cta:hover, nav#primary-nav .nav-cta[aria-current="true"] { 
 .page-head .lede { margin-bottom: 12px; }
 .page h1 { font-size: clamp(2rem, 3.6vw, 3rem); margin: 0 0 14px; }
 .status { font-size: 0.875rem; color: var(--muted); margin: 0 0 6px; }
+.btn.sm { position: relative; z-index: 2; min-height: 40px; padding: 0 16px; font-size: 0.9rem; }
+.page-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 14px 0 8px; }
 .logo-tile { width: 88px; height: 88px; flex: none; border-radius: var(--r-lg); border: 1px solid var(--line); background: #fff; }
 .page-grid { display: grid; grid-template-columns: minmax(0, 1fr) clamp(280px, 26vw, 360px); gap: clamp(32px, 5vw, 88px); align-items: start; margin-top: 24px; }
 .page-main { max-width: 46rem; }

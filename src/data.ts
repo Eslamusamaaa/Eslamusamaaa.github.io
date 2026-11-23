@@ -74,6 +74,8 @@ export type Project = {
   limitations: string[];
   next: string[];
   links: Link[];
+  /** Prominent external links, shown on the card and under the page title. */
+  actions?: Link[];
   contribution: string;
   role?: string;
   outcome?: string;
@@ -160,7 +162,14 @@ export const projects: Project[] = [
       "A generic adapter for platforms beyond Salla is planned, not built. No sales or usage figures are claimed here.",
     ],
     next: ["Purchase-conversion attribution via order webhooks.", "Generic adapter (JSON-LD / product feed)."],
-    links: [{ label: "View the app on the Salla App Store", href: "https://apps.salla.sa/en/app/332818570" }],
+    links: [
+      { label: "View the app on the Salla App Store", href: "https://apps.salla.sa/en/app/332818570" },
+      { label: "Landing page (rashihli.app)", href: "https://rashihli.app/" },
+    ],
+    actions: [
+      { label: "Salla App Store", href: "https://apps.salla.sa/en/app/332818570" },
+      { label: "Landing page", href: "https://rashihli.app/" },
+    ],
     contribution:
       "I am the main committer and built the backend, catalog adapter, quiz engine and merchant tooling described above.",
     role: "Main developer: backend, catalog adapter, quiz engine and merchant tooling.",
@@ -1214,6 +1223,7 @@ export const zikolaWork: { title: string; body: string; links: ExperienceLink[] 
       { label: "Case study", to: "/projects/rashihli-salla-widget" },
       { label: "Demo video", href: "https://www.youtube.com/watch?v=EIuLRemSntw" },
       { label: "Salla App Store", href: "https://apps.salla.sa/en/app/332818570" },
+      { label: "Landing page", href: "https://rashihli.app/" },
     ],
   },
   {

@@ -117,6 +117,16 @@ export default function ProjectPage() {
           <h1>{p.title}</h1>
           <p className="lede">{p.summary}</p>
           <p className="status">Status: {p.status}</p>
+          {p.actions && (
+            <div className="page-actions">
+              {p.actions.map((a, n) => (
+                <a key={a.href} className={`btn ${n === 0 ? "primary" : "secondary"}`} href={a.href} target="_blank" rel="noopener noreferrer">
+                  {a.label} <span aria-hidden="true">↗</span>
+                  <span className="sr"> (opens in a new tab)</span>
+                </a>
+              ))}
+            </div>
+          )}
           {p.video && <VideoLink p={p} />}
         </div>
       </header>

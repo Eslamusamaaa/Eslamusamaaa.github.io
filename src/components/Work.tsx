@@ -46,6 +46,12 @@ export function ProjectCard({ p, variant, index }: { p: Project; variant: "flags
           Read case study <ArrowIcon size={14} />
         </span>
         <VideoLink p={p} />
+        {p.actions?.map((a, n) => (
+          <a key={a.href} className={`btn sm ${n === 0 ? "primary" : "secondary"}`} href={a.href} target="_blank" rel="noopener noreferrer">
+            {a.label} <span aria-hidden="true">↗</span>
+            <span className="sr"> (opens in a new tab)</span>
+          </a>
+        ))}
       </div>
     </article>
   );
